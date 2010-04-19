@@ -128,7 +128,7 @@ public class LoadUtils {
 		Query query = new TermQuery(new Term("guid", guid));
 		TopDocs topDocs = getPubIdxSearcher().search(query, 1);
 		for(ScoreDoc scoreDoc: topDocs.scoreDocs){
-			Document doc = getTcIdxSearcher().doc(scoreDoc.doc);
+			Document doc = getPubIdxSearcher().doc(scoreDoc.doc);
 			Publication p = new Publication();
 			p.setGuid(doc.get("guid"));
 			p.setTitle(doc.get("title"));
