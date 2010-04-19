@@ -28,9 +28,6 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import au.org.ala.checklist.lucene.CBIndexSearch;
-import au.org.ala.checklist.lucene.SearchResultException;
-import au.org.ala.checklist.lucene.model.NameSearchResult;
 import org.ala.dto.ExtendedTaxonConceptDTO;
 import org.ala.dto.SearchResultsDTO;
 import org.ala.dto.SearchTaxonConceptDTO;
@@ -93,6 +90,8 @@ import org.codehaus.jackson.type.TypeReference;
 import org.gbif.ecat.model.ParsedName;
 import org.gbif.ecat.parser.NameParser;
 import org.springframework.stereotype.Component;
+
+//import au.org.ala.checklist.lucene.CBIndexSearch;
 /**
  * HBase implementation if Taxon concept DAO.
  * 
@@ -135,8 +134,8 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
     
 	protected IndexSearcher tcIdxSearcher;
 	
-	@Inject
-	protected CBIndexSearch cbIdxSearcher;
+//	@Inject
+//	protected CBIndexSearch cbIdxSearcher;
 	
 	protected HTable tcTable;
 
@@ -848,51 +847,6 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
     }
 	
 	/**
-	 * @see org.ala.dao.TaxonConceptDao#findConceptIDForName(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public String findConceptIDForName(String kingdom, String genus, String scientificName) throws Exception {
-		try {
-			String searchName = scientificName;
-
-			searchName = expandAbbreviation(genus, scientificName);
-			
-			IndexSearcher is = getTcIdxSearcher();
-			QueryParser qp  = new QueryParser("scientificName", new KeywordAnalyzer());
-			Query q = qp.parse("\""+searchName.toLowerCase()+"\"");
-			
-			TopDocs topDocs = is.search(q, 20);
-			
-			for(ScoreDoc scoreDoc: topDocs.scoreDocs){
-				Document doc = is.doc(scoreDoc.doc);
-//				Field hasSynonym = doc.getField("http://rs.tdwg.org/ontology/voc/TaxonConcept#HasSynonym");
-//				if(hasSynonym!=null){
-//					logger.debug("Returning synonym");
-//					return hasSynonym.stringValue();
-//				}
-//				Field hasVernacular = doc.getField("http://rs.tdwg.org/ontology/voc/TaxonConcept#HasVernacular");
-//				if(hasVernacular!=null){
-//					logger.debug("Returning vernacular");
-//					return hasVernacular.stringValue();
-//				}
-//				Field isCongruentTo = doc.getField("http://rs.tdwg.org/ontology/voc/TaxonConcept#IsCongruentTo");
-//				if(isCongruentTo!=null){
-//					logger.debug("Returning congruent");
-//					return isCongruentTo.stringValue();
-//				}
-//			logger.debug("Doc Id: "+scoreDoc.doc);
-//			logger.debug("Guid: "+doc.getField("guid").stringValue());
-//			logger.debug("Name: "+doc.getField("scientificName").stringValue());
-//			logger.debug("Raw name: "+doc.getField("scientificNameRaw").stringValue());
-//			logger.debug("#################################");
-				return doc.getField("guid").stringValue();
-			}
-		} catch (Exception e) {
-			logger.error("Problem searching with:"+scientificName+" : "+e.getMessage());
-		}		
-		return null;
-	}
-
-	/**
 	 * @param genus
 	 * @param scientificName
 	 * @param searchName
@@ -918,42 +872,42 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
 		return expandedName;
 	}	
 
-	/**
-	 * @see org.ala.dao.TaxonConceptDao#findLsidByName(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public String findLsidByName(String kingdom, String genus, String scientificName, String taxonRank) {
-		String lsid = null;
-		try {
-			lsid = cbIdxSearcher.searchForLSID(scientificName, genus, kingdom, taxonRank);
-		} catch (SearchResultException e) {
-			logger.warn("Checklist Bank lookup exception - " + e.getMessage() + e.getResults());
-		}
-		return lsid;
-	}
-	
-	/**
-	 * @see org.ala.dao.TaxonConceptDao#findLsidByName(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public String findLsidByName(String scientificName, String taxonRank) {
-		String lsid = null;
-		try {
-			lsid = cbIdxSearcher.searchForLSID(scientificName, taxonRank);
-		} catch (SearchResultException e) {
-			logger.warn("Checklist Bank lookup exception - " + e.getMessage() + e.getResults());
-		}
-		return lsid;
-	}
-	
-	/**
-	 * @see org.ala.dao.TaxonConceptDao#findCBDataByName(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public NameSearchResult findCBDataByName(String kingdom, String genus,
-			String scientificName, String rank) throws SearchResultException {
-		return cbIdxSearcher.searchForRecord(scientificName, kingdom, genus, rank);
-	}
+//	/**
+//	 * @see org.ala.dao.TaxonConceptDao#findLsidByName(java.lang.String, java.lang.String)
+//	 */
+//	@Override
+//	public String findLsidByName(String kingdom, String genus, String scientificName, String taxonRank) {
+//		String lsid = null;
+//		try {
+//			lsid = cbIdxSearcher.searchForLSID(scientificName, genus, kingdom, taxonRank);
+//		} catch (SearchResultException e) {
+//			logger.warn("Checklist Bank lookup exception - " + e.getMessage() + e.getResults());
+//		}
+//		return lsid;
+//	}
+//	
+//	/**
+//	 * @see org.ala.dao.TaxonConceptDao#findLsidByName(java.lang.String, java.lang.String)
+//	 */
+//	@Override
+//	public String findLsidByName(String scientificName, String taxonRank) {
+//		String lsid = null;
+//		try {
+//			lsid = cbIdxSearcher.searchForLSID(scientificName, taxonRank);
+//		} catch (SearchResultException e) {
+//			logger.warn("Checklist Bank lookup exception - " + e.getMessage() + e.getResults());
+//		}
+//		return lsid;
+//	}
+//	
+//	/**
+//	 * @see org.ala.dao.TaxonConceptDao#findCBDataByName(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+//	 */
+//	@Override
+//	public NameSearchResult findCBDataByName(String kingdom, String genus,
+//			String scientificName, String rank) throws SearchResultException {
+//		return cbIdxSearcher.searchForRecord(scientificName, kingdom, genus, rank);
+//	}
 
 	/**
 	 * @see org.ala.dao.TaxonConceptDao#getByParentGuid(java.lang.String, int)
@@ -1148,42 +1102,45 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
 		}
 		
 		// Lookup LSID in Checklist Bank data 
-		String rank = null;
-		if (scientificName == null) {
-			if (species != null) {
-				scientificName = species;
-				rank = "species";
-			} else if (genus != null) {
-				if (specificEpithet != null) {
-					scientificName = genus + " " + specificEpithet;
-					rank = "species";
-				} else {
-					scientificName = genus;
-					rank = "genus";
-				}
-			} else if (family != null) {
-				scientificName = family;
-				rank = "family";
-			} else if (order != null) {
-				scientificName = order;
-				rank = "order";
-			} else if (kingdom != null) {
-				scientificName = kingdom;
-				rank = "kingdom";
-			} else {
-				logger.error("Not enough search data for Checklist Bank found for document at: "+document.getFilePath());
-				return false;
-			}
-		}
-		String guid = findLsidByName(kingdom, genus, scientificName, rank);
+//		String rank = null;
+//		if (scientificName == null) {
+//			if (species != null) {
+//				scientificName = species;
+//				rank = "species";
+//			} else if (genus != null) {
+//				if (specificEpithet != null) {
+//					scientificName = genus + " " + specificEpithet;
+//					rank = "species";
+//				} else {
+//					scientificName = genus;
+//					rank = "genus";
+//				}
+//			} else if (family != null) {
+//				scientificName = family;
+//				rank = "family";
+//			} else if (order != null) {
+//				scientificName = order;
+//				rank = "order";
+//			} else if (kingdom != null) {
+//				scientificName = kingdom;
+//				rank = "kingdom";
+//			} else {
+//				logger.error("Not enough search data for Checklist Bank found for document at: "+document.getFilePath());
+//				return false;
+//			}
+//		}
+//		String guid = findLsidByName(kingdom, genus, scientificName, rank);
+		String guid = findConceptIDForName(kingdom, genus, scientificName);
 
 		// if null try with the species name
 		if (guid == null && species != null) {
-			guid = findLsidByName(kingdom, genus, species, "species");
+//			guid = findLsidByName(kingdom, genus, species, "species");
+			guid = findConceptIDForName(kingdom, genus, scientificName);
 		}
 		// FIX ME search with genus + specific epithet
 		if (guid == null && genus != null && specificEpithet != null) {
-			guid = findLsidByName(kingdom, genus, genus + " " + specificEpithet, "species");
+//			guid = findLsidByName(kingdom, genus, genus + " " + specificEpithet, "species");
+			guid = findConceptIDForName(kingdom, genus, genus + " " + specificEpithet);
 		}
 
 		if (guid != null) {
@@ -1296,6 +1253,62 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
 	}
 
 	/**
+	 * @see org.ala.dao.TaxonConceptDao#findConceptIDForName(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public String findConceptIDForName(String kingdom, String genus, String scientificName) throws Exception {
+		try {
+			String searchName = scientificName;
+
+			//change A. bus to Aus bus if it is abbreviated
+			if(abbreviatedCanonical.matcher(scientificName).matches() && genus!=null){
+				NameParser np = new NameParser();
+				
+				ParsedName parsedName = np.parse(scientificName);
+				
+				if(parsedName!=null){
+					if(parsedName.isBinomial()){
+						searchName = genus +" "+ parsedName.getSpecificEpithet();
+					}
+				}
+			}
+			
+			IndexSearcher is = getTcIdxSearcher();
+			QueryParser qp  = new QueryParser("scientificName", new KeywordAnalyzer());
+			Query q = qp.parse("\""+searchName.toLowerCase()+"\"");
+			
+			TopDocs topDocs = is.search(q, 20);
+			
+			for(ScoreDoc scoreDoc: topDocs.scoreDocs){
+				Document doc = is.doc(scoreDoc.doc);
+//				Field hasSynonym = doc.getField("http://rs.tdwg.org/ontology/voc/TaxonConcept#HasSynonym");
+//				if(hasSynonym!=null){
+//					logger.debug("Returning synonym");
+//					return hasSynonym.stringValue();
+//				}
+//				Field hasVernacular = doc.getField("http://rs.tdwg.org/ontology/voc/TaxonConcept#HasVernacular");
+//				if(hasVernacular!=null){
+//					logger.debug("Returning vernacular");
+//					return hasVernacular.stringValue();
+//				}
+//				Field isCongruentTo = doc.getField("http://rs.tdwg.org/ontology/voc/TaxonConcept#IsCongruentTo");
+//				if(isCongruentTo!=null){
+//					logger.debug("Returning congruent");
+//					return isCongruentTo.stringValue();
+//				}
+//			logger.debug("Doc Id: "+scoreDoc.doc);
+//			logger.debug("Guid: "+doc.getField("guid").stringValue());
+//			logger.debug("Name: "+doc.getField("scientificName").stringValue());
+//			logger.debug("Raw name: "+doc.getField("scientificNameRaw").stringValue());
+//			logger.debug("#################################");
+				return doc.getField("guid").stringValue();
+			}
+		} catch (Exception e) {
+			logger.error("Problem searching with:"+scientificName+" : "+e.getMessage());
+		}		
+		return null;
+	}	
+	
+	/**
 	 * @see org.ala.dao.TaxonConceptDao#clearRawProperties()
 	 */
 	public void clearRawProperties() throws Exception {
@@ -1388,7 +1401,7 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
     		if(taxonConcept.getNameString()!=null){
     			
     			doc.add(new Field("guid", taxonConcept.getGuid(), Store.YES, Index.NOT_ANALYZED_NO_NORMS));
-    			addToSetSafely(infoSourceIds, taxonConcept.getInfoSourceId());
+    			infoSourceIds.add(taxonConcept.getInfoSourceId());
     			//add multiple forms of the scientific name to the index
     			LuceneUtils.addScientificNameToIndex(doc, taxonConcept.getNameString(), taxonConcept.getRankString());
 	    		
@@ -1402,7 +1415,7 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
                             Field f = new Field("conservationStatus", csTerm, Store.YES, Index.NOT_ANALYZED);
                             f.setBoost(0.6f);
                             doc.add(f);
-                			addToSetSafely(infoSourceIds, cs.getInfoSourceId());
+                            infoSourceIds.add(cs.getInfoSourceId());
                         }
                     }
                 }
@@ -1413,7 +1426,7 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
                             Field f = new Field("pestStatus", psTerm, Store.YES, Index.NOT_ANALYZED);
                             f.setBoost(0.6f);
                             doc.add(f);
-                            addToSetSafely(infoSourceIds, ps.getInfoSourceId());
+                            infoSourceIds.add(ps.getInfoSourceId());
                         }
                     }
                 }
@@ -1424,7 +1437,7 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
                         Field textField = new Field("simpleText", sp.getValue(), Store.YES, Index.ANALYZED);
                         textField.setBoost(0.4f);
                         doc.add(textField);
-                        addToSetSafely(infoSourceIds, sp.getInfoSourceId());
+                        infoSourceIds.add(sp.getInfoSourceId());
                     }
                 }
 
@@ -1433,7 +1446,9 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
 	    		for(CommonName cn: commonNames){
 	    			if(cn.nameString!=null){
 	    				commonNameSet.add(cn.nameString.toLowerCase());
-						addToSetSafely(infoSourceIds, cn.getInfoSourceId());
+                        if (cn.getInfoSourceId()!=null) {
+                        	infoSourceIds.add(cn.getInfoSourceId());
+                        }
                         //doc.add(new Field("commonName", cn.nameString.toLowerCase(), Store.YES, Index.ANALYZED));
                         //cnStr.append(cn.nameString.toLowerCase() + " ");
 	    			}
@@ -1650,17 +1665,5 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
     @Override
     public String getIndexLocation() {
         return TC_INDEX_DIR;
-    }
-    
-    /**
-     * Prevent adding a null to a set.
-     * 
-     * @param set 
-     * @param object
-     */
-    private void addToSetSafely(Set set, Object object) {
-    	if (object != null) {
-    		set.add(object);
-    	}
     }
 }

@@ -117,7 +117,7 @@ public class ANBGDataLoader {
     		p.setGuid(record[0]);
     		p.setTitle(record[1]);
     		p.setAuthor(record[2]);
-    		p.setDatePublished(record[3]);
+    		p.setYear(record[3]);
     		p.setPublicationType(record[4]);
     		
     		//add this taxon name to each taxon concept
@@ -257,12 +257,6 @@ public class ANBGDataLoader {
     		tn.publishedInCitation = record[5];
     		tn.nomenclaturalCode = record[6];
     		tn.typificationString = record[7];
-
-    		//load the publication information for the name
-    		Publication publication = loadUtils.getPublicationByGuid(record[5]);
-    		if(publication!=null){
-    			tn.publishedIn = publication.getTitle();
-    		}
     		
     		//add this taxon name to each taxon concept
     		for(TaxonConcept tc: tcs){
@@ -273,9 +267,6 @@ public class ANBGDataLoader {
     				//is not an accepted concept and is congruent to another
     				//we have not added the concept to the profile - hence the lookup will fail
     				taxonConceptDao.addTaxonName(tc.getGuid(), tn);
-    				
-    				//FIXME load the publication information
-    				
     			}
     		}
     	}
@@ -326,8 +317,8 @@ public class ANBGDataLoader {
 	    			if(addTaxonToProfile(loadUtils, record[0])){
 		    			TaxonConcept tc = new TaxonConcept();
 		    			tc.setGuid(record[0]);
-//		    			tc.nameGuid = record[1];
-//		    			tc.nameString = record[2];
+		    			tc.setNameGuid(record[1]);
+		    			tc.setNameString(record[2]);
 		    			tc.setAuthor(record[3]);
 		    			tc.setAuthorYear(record[4]);
 		    			tc.setPublishedInCitation(record[5]);
