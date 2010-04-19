@@ -1,0 +1,16 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+	<jsp:output omit-xml-declaration="yes"/>	
+	<script type="text/javascript">dojo.require("dijit.TitlePane")</script>
+    <div id="_title_id">
+    	<spring:message var="app_name" code="application.name" />
+    	<spring:message var="title" code="welcome.titlepane" arguments="${app_name}" />
+    	<script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_id', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title}'}})); </script>
+		<h3>Share your data with the ALA</h3>
+		
+	   <form method="post" action="/rego/logo/uploaded" enctype="multipart/form-data">
+	     <p><input type="file" name="file"/></p>
+	    <input type="submit"/>
+	   </form>
+
+	</div>
+</div>

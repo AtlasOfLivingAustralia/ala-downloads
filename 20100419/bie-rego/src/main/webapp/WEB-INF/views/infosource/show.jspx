@@ -1,0 +1,181 @@
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <script type="text/javascript">dojo.require('dijit.TitlePane');</script>
+    <div id="_title_div">
+        <spring:message code="label.infosource" var="entity_label"/>
+        <spring:message arguments="${entity_label}" code="entity.show" var="title_msg"/>
+        <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
+        <c:if test="${not empty infosource}">
+            <spring:url value="/infosource/${infosource.id}/form" var="update_form_url"/>
+            <p>
+              <a href="${update_form_url}">Edit</a>
+            </p>
+        
+            <div id="roo_infosource_name">
+                <label for="_name_id">Name:</label>
+                <div class="box" id="_name_id">
+                    <c:out value="${infosource.name}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_description">
+                <label for="_description_id">Description:</label>
+                <div class="box" id="_description_id">
+                    <c:out value="${infosource.description}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_acronym">
+                <label for="_acronym_id">Acronym:</label>
+                <div class="box" id="_acronym_id">
+                    <c:out value="${infosource.acronym}"/>
+                </div>
+            </div>
+            <!-- 
+            <br/>
+            <div id="roo_infosource_uri">
+                <label for="_uri_id">Uri:</label>
+                <div class="box" id="_uri_id">
+                    <c:out value="${infosource.uri}"/>
+                </div>
+            </div>
+             -->
+            <br/>
+            <div id="roo_infosource_websiteUrl">
+                <label for="_websiteUrl_id">Website Url:</label>
+                <div class="box" id="_websiteUrl_id">
+                    <c:out value="${infosource.websiteUrl}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_logoUrl">
+                <label for="_logoUrl_id">Logo:</label>
+                <div class="box" id="_logoUrl_id">
+                    <c:if test="${not empty infosource.logoUrl}">
+                      <img class="uploadedLogo" src="http://localhost/repository/${infosource.id}/${infosource.logoUrl}"/>
+                      <p>
+                        <span>File name: </span><c:out value="${infosource.logoUrl}"/>
+                      </p>
+                    </c:if>
+                    <br/>
+                    <a href="/rego/logo/uploadLogo?infosourceId=${infosource.id}">Update logo ...</a>
+                </div>
+            </div>
+            
+            <hr/>
+            
+            <br/>
+            <div id="roo_infosource_geographicDescription">
+                <label for="_geographicDescription_id">Geographic Description:</label>
+                <div class="box" id="_geographicDescription_id">
+                    <c:out value="${infosource.geographicDescription}"/>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <div id="roo_infosource_states">
+                <label for="_states_id">States:</label>
+                <div class="box" id="_states_id">
+                    <c:forEach items="${infosource.states}" var="state">
+                      <c:out value="${state}"/><br/>
+                    </c:forEach>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_wellKnownText">
+                <label for="_wellKnownText_id">Well Known Text:</label>
+                <div class="box" id="_wellKnownText_id">
+                    <c:out value="${infosource.wellKnownText}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_northCoordinate">
+                <label for="_northCoordinate_id">North Coordinate:</label>
+                <div class="box" id="_northCoordinate_id">
+                    <c:out value="${infosource.northCoordinate}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_southCoordinate">
+                <label for="_southCoordinate_id">South Coordinate:</label>
+                <div class="box" id="_southCoordinate_id">
+                    <c:out value="${infosource.southCoordinate}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_eastCoordinate">
+                <label for="_eastCoordinate_id">East Coordinate:</label>
+                <div class="box" id="_eastCoordinate_id">
+                    <c:out value="${infosource.eastCoordinate}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_westCoordinate">
+                <label for="_westCoordinate_id">West Coordinate:</label>
+                <div class="box" id="_westCoordinate_id">
+                    <c:out value="${infosource.westCoordinate}"/>
+                </div>
+            </div>
+            <br/>
+            <hr/>
+            <br/>
+            <div id="roo_infosource_singleDate">
+                <label for="_singleDate_id">Single Date:</label>
+                <div class="box" id="_singleDate_id">
+                    <fmt:formatDate pattern="${infosource_singleDate_date_format}" value="${infosource.singleDate}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_startDate">
+                <label for="_startDate_id">Start Date:</label>
+                <div class="box" id="_startDate_id">
+                    <fmt:formatDate pattern="${infosource_startDate_date_format}" value="${infosource.startDate}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_endDate">
+                <label for="_endDate_id">End Date:</label>
+                <div class="box" id="_endDate_id">
+                    <fmt:formatDate pattern="${infosource_endDate_date_format}" value="${infosource.endDate}"/>
+                </div>
+            </div>
+            <hr/>
+            <br/>
+            <div id="roo_infosource_scientificNames">
+                <label for="_scientificNames_id">Scientific Names:</label>
+                <div class="box" id="_scientificNames_id">
+                    <c:forEach items="${infosource.scientificNames}" var="scientificName">
+                      <c:out value="${scientificName}"/><br/>
+                    </c:forEach>
+                </div>
+            </div>
+            <br/>
+            <hr/>
+            <br/>
+            <div id="roo_infosource_documentMapper">
+                <label for="_documentMapper_id">Document Mapper:</label>
+                <div class="box" id="_documentMapper_id">
+                    <c:out value="${infosource.documentMapper}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_harvesterId">
+                <label for="_harvesterId_id">Harvester Id:</label>
+                <div class="box" id="_harvesterId_id">
+                    <c:out value="${infosource.harvesterId}"/>
+                </div>
+            </div>
+            <br/>
+            <div id="roo_infosource_connectionParams">
+                <label for="_connectionParams_id">Connection Params:</label>
+                <div class="box" id="_connectionParams_id">
+                    <c:out value="${infosource.connectionParams}"/>
+                </div>
+            </div>
+            <br/>
+        </c:if>
+        <c:if test="${empty infosource}">
+            <spring:message arguments="${entity_label}" code="entity.not.found.single"/>
+        </c:if>
+    </div>
+</div>

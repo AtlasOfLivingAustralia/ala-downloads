@@ -1,0 +1,262 @@
+author  hasAuthor
+authority hasAuthor
+authorlink  
+basionym  hasBasionym
+binomailAuthority hasAuthor
+binomia hasScientificName
+binomial  hasScientificName
+binomial2Authority  hasAuthor
+binomial3Authority  hasAuthor
+binomial4Authority  hasAuthor
+binomialAuthor  hasAuthor
+binomialAuthority hasAuthor
+binomialAuthoriy  hasAuthor
+binomialName  hasScientificName
+binomialSpecies hasScientificName
+binominal hasScientificName
+binomualAuthority hasAuthor
+biogroup  
+catalogueoflifeSpeciesProperty  
+clade hasClade
+clasis  hasClass
+class hasClass
+classClassis  hasClass
+classes hasClass
+classis hasClass
+classisAuthority  hasClassAuthority
+classis_percent_27_percent_27_percent_27  hasClass
+cohort  hasCohort
+cohorto hasCohort
+color hasColour
+colour  hasColour
+commonName  hasCommonName
+commonNames hasCommonName
+commons hasCommonName
+commonscatInlineProperty  
+commonscatProperty  hasCommonName
+commonsProperty hasCommonName
+conservationStatus  hasConservationStatus
+conservationStaus hasConservationStatus
+cultivar  hasCultivar
+diet  hasDietText
+divisio hasPhylum
+divisioAuthority  hasPhylumAuthority
+division  hasPhylum
+ecologicaltype  hasEcologicalText
+emedicineMult 
+emedicineProperty 
+emedicinesubj 
+emedicinetopic  
+extinct hasExtinctStatus
+familaAuthority hasFamilyAuthority
+familia hasFamily
+familiaAuthority  hasFamilyAuthority
+familie hasFamily
+family  hasFamily
+familyAuthority hasFamilyAuthority
+flower  
+form  hasForm
+formerScientificName  hasSynonym
+fossilRange 
+fossilRecord  
+fossilSpecies 
+genus hasGenus
+genus2Authority hasGenusAuthority
+genusAugthority hasGenusAuthority
+genusAuthor hasGenusAuthority
+genusAuthority  hasGenusAuthority
+genusDecriber hasGenusAuthority
+genusDescriber  hasGenusAuthority
+genusYear 
+gunusAuthority  hasGenusAuthority
+habit hasHabitatText
+hclassis  hasClass
+imaege  hasImageUrl
+image hasImageUrl
+imageLocation hasImageUrl
+imfraordo hasInfraOrder
+infraclass  hasInfraClass
+infraclassic  hasInfraClass
+infraclassis  hasInfraClass
+infrafamilia  hasInfraFamily
+infraorder  hasInfraOrder
+infraordo hasInfraOrder
+infraordoAuthority  hasInfraOrderAuthority
+infraorodo  hasInfraOrder
+infraphylum hasInfraPhylum
+infraregnum hasInfraKingdom
+iucnid  
+iucnYear  
+kingdom hasKingdom
+lat 
+latD  
+latin 
+latM  
+latNs 
+latS  
+lifeSpan  hasLifeSpanText
+loc 
+long  
+longD 
+longEw  
+longM 
+longS 
+map hasDistributionMapImageUrl
+ncbiTaxid 
+niacinMg  
+order hasOrder
+orderis hasOrder
+ordo  hasOrder
+ordoAuthority hasOrderAuthority
+ordor hasOrder
+parafamilia 
+parvordo  
+phlylum hasPhylum
+phylium hasPhylum
+phylo hasPhylum
+phylum  hasPhylum
+phylumAuthority hasPhylumAuthority
+probableGenus 
+rangeMap  hasDistributionMapImageUrl
+rangeMapDistribution  hasDistributionMapImageUrl
+regnum  hasKingdom
+regnumAuthority hasKingdomAuthority
+salinitySg  
+saubfamilia hasSubFamily
+scientificName  hasScientificName
+series  hasSeries
+seriesAuthority hasSeriesAuthority
+serotype  
+specie  hasSpecies
+species hasSpecies
+speciesAuthority  hasSpeciesAuthority
+spexies hasSpecies
+ssubphylum  hasSubPhylum
+statisSystem  hasConservationStatusSystem
+statsRef  
+status  hasConservationStatus
+statusRef 
+statusSource  hasConservationStatusSystem
+statusSystem  hasConservationStatusSystem
+statusText  hasConservationStatus
+staus hasConservationStatus
+subclass  hasSubClass
+subclassis  hasSubClass
+subclassisAuthority hasSubClassAuthority
+subcohort hasSubCohort
+subcohorto  hasSubCohort
+subdivisio  hasSubDivision
+subdivision hasSubDivision
+subdivisionRanks  
+subdivisions  hasSubDivision
+subdivisionsRanks 
+subdivsion  hasSubDivision
+suberfamily hasSuperFamily
+subfam  hasSubFamily
+subfamalia  hasSubFamily
+subfamia  hasSubFamily
+subfamila hasSubFamily
+subfamilai  hasSubFamily
+subfamilia  hasSubFamily
+subfamiliaAuthority hasSubFamilyAuthority
+subfamily hasSubFamily
+subfamlia hasSubFamily
+subfmailia  hasSubFamily
+subgenera hasSubGenus
+subgenus  hasSubGenus
+subgenusAuthority hasSubGenusAuthority
+subinfraorder hasSubInfraOrder
+subkingdom  hasSubKingdom
+sublcassis  hasSubClass
+subord  hasSubOrder
+suborder  hasSubOrder
+suborders hasSubOrder
+subordo hasSubOrder
+subordoAuthority  hasSubOrderAuthority
+suborkhuido 
+subphyla  hasSubPhylum
+subphylum hasSubPhylum
+subphylumAuthority  hasSubPhylumAuthority
+subregnum hasSubKingdom
+subregnumAuthority  hasSubKingdomAuthority
+subsectio hasSubSection
+subseries hasSubSeries
+subseriesAuthority  hasSubSeriesAuthority
+subsp hasSubSpecies
+subspecies  hasSubSpecies
+subspeciesAuthority hasSubSpeciesAuthority
+subtribus hasSubTribe
+subtribusAuthority  hasSubTribeAuthority
+subvidision hasSubDivision
+suffamilia  hasSubFamily
+sunfamily hasSubFamily
+superclass  hasSuperClass
+superclassis  hasSuperClass
+superdivisio  hasSuperDivision
+superdomain hasSuperDomain
+superfamila hasSuperFamily
+superfamilia  hasSuperFamily
+superfamiliaAuthority hasSuperFamilyAuthority
+superfamilie  hasSuperFamily
+superfamiloa  hasSuperFamily
+superfamily hasSuperFamily
+superhylum  hasSuperPhylum
+superorder  hasSuperOrder
+superordo hasSuperOrder
+superordp hasSuperOrder
+superphylum hasSuperPhylum
+superregnum hasSuperKingdom
+superSpecies  hasSuperSpecies
+supertribus hasSuperTribe
+synomym hasSynonym
+synomyms  hasSynonym
+synonoyms hasSynonym
+synonsm hasSynonym
+synonym hasSynonym
+synonymAuthority  hasSynonymAuthority
+synonyms  hasSynonym
+synoyms hasSynonym
+tason hasScientificName
+taxon hasScientificName
+taxoname  hasScientificName
+temperament 
+triba hasTribe
+tribe hasTribe
+tribinomial hasSubSpecies
+tribu hasTribe
+tribus  hasTribe
+tribusAuthority hasTribeAuthority
+trinomial hasSubSpecies
+trinomial2Authority hasSubSpeciesAuthority
+trinomialAuthority  hasSubSpeciesAuthority
+type  hasTypeSpecimen
+typeGenus hasTypeGenus
+typeGenusAuthority  hasTypeGenusAuthority
+typeLocality  
+typeSpecies hasTypeSpecies
+typeSpeciesAuhtority  hasTypeSpeciesAuthority
+typeSpeciesAuthority  hasTypeSpeciesAuthority
+typeSpeciesDescriber  hasTypeSpeciesAuthority
+unranked  
+unrankedClade 
+unrankedClassis 
+unrankedDivisio 
+unrankedFamilia 
+unrankedFamily  
+unrankedInfraclassis  
+unrankedOrdo  
+unrankedPhylum  
+unrankedRegnum  
+unrankedSubclassis  
+unrankedSubordo 
+unrankedSubphylum 
+unrankedSuperordo 
+unreferenced  
+variety 
+virusClass  
+virusGroup  
+youtubeProperty 
+zoodivisio  
+zoodivision 
+zoosectio 
+zoosubsectio  

@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<eml:eml 
+ packageId="ala.1" 
+ system="ala" 
+ xmlns:eml="eml://ecoinformatics.org/eml-2.1.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.0 http://www.ala.org.au/schemas/eml-2.1.0/eml.xsd">
+ <dataset>
+  <title>My data</title>
+  <creator id="1254280537864">
+   <individualName>
+    <surName>Martin</surName>
+   </individualName>
+   <organizationName>ALA</organizationName>
+   <positionName>Systems Architect</positionName>
+  </creator>
+  <abstract>
+   <para>My data abstract</para>
+  </abstract>
+  <keywordSet>
+   <keyword>keyword1</keyword>
+   <keyword>keyword2</keyword>
+  </keywordSet>
+  <intellectualRights>
+   <para>my usage rights</para>
+  </intellectualRights>
+  <coverage>
+   <geographicCoverage>
+    <geographicDescription>My description</geographicDescription>
+    <boundingCoordinates>
+     <westBoundingCoordinate>147.0</westBoundingCoordinate>
+     <eastBoundingCoordinate>151.625</eastBoundingCoordinate>
+     <northBoundingCoordinate>-33.5</northBoundingCoordinate>
+     <southBoundingCoordinate>-37.0</southBoundingCoordinate>
+    </boundingCoordinates>
+   </geographicCoverage>
+   <temporalCoverage>
+    <singleDateTime>
+     <calendarDate>2009-09-30</calendarDate>
+    </singleDateTime>
+   </temporalCoverage>
+   <taxonomicCoverage>
+    <taxonomicClassification>
+     <taxonRankName>Genus</taxonRankName>
+     <taxonRankValue>Aus</taxonRankValue>
+     <taxonomicClassification>
+      <taxonRankName>Species</taxonRankName>
+      <taxonRankValue>bus</taxonRankValue>
+     </taxonomicClassification>
+    </taxonomicClassification>
+   </taxonomicCoverage>
+  </coverage>
+  <contact id="1254280554776">
+   <individualName>
+    <surName>Dave</surName>
+   </individualName>
+   <organizationName>DaveOrg</organizationName>
+   <positionName>DavePosition</positionName>
+  </contact>
+ </dataset>
+ <!-- Used to house the ALA specific data elements where no EML equivalent is applicable -->
+ <additionalMetadata>
+  <metadata>
+    <ala:dataset xmlns:ala="http://ala.org.au/dataset">
+     <datasetType thesaurusId="123"></datasetType>
+     <sharedTrait>Local checklist</sharedTrait>
+     <staticDataset>false</staticDataset>
+    </ala:dataset>    
+  </metadata>
+ </additionalMetadata>
+</eml:eml>

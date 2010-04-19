@@ -1,0 +1,50 @@
+// Spring Roo 1.0.1.RELEASE [rev 601] log opened at 2010-01-31 09:29:04
+project --topLevelPackage org.ala.bie.rego
+persistence setup --provider HIBERNATE --database MYSQL --databaseName bie --userName root --password password
+entity --class ~.model.Contact --table contact --identifierField id --identifierColumn id_pk --testAutomatically
+field string --fieldName name --notNull --sizeMin 2
+field string --fieldName email --notNull --sizeMin 2 --regexp "\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b"
+field string --fieldName phone
+controller scaffold ~.web.ContactController
+entity --class ~.model.ScientificName --table scientific_name --identifierField id --identifierColumn id --testAutomatically
+field string --fieldName name --notNull --sizeMin 2
+controller scaffold ~.web.ScientificNameController
+entity --class ~.model.GeoRegion --table geo_region --identifierField id --identifierColumn id --testAutomatically
+field string --fieldName name --notNull --sizeMin 2
+field string --fieldName regionType --notNull --sizeMin 2
+controller scaffold ~.web.GeoRegionController
+entity --class ~.model.Infosource --table infosource --identifierField id --identifierColumn id --testAutomatically
+field string --fieldName name --notNull --sizeMin 2
+field string --fieldName description 
+field string --fieldName acronym
+field string --fieldName uri --column uri
+field string --fieldName websiteUrl --column website_url
+field string --fieldName logoUrl --column logo_url
+field string --fieldName geographicDescription --column geographic_description
+field set --fieldName states --element GeoRegion
+field string --fieldName wellKnownText --column well_known_text
+field number --fieldName northCoordinate --column north_coordinate --class org.ala.bie.rego.model.Infosource --type java.lang.Float
+field number --fieldName southCoordinate --column south_coordinate --class org.ala.bie.rego.model.Infosource --type java.lang.Float
+field number --fieldName eastCoordinate --column east_coordinate --class org.ala.bie.rego.model.Infosource --type java.lang.Float
+field number --fieldName westCoordinate --column west_coordinate --class org.ala.bie.rego.model.Infosource --type java.lang.Float
+field date --fieldName singleDate --column single_date --class org.ala.bie.rego.model.Infosource --type java.Util.Date --past true
+field date --fieldName startDate --column start_date --class org.ala.bie.rego.model.Infosource --type java.Util.Date --past true
+field date --fieldName endDate --column end_date --class org.ala.bie.rego.model.Infosource --type java.Util.Date 
+field set --fieldName scientificNames --element ScientificName
+field string --fieldName documentMapper --column document_mapper
+field string --fieldName harvesterId --column harvester_id
+field string --fieldName connectionParams --column connection_params
+test integration
+perform test
+controller scaffold ~.web.InfosourceController
+exit
+// Spring Roo 1.0.1.RELEASE [rev 601] log closed at 2010-01-31 09:29:23
+// Spring Roo 1.0.1.RELEASE [rev 601] log opened at 2010-01-31 10:35:29
+addon list
+exit
+// Spring Roo 1.0.1.RELEASE [rev 601] log closed at 2010-01-31 10:39:04
+// Spring Roo 1.0.1.RELEASE [rev 601] log opened at 2010-01-31 15:20:42
+field string --fieldName rank --class ~.model.ScientificName
+field string --fieldName commonName --class ~.model.ScientificName
+exit
+// Spring Roo 1.0.1.RELEASE [rev 601] log closed at 2010-01-31 15:21:08
