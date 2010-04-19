@@ -258,6 +258,13 @@ public class ANBGDataLoader {
     		tn.nomenclaturalCode = record[6];
     		tn.typificationString = record[7];
     		
+    		if(record[5]!=null){
+    			Publication pub = loadUtils.getPublicationByGuid(record[5]);
+    			if(pub!=null){
+    				tn.publishedIn = pub.getTitle();
+    			}
+    		}
+    		
     		//add this taxon name to each taxon concept
     		for(TaxonConcept tc: tcs){
     			j++;
