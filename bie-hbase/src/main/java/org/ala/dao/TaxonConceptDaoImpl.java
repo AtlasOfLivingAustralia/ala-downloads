@@ -97,7 +97,7 @@ import org.springframework.stereotype.Component;
  * 
  * @author Dave Martin
  */
-@Component("taxonConceptDao")
+//@Component("taxonConceptDao")
 public class TaxonConceptDaoImpl implements TaxonConceptDao {
 	
 	protected static Logger logger = Logger.getLogger(TaxonConceptDaoImpl.class);
@@ -605,7 +605,7 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
 		if(rowResult==null){
 			return null;
 		}
-		return getTaxonConcept(guid, rowResult);
+		return getTaxonConcept(rowResult);
 	}
 
 	/**
@@ -620,7 +620,7 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
 		ExtendedTaxonConceptDTO etc = new ExtendedTaxonConceptDTO();
 		
 		//populate the dto
-		etc.setTaxonConcept(getTaxonConcept(guid, row));
+		etc.setTaxonConcept(getTaxonConcept(row));
 		etc.setTaxonName(getTaxonName(row));
         etc.setClassification(getClassification(row));
 		etc.setSynonyms(getSynonyms(row));
@@ -651,9 +651,10 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
 	 * @param rowResult
 	 * @return
 	 */
-	private TaxonConcept getTaxonConcept(String guid, RowResult rowResult) {
+	private TaxonConcept getTaxonConcept(RowResult rowResult) {
 		TaxonConcept tc = new TaxonConcept();
-		tc.setGuid(guid);
+		byte[] row = rowResult.getRow();
+		tc.setGuid(new String(row));
 		tc.setAuthor(HBaseDaoUtils.getField(rowResult, "tc:author"));
 		tc.setAuthorYear(HBaseDaoUtils.getField(rowResult, "tc:authorYear"));
 		tc.setNameGuid(HBaseDaoUtils.getField(rowResult, "tc:hasName")); 
@@ -1358,14 +1359,12 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
     	while(iter.hasNext()){
     		i++;
     		RowResult rowResult = iter.next();
-    		byte[] row = rowResult.getRow();
-    		String guid = new String(row);
 
     		//get taxon concept details
-    		TaxonConcept taxonConcept = getTaxonConcept(guid, rowResult);
+    		TaxonConcept taxonConcept = getTaxonConcept(rowResult);
             
             // get taxon name
-            TaxonName taxonName = getTaxonNameFor(guid);
+            TaxonName taxonName = getTaxonName(rowResult);
 
             //get synonyms
     		Cell synonymsCell = rowResult.get(Bytes.toBytes(SYNONYM_COL));
@@ -1393,7 +1392,7 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
             List<SimpleProperty> simpleProperties = getTextProperties(rowResult);
             
     		// save all infosource ids to add in a Set to index at the end
-    		TreeSet<String> infoSourceIds = new TreeSet<String>();
+            Set<String> infoSourceIds = new TreeSet<String>();
             
     		//TODO this index should also include nub ids
     		Document doc = new Document();
@@ -1442,7 +1441,7 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
                 }
 
                 //StringBuffer cnStr = new StringBuffer();
-                TreeSet<String> commonNameSet = new TreeSet<String>();
+                Set<String> commonNameSet = new TreeSet<String>();
 	    		for(CommonName cn: commonNames){
 	    			if(cn.nameString!=null){
 	    				commonNameSet.add(cn.nameString.toLowerCase());
@@ -1495,7 +1494,7 @@ public class TaxonConceptDaoImpl implements TaxonConceptDao {
 	    		iw.commit();
 	    	}
 	    	
-    		if (i%100==0) logger.debug(i + " " + guid);
+    		if (i%100==0) logger.debug(i + " " + taxonConcept.getGuid());
     	}
     	
     	iw.commit();

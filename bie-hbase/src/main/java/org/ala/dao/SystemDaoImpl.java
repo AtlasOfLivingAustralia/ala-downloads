@@ -19,11 +19,13 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 /**
  * HBase implementation if the SystemDao.
  *
  * @author Dave Martin (David.Martin@csiro.au)
  */
+@Component("systemDao")
 public class SystemDaoImpl implements SystemDao {
 
 	protected static Logger logger = Logger.getLogger(SystemDaoImpl.class);
