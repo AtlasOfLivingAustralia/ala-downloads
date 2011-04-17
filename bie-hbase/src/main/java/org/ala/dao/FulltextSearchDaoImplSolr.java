@@ -91,7 +91,8 @@ public class FulltextSearchDaoImplSolr implements FulltextSearchDao {
             queryString.append("idxtype:"+IndexedTypes.TAXON);
             String[] fq = new String[]{"left:[* TO "+leftNSValue+"]", "right:["+leftNSValue+" TO *]"};
             logger.info("search query: "+queryString.toString());
-            return doSolrSearch(queryString.toString(), fq, 100, 0, "rankId", "asc");
+            //ordering by left instead of rankId otherwise the suprageneric names appear out of order.
+            return doSolrSearch(queryString.toString(), fq, 100, 0, "left", "asc");
         } catch (SolrServerException ex) {
         	SearchResultsDTO searchResults = new SearchResultsDTO();
             logger.error("Problem communicating with SOLR server. " + ex.getMessage(), ex);

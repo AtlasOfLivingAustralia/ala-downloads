@@ -13,6 +13,11 @@
  * rights and limitations under the License.
  ***************************************************************************/
 package org.ala.model;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Simple POJO for a taxon concept.
  *
@@ -38,6 +43,7 @@ public class TaxonConcept extends AttributableObject implements Comparable<Taxon
 	protected String rankString;
 	protected Integer left;
 	protected Integer right;
+        protected Set<String> childrenGuid;
 
 	/**
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
@@ -259,6 +265,17 @@ public class TaxonConcept extends AttributableObject implements Comparable<Taxon
 	public void setRankID(Integer rankID) {
 		this.rankID = rankID;
 	}
+
+    public Set<String> getChildrenGuid() {
+        if(childrenGuid == null)
+            childrenGuid = new java.util.HashSet<String>();
+        return childrenGuid;
+    }
+
+    public void setChildrenGuid(Set<String> childrenGuid) {
+        this.childrenGuid = childrenGuid;
+    }
+
 	
 	/**
 	 * @see java.lang.Object#toString()

@@ -39,6 +39,10 @@ public class CreateLoadingIndex {
 		
 		logger.info("Starting the creation of temporary loading indicies...");
 		LoadUtils l = new LoadUtils();
+                logger.info("Loading CoL names...");
+                l.loadCoLNames();
+                logger.info("Loading taxon names...");
+                l.loadTaxonNames();
 		logger.info("Loading relationships...");
 		l.loadRelationships();
 		logger.info("Loading taxon concepts...");

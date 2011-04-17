@@ -52,7 +52,7 @@ import org.wyki.cassandra.pelops.Selector;
 public class CassandraPelopsHelper implements StoreHelper  {
 	protected static Logger logger = Logger.getLogger(CassandraPelopsHelper.class);
 
-	protected static String keySpace = "bie";
+	protected static String keySpace = "names";
 
 	protected String host = "localhost";
 
@@ -181,7 +181,7 @@ public class CassandraPelopsHelper implements StoreHelper  {
         catch(Exception e){
             //expected behaviour. current thrift API doesnt seem
             //to support a retrieve null getter
-        	logger.error(e.getMessage(), e);
+        	//logger.error(e.getMessage(), e);
         }
 
 		//read the existing value

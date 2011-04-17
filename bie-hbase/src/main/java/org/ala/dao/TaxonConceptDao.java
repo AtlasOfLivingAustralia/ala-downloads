@@ -72,6 +72,15 @@ public interface TaxonConceptDao {
 	 * @throws Exception
 	 */
 	boolean addIdentifier(String guid, String alternativeIdentifier) throws Exception;
+
+        /**
+         * Adds the associated Taxa.  This is very similar to addIdentifier except we have the complete details of the identical concept...
+         * @param guid
+         * @param assTaxa
+         * @return
+         * @throws Exception
+         */
+        boolean addAssociatedTaxa(String guid, List<TaxonConcept> assTaxa) throws Exception;
 	
 	/**
 	 * Retrieve the link identifier value for this concept.
@@ -362,6 +371,8 @@ public interface TaxonConceptDao {
 	 * @throws Exception
 	 */
 	boolean addSynonym(String guid, TaxonConcept synonym) throws Exception;
+
+        boolean addIncluded(String guid, TaxonConcept included) throws Exception;
 
 	/**
 	 * Add a congruent concept.

@@ -144,7 +144,7 @@ public class TaxonConceptSHDaoImpl implements TaxonConceptDao {
 	protected IndexSearcher tcIdxSearcher;
 
 	@Inject
-	protected CBIndexSearch cbIdxSearcher;
+	public CBIndexSearch cbIdxSearcher;
 
 	/** The spring wired store helper to use */
 	protected StoreHelper storeHelper;
@@ -225,9 +225,10 @@ public class TaxonConceptSHDaoImpl implements TaxonConceptDao {
 		if (current == null) {
 			return false;
 		}
+                //TODO work out whether or not the taxonconcept should be tc or current
 		return storeHelper.putSingle(TC_TABLE, TC_COL_FAMILY,
 				ColumnType.TAXONCONCEPT_COL.getColumnName(),
-				tc.getGuid(), current);
+				tc.getGuid(), tc);
 	}
 
 	/**
@@ -339,6 +340,11 @@ public class TaxonConceptSHDaoImpl implements TaxonConceptDao {
 				ColumnType.SYNONYM_COL.getColumnName(), guid,
 				synonym);
 	}
+        public boolean addIncluded(String guid, TaxonConcept included) throws Exception{
+            return storeHelper.put(TC_TABLE, TC_COL_FAMILY,
+				ColumnType.SYNONYM_COL.getColumnName(), guid,
+				included);
+        }
 
 	/**
 	 * @see org.ala.dao.TaxonConceptDao#addIsCongruentTo(java.lang.String,
@@ -385,6 +391,10 @@ public class TaxonConceptSHDaoImpl implements TaxonConceptDao {
 				ColumnType.IDENTIFIER_COL.getColumnName(), guid,
 				alternativeIdentifier);
 	}
+
+        public boolean addAssociatedTaxa(String guid, List<TaxonConcept> assTaxa) throws Exception{
+            return storeHelper.putList(TC_TABLE, TC_COL_FAMILY, ColumnType.ASSOCIATED_COL.getColumnName(), guid, (List) assTaxa, false);
+        }
 
 	/**
 	 * @see org.ala.dao.TaxonConceptDao#getIdentifiers(java.lang.String)

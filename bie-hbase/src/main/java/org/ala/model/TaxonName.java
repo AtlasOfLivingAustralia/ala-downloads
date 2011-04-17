@@ -32,6 +32,11 @@ public class TaxonName extends AttributableObject implements Comparable<TaxonNam
 	public String publishedIn; //readable title
 	public String nomenclaturalCode;
 	public String typificationString;
+        public String genus;
+        public String uninomial;
+        public String specificEpithet;
+        public String infraspecificEpithet;
+
 
 	/**
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
@@ -43,7 +48,18 @@ public class TaxonName extends AttributableObject implements Comparable<TaxonNam
 			return nameComplete.compareTo(o.getNameComplete());
 		}
 		return -1;
-	}	
+	}
+        @Override
+	public boolean equals(Object obj) {
+		if(obj!=null && obj instanceof TaxonName){
+			TaxonName tn = (TaxonName) obj;
+			if(tn.getGuid()!=null && guid!=null){
+				return tn.getGuid().equals(guid);
+			}
+			
+		}
+		return false;
+	}
 	/**
 	 * @return the guid
 	 */
@@ -154,6 +170,38 @@ public class TaxonName extends AttributableObject implements Comparable<TaxonNam
 	public void setPublishedIn(String publishedIn) {
 		this.publishedIn = publishedIn;
 	}
+
+    public String getGenus() {
+        return genus;
+    }
+
+    public void setGenus(String genus) {
+        this.genus = genus;
+    }
+
+    public String getInfraspecificEpithet() {
+        return infraspecificEpithet;
+    }
+
+    public void setInfraspecificEpithet(String infraspecificEpithet) {
+        this.infraspecificEpithet = infraspecificEpithet;
+    }
+
+    public String getSpecificEpithet() {
+        return specificEpithet;
+    }
+
+    public void setSpecificEpithet(String specificEpithet) {
+        this.specificEpithet = specificEpithet;
+    }
+
+    public String getUninomial() {
+        return uninomial;
+    }
+
+    public void setUninomial(String uninomial) {
+        this.uninomial = uninomial;
+    }
 	
 	/**
 	 * @see java.lang.Object#toString()
@@ -167,6 +215,10 @@ public class TaxonName extends AttributableObject implements Comparable<TaxonNam
 		builder.append(this.guid);
 		builder.append(", nameComplete=");
 		builder.append(this.nameComplete);
+                builder.append(", uninomial=").append(this.uninomial);
+                builder.append(", genus=").append(this.genus);
+                builder.append(", specificEpithet=").append(this.specificEpithet);
+                builder.append(", infraspecificEpithet=").append(this.infraspecificEpithet);
 		builder.append(", nomenclaturalCode=");
 		builder.append(this.nomenclaturalCode);
 		builder.append(", publishedIn=");
