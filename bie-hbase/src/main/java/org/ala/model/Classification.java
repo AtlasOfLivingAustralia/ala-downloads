@@ -1,5 +1,7 @@
 package org.ala.model;
 
+import au.org.ala.data.util.RankType;
+
 public class Classification extends AttributableObject implements Comparable<Classification>{
 
 	protected String guid;
@@ -18,6 +20,8 @@ public class Classification extends AttributableObject implements Comparable<Cla
 	protected String superfamilyGuid;
 	protected String family;
 	protected String familyGuid;
+        protected String subfamily;
+        protected String subfamilyGuid;
 	protected String genus;
 	protected String genusGuid;
 	protected String species;
@@ -169,6 +173,23 @@ public class Classification extends AttributableObject implements Comparable<Cla
 	public void setFamilyGuid(String familyGuid) {
 		this.familyGuid = familyGuid;
 	}
+
+        public String getSubfamily() {
+            return subfamily;
+        }
+
+        public void setSubfamily(String subfamily) {
+            this.subfamily = subfamily;
+        }
+
+        public String getSubfamilyGuid() {
+            return subfamilyGuid;
+        }
+
+        public void setSubfamilyGuid(String subfamilyGuid) {
+            this.subfamilyGuid = subfamilyGuid;
+        }
+
 	/**
 	 * @return the genus
 	 */
@@ -270,6 +291,53 @@ public class Classification extends AttributableObject implements Comparable<Cla
 	public int compareTo(Classification o) {
 		return 0;
 	}
+        public void setRank(String rank , String name, String guid){
+            RankType r = RankType.getForName(rank);
+            if(r!= null){
+                switch(r){
+                    case KINGDOM:
+                        setKingdom(name);
+                        setKingdomGuid(guid);
+                        break;
+                    case PHYLUM:
+                        setPhylum(name);
+                        setPhylumGuid(guid);
+                        break;
+                    case CLASS:
+                        setClazz(name);
+                        setClazzGuid(guid);
+                        break;
+                    case ORDER:
+                        setOrder(name);
+                        setOrderGuid(guid);
+                        break;
+                    case SUPERFAMILY:
+                        setSuperfamily(name);
+                        setSuperfamilyGuid(guid);
+                    case FAMILY:
+                        setFamily(name);
+                        setFamilyGuid(guid);
+                        break;
+                    case SUBFAMILY:
+                        setSubfamily(name);
+                        setSubfamilyGuid(guid);
+                        break;
+                    case GENUS:
+                        setGenus(name);
+                        setGenusGuid(guid);
+                        break;
+                    case SPECIES:
+                        setSpecies(name);
+                        setSpeciesGuid(guid);
+                        break;
+                    case SUBSPECIES:
+                        setSubspecies(name);
+                        setSubspeciesGuid(guid);
+                        break;
+                    
+                }
+            }
+        }
 	/**
 	 * @see org.ala.model.AttributableObject#equals(java.lang.Object)
 	 */

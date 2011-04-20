@@ -436,6 +436,21 @@ public class LoadUtils {
             return null;
         }
         /**
+         * Returns the rank type for the supplied supra genric name if it can
+         * be determined.
+         * 
+         * @return
+         */
+        private RankType getRankForSupragenric(TaxonName tn){
+            if(tn.getUninomial() != null)
+                return RankType.GENUS;
+            if(tn.getInfraspecificEpithet()!= null)
+                return RankType.INFRASPECIFICNAME;
+            if(tn.getSpecificEpithet() != null)
+                return RankType.SPECIES;
+            return RankType.SUPRAGENERICNAME;
+        }
+        /**
          * Attempts to locate the CoL TaxonConcept that is similar to supplied tc
          * @param tc
          * @return
@@ -446,6 +461,8 @@ public class LoadUtils {
 
 
             RankType rank = RankType.getForName(tn.getRankString());
+            if(rank == RankType.SUPRAGENERICNAME)
+                rank = getRankForSupragenric(tn);
             if(rank.getId() <= RankType.GENUS.getId()){
 
                 if(tn.getUninomial() != null){
@@ -800,8 +817,18 @@ public class LoadUtils {
      public TaxonName getTaxonName(String uninomial, String genus, String species, String infra, RankType rank)throws Exception{
          TaxonName tn = null;
          BooleanQuery bquery = new BooleanQuery();
-         bquery.add(new TermQuery(new Term("lowUninomial",  colSearchTerm(uninomial))), Occur.MUST);
-         bquery.add(new TermQuery(new Term("lowGenus",  colSearchTerm(genus))), Occur.MUST);
+         if(rank == RankType.GENUS){
+             String g = genus != null ? genus:uninomial;
+             //the value can be in the uninomial or genus 
+             BooleanQuery orquery = new BooleanQuery();
+             orquery.add(new TermQuery(new Term("lowUninomial",  colSearchTerm(g))), Occur.SHOULD);
+             orquery.add(new TermQuery(new Term("lowGenus",  colSearchTerm(g))), Occur.SHOULD);
+             bquery.add(orquery, Occur.MUST);
+         }
+         else{
+            bquery.add(new TermQuery(new Term("lowUninomial",  colSearchTerm(uninomial))), Occur.MUST);
+            bquery.add(new TermQuery(new Term("lowGenus",  colSearchTerm(genus))), Occur.MUST);
+         }
          bquery.add(new TermQuery(new Term("lowSpecificEpithet",  colSearchTerm(species))), Occur.MUST);
          bquery.add(new TermQuery(new Term("lowInfraspecificEpithet",  colSearchTerm(infra))), Occur.MUST);
          if(rank != null && rank == RankType.SPECIES){

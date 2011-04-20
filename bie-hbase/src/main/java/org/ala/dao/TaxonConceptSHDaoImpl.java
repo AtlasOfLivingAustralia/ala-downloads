@@ -130,7 +130,7 @@ public class TaxonConceptSHDaoImpl implements TaxonConceptDao {
 	}
 
 	/** The location for the lucene index */
-	public static final String TC_INDEX_DIR = "/data/solr/bie/index";
+	public static final String TC_INDEX_DIR = "/data/solr/bie-names/data/index";
 
 	/** Column families */
 	private static final String TC_COL_FAMILY = "tc";
@@ -342,7 +342,7 @@ public class TaxonConceptSHDaoImpl implements TaxonConceptDao {
 	}
         public boolean addIncluded(String guid, TaxonConcept included) throws Exception{
             return storeHelper.put(TC_TABLE, TC_COL_FAMILY,
-				ColumnType.SYNONYM_COL.getColumnName(), guid,
+				ColumnType.INCLUDES_COL.getColumnName(), guid,
 				included);
         }
 
@@ -450,6 +450,12 @@ public class TaxonConceptSHDaoImpl implements TaxonConceptDao {
 				ColumnType.SYNONYM_COL.getColumnName(), guid,
 				TaxonConcept.class);
 	}
+
+        public List<TaxonConcept> getIncluded(String guid) throws Exception {
+                return (List) storeHelper.getList(TC_TABLE, TC_COL_FAMILY,
+                                ColumnType.INCLUDES_COL.getColumnName(), guid,
+                                TaxonConcept.class);
+        }
 
 	/**
 	 * @see org.ala.dao.TaxonConceptDao#getSynonymsFor(java.lang.String)
@@ -2283,6 +2289,7 @@ public class TaxonConceptSHDaoImpl implements TaxonConceptDao {
 		etc.setClassification((Classification) getFirstItem((List<Classification>) getColumnValue(map, ColumnType.CLASSIFICATION_COL)));
 		etc.setIdentifiers((List<String>) getColumnValue(map,ColumnType.IDENTIFIER_COL));
 		etc.setSynonyms((List<TaxonConcept>) getColumnValue(map,ColumnType.SYNONYM_COL));
+                etc.setIncludes((List<TaxonConcept>) getColumnValue(map, ColumnType.INCLUDES_COL));
 		etc.setCommonNames((List<CommonName>) getColumnValue(map,ColumnType.VERNACULAR_COL));
 		etc.setChildConcepts((List<TaxonConcept>) getColumnValue(map,ColumnType.IS_PARENT_COL_OF));
 		etc.setParentConcepts((List<TaxonConcept>) getColumnValue(map,ColumnType.IS_CHILD_COL_OF));

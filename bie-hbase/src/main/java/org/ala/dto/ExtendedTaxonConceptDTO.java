@@ -42,6 +42,7 @@ public class ExtendedTaxonConceptDTO {
     protected Classification classification;
     protected List<String> identifiers;
     protected List<TaxonConcept> synonyms;
+    protected List<TaxonConcept> includes;
 	protected List<CommonName> commonNames;
 	protected List<TaxonConcept> childConcepts;
 	protected List<TaxonConcept> parentConcepts;
@@ -355,4 +356,13 @@ public class ExtendedTaxonConceptDTO {
 	public void setSpecimenHolding(List<SpecimenHolding> specimenHolding) {
 		this.specimenHolding = specimenHolding;
 	}
+
+    public List<TaxonConcept> getIncludes() {
+        return includes;
+    }
+
+    public void setIncludes(List<TaxonConcept> includes) {
+        this.includes = includes;
+    }
+
 }

@@ -62,6 +62,15 @@ public interface TaxonConceptDao {
 	 */
 	List<TaxonConcept> getSynonymsFor(String guid) throws Exception;
 
+        /**
+	 * Retrieve the included TaxonConcepts for the supplied guid.
+	 *
+	 * @param guid
+	 * @return
+	 * @throws Exception
+	 */
+	List<TaxonConcept> getIncluded(String guid) throws Exception;
+
 	/**
 	 * Add an alternative identifier (GUID) for this taxon concept or 
 	 * a concept asserted to be congruent.

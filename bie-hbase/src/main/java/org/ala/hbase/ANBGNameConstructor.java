@@ -58,6 +58,7 @@ public class ANBGNameConstructor {
     protected InfoSourceDAO infoSourceDAO;
     @Inject
     protected TaxonConceptDao taxonConceptDao;
+    public static final String animaliaLsid = "urn:lsid:biodiversity.org.au:afd.taxon:4647863b-760d-4b59-aaa1-502c8cdf8d3c";
     
     private static final String TAXON_CONCEPTS = "/data/bie-staging/anbg/taxonConcepts.txt";
     public static final String TAXON_NAMES = "/data/bie-staging/anbg/taxonNames.txt";//-small.txt";
@@ -81,7 +82,8 @@ public class ANBGNameConstructor {
         ANBGNameConstructor loader = (ANBGNameConstructor) context.getBean(ANBGNameConstructor.class);
         loader.init();
         loader.construct();
-       
+       //CoL index query: name:equisetopsida OR id:2251389 OR id:2242856
+      
         //loader.generateEquivalentCoLList();
         loader.fillMissingClassification();
         loader.generateClassification();
@@ -138,6 +140,11 @@ public class ANBGNameConstructor {
                                 taxonConceptDao.addIncluded(guid, accepted);
                             }
                             else{
+                                //Hack for the Plantae TC
+                                if(guid.equals("urn:lsid:biodiversity.org.au:apni.taxon:0")){
+                                    accepted.setNameString("Plantae " + accepted.getNameString());
+                                    tn.setNameComplete("Plantae");
+                                }
                                 //we have a real taxon concept!!
                                 //set the rank
                                 RankType rank = RankType.getForName(tn.getRankString());
@@ -221,77 +228,7 @@ public class ANBGNameConstructor {
         while ((record = tr.readNext()) != null) {
             i++;
             processRecord(record,pout,out);
-//            if(record.length >=10){
-//                String namesGuid = record[0];
-//                //get all the taxon concepts for this name...
-//                List<TaxonConcept> tcs = loadUtils.getByNameGuid(namesGuid, 10);
-//                //search for the accepted concept
-//                TaxonConcept accepted = loadUtils.getAcceptedConcept(tcs);
-//                if(accepted != null){
-//                    String guid = accepted.getGuid();
-//                    TaxonName tn = loadUtils.getNameByGuid(namesGuid);
-//
-//
-//                    //check to see if this concept should be marked as congruent to or a synonym of another...
-//                    String cguid = loadUtils.isCongruentConcept(guid);
-//                    if(cguid != null && !cguid.equals(guid)){
-//                        taxonConceptDao.addIsCongruentTo(cguid, accepted);
-//                        //TODO work out what to do with remaining TC if there are more than 1 associated with this name
-//                    }
-//                    else{
-//                        //check see if synonym
-//                        String sguid = loadUtils.isSynonymFor(guid);
-//                        if(sguid != null && !sguid.equals(guid)){
-//                            taxonConceptDao.addSynonym(sguid, accepted);
-//                            //TODO work out what to do with remaining TC if there are more than 1 associated with this name
-//                        } else {
-//
-//                            //add it
-//                            taxonConceptDao.create(accepted);
-//                            numberAdded++;
-//                            if(numberAdded % 1000 == 0){
-//                                long current = System.currentTimeMillis();
-//                                logger.info("Taxon concepts added: "+numberAdded+", insert rate: "+((current-start)/numberAdded)+ "ms per record, last guid: "+ accepted.getGuid());
-//                            }
-//
-//                            //add the name...
-//                            taxonConceptDao.addTaxonName(guid, tn);
-//
-//
-//                            //set the parent for the accepted concept
-//                            accepted.setParentGuid(loadUtils.getParent(guid));
-//                            //set the children for the concept...
-//                            //accepted.setChildrenGuid(loadUtils.getChildren(guid));
-//                            //if the concept does not have a parent write it to file...
-//                            if (accepted.getParentGuid() == null) {
-//                                pout.write("\""+guid + "\"\t\"" + accepted.getNameString() + "\"\t\"" + tn.getRankString() + "\"\n");
-//                            }
-//
-//
-//                            //report similar names...
-//                            List<TaxonName> similarNames = loadUtils.getSimilarNames(tn, 10);
-//                            if(similarNames!= null && !similarNames.isEmpty()){
-//                                //report these names and in the future detemine whether or not TC for these names need to be merged with the current TC...
-//                                for(TaxonName name : similarNames){
-//                                    writeName(out,tn, false);
-//                                    writeName(out, name, true);
-//                                }
-//                                out.flush();
-//                            }
-//
-//                            //add all the other taxon concept with the same taxonName as "associated concepts"
-//                            tcs.remove(accepted);
-//                            if(!tcs.isEmpty()){
-//                                taxonConceptDao.addAssociatedTaxa(guid, tcs);
-//                            }
-//                        }
-//                    }
-//                }
-//                else{
-//                    logger.warn("No Taxon Concepts for " + namesGuid +"("+record[1]+ ") line " + i);
-//                }
-//
-//            }
+
         }
         out.flush();
         out.close();
@@ -350,13 +287,18 @@ public class ANBGNameConstructor {
     }
     /**
      * Attempts to fill in the missing classification with values from CoL
+     *
+     * When a genus has no parents and it is a possible homonym it is difficult to resolve
+     * these homonyms because CoL does not include authority for Genus.
+     *
      * @throws Exception
      */
     public void fillMissingClassification() throws Exception{
         //init file that will be used to write the classification start points
-        Writer out = null;//new OutputStreamWriter(new FileOutputStream(CLASS_START), "UTF-8");
+        Writer out =new OutputStreamWriter(new FileOutputStream(CLASS_START), "UTF-8");
         //attempt to add missing parts of the classification using the CoL
                 TaxonConceptSHDaoImpl tcDAOImpl = null;
+               
         if(taxonConceptDao instanceof TaxonConceptSHDaoImpl)
             tcDAOImpl= (TaxonConceptSHDaoImpl)taxonConceptDao;
         //As a first step use the missing parents list to identify area's of missing classification.
@@ -370,6 +312,7 @@ public class ANBGNameConstructor {
             i++;
             boolean checkHomo =false;
              boolean locatedName = false;
+             String reason="";
             if(record.length>=3){
 
                 //ignore bad names
@@ -377,9 +320,15 @@ public class ANBGNameConstructor {
                 if(name.startsWith("??") || name.startsWith("Unplaced")){
                     //logger.info("Ignoring bad name: "+ name);
                     badname++;
+                    reason ="Bad name";
                 }
                 else{
                     RankType rank = RankType.getForName(record[2]);
+                    if(rank == null){
+                        //attempt to get the rank type based on the raw
+                        rank = RankType.getForStrRank(record[2]);
+                    }
+
                     if(rank != null){
                         switch(rank){
 //                            case SUPRAGENERICNAME:
@@ -410,6 +359,7 @@ public class ANBGNameConstructor {
                                             catch(SearchResultException e){
                                                 //stop the processing
                                                 homo++;
+                                                reason = "Homonym Detected";
                                                 break;
                                             }
                                         }
@@ -441,9 +391,9 @@ public class ANBGNameConstructor {
                                     }
                                     else{
                                         //if the rank is species or below check to see if we can match on species etc
-                                        if(rank.getId()>RankType.GENUS.getId()){
+                                        if(rank.getId()>RankType.GENUS.getId() ||(rank == RankType.SUPRAGENERICNAME && tn.getGenus() != null && tn.getSpecificEpithet() != null)){
                                             String genus = tn.getGenus();
-                                            String species = tn.getSpecificEpithet();
+                                            String species = tn.getInfraspecificEpithet() != null ?tn.getSpecificEpithet():null;
                                             RankType r = RankType.SPECIES;
                                             if(species == null){
                                                 //check for homonym
@@ -455,6 +405,7 @@ public class ANBGNameConstructor {
                                             catch(SearchResultException e){
                                                 //stop the processing
                                                 homo++;
+                                                reason = "Homonym detected in broken down name";
                                                 break;
                                             }
                                             }
@@ -470,6 +421,8 @@ public class ANBGNameConstructor {
                                                     taxonConceptDao.update(tc);
                                                     locatedName=true;
                                                 }
+                                                else
+                                                    reason = "Unable to find concept in storage";
                                             }
                                             else {
                                                 //serach for the CoL term
@@ -498,7 +451,12 @@ public class ANBGNameConstructor {
                                                     }
                                                     locatedName=true;
                                                 }
+                                                else
+                                                    reason = "Unable to find disected parent";
                                             }
+                                        }
+                                        else{
+                                            reason = "Unable to locate a matching term in CoL";
                                         }
                                     }
                                 }
@@ -506,13 +464,24 @@ public class ANBGNameConstructor {
 
                         }
                     }
-                    else
+                    else{
                         badrank++;
+                        reason = "No Rank";
+                    }
                         //logger.info("Unable to process unknown rank: " + record[0] + "\t" + record[1] + "\t" +record[2]);
                 }
             }
-             if(!locatedName)
-                 out.write(StringUtils.join(record,"\t") + "\n");
+             //If AFD name add it to "Animalia"
+             //Unfortunately there is no one default kingdom for APNI
+             if (! locatedName && record[0].startsWith("urn:lsid:biodiversity.org.au:afd.taxon") && !record[0].equals(animaliaLsid)) {
+                 TaxonConcept animaliaConcept = taxonConceptDao.getByGuid(animaliaLsid);
+                 animaliaConcept.getChildrenGuid().add(record[0]);
+                 taxonConceptDao.update(animaliaConcept);
+                 logger.warn("Adding " + record[0] + " - " + record[1] + " to default kingdom Animalia. " + reason);
+                 locatedName = true;
+             }
+             if (!locatedName)
+                 out.write(StringUtils.join(record,"\t")+"\t"+reason + "\n");
         }
         //add all the toplevel terms to the file
         for(TaxonConcept ttc : topLevel)
@@ -625,7 +594,7 @@ public class ANBGNameConstructor {
             
             Classification cl = new Classification();
             before = previous;
-            previous=processLevel(guid, previous+1, cl);
+            previous=processLevel(guid,null, previous+1, cl);
             System.out.println(">>>>>guid: " + guid+ " left " + before + " right " + (previous));
 
         }
@@ -634,7 +603,7 @@ public class ANBGNameConstructor {
         
     }
 
-    public int processLevel(String guid, int previous, Classification cl) throws Exception{
+    public int processLevel(String guid, String parentguid, int previous, Classification cl) throws Exception{
         //get this concept
         TaxonConcept tc = taxonConceptDao.getByGuid(guid);
         if(tc != null){
@@ -651,10 +620,12 @@ public class ANBGNameConstructor {
         children.remove(tc.getGuid());
         for(String child : children){
             //System.out.println("parent: "+guid + " previous " + previous);
-            previous = processLevel(child, previous+1,cl2);
+            previous = processLevel(child, guid, previous+1,cl2);
         }
         //add the right value
         tc.setRight(previous+1);
+        if(parentguid != null)
+            tc.setParentGuid(parentguid);
         //update the taxon concept
         taxonConceptDao.update(tc);
         System.out.println(guid + "- LEFT: " + tc.getLeft() + " RIGHT: " + tc.getRight());
