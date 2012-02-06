@@ -1047,14 +1047,41 @@ include file="/common/taglibs.jsp" %><%@ taglib uri="/tld/taglibs-string.tld" pr
                                     <c:if test="${not empty extendedTaxonConcept.taxonName.publishedIn}"><cite>Published in: <a href="#">${extendedTaxonConcept.taxonName.publishedIn}</a></cite></c:if>
                             </td>
                     	</tr>
+                    	<tr class="cite">
+                            <td colspan="2">
+                                    <c:if test="${not empty extendedTaxonConcept.taxonConcept.referencedIn}"><cite>Referenced in: <a href="#">${extendedTaxonConcept.taxonConcept.referencedIn}</a></cite></c:if>
+                            </td>
+                    	</tr>
+                    	<!--  Add all the sameAs TaxonConcepts as publicationn -->
+                    	<c:if test="${not empty extendedTaxonConcept.sameAsConcepts}">
+                    		<c:forEach items="${extendedTaxonConcept.sameAsConcepts}" var="sameConcept">
+                    			<c:if test="${not empty sameConcept.publishedIn}">
+                    				<tr class="cite">
+                            			<td colspan="2">
+                            				<cite>Published in: <span class="publishedIn">${sameConcept.publishedIn}</span></cite>
+                            			</td>
+                            		</tr>
+                    			</c:if>
+                    			<c:if test="${not empty sameConcept.referencedIn}">
+                      				<tr class="cite">
+                            			<td colspan="2">
+                            				<cite>Referenced in: <span class="publishedIn">${sameConcept.referencedIn}</span></cite>
+                            			</td>
+                            		</tr>                  			
+                    			</c:if>
+                    		</c:forEach>
+                    	</c:if>
                     </table>
 
                     <c:if test="${not empty extendedTaxonConcept.synonyms}">
+                    <c:set var="currentNameLsid">empty</c:set>
                         <h2>Synonyms</h2>
                         <table>
                     </c:if>
                     <c:forEach items="${extendedTaxonConcept.synonyms}" var="synonym">
-                    	<tr>
+                    	<c:if test="${synonym.nameGuid != currentNameLsid}">
+                    	<c:set var="currentNameLsid">${synonym.nameGuid}</c:set>
+                    	<tr>                    		
                             <td><alatag:formatSciName name="${synonym.nameString}" rankId="${extendedTaxonConcept.taxonConcept.rankID}"/> ${synonym.author}</td>
                             <td class="source">
                                 <c:choose>
@@ -1062,10 +1089,17 @@ include file="/common/taglibs.jsp" %><%@ taglib uri="/tld/taglibs-string.tld" pr
                                     <c:otherwise><cite>Source:&nbsp;<a href="${synonym.infoSourceURL}" target="blank">${synonym.infoSourceName}</a></cite></c:otherwise>
                                 </c:choose>
                             </td>
+                             <td>(${synonym.relationship} ${synonym.description})</td> 
                         </tr>
+                        </c:if>
                         <tr class="cite">
                             <td colspan="2">
                                 <c:if test="${not empty synonym.publishedIn}"><cite>Published in: <span class="publishedIn">${synonym.publishedIn}</span></cite></c:if>
+                            </td>
+                        </tr>
+                        <tr class="cite">
+                            <td colspan="2">
+                                <c:if test="${not empty synonym.referencedIn}"><cite>Referenced in: <span class="publishedIn">${synonym.referencedIn}</span></cite></c:if>
                             </td>
                         </tr>
                     </c:forEach>

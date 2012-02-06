@@ -84,6 +84,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestOperations;
 
 import au.org.ala.data.model.LinnaeanRankClassification;
+import org.ala.model.SynonymConcept;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -969,6 +970,12 @@ public class SpeciesController {
         model.addAttribute("searchResults", searchResults);
         return STATUS_LIST;
     }
+    
+    public List<String> getAustralianSpecies(){
+        
+        return null;
+    }
+    
 
     /**
      * Pest / Conservation status JSON (for yui datatable)
@@ -1056,11 +1063,12 @@ public class SpeciesController {
         List<Map<String, String>> synonyms = new ArrayList<Map<String, String>>();
         
         try {
-            List<TaxonConcept> tcs = taxonConceptDao.getSynonymsFor(guid);
+            List tcs = taxonConceptDao.getSynonymsFor(guid);
             TaxonConcept accepted = taxonConceptDao.getByGuid(guid);
             tcs.add(0, accepted);
             
-            for (TaxonConcept tc : tcs) {
+            for (Object obj : tcs) {
+                TaxonConcept tc = (TaxonConcept)obj;
                 Map<String, String> syn = new HashMap<String, String>();
                 String name = tc.getNameString();
                 String author = (tc.getAuthor() != null) ? tc.getAuthor() : "";
@@ -1514,7 +1522,8 @@ public class SpeciesController {
 	        	Object isAustralian = map.get("isAustralian");
 	        	if(!isAussie.trim().equalsIgnoreCase(isAustralian.toString())){
 	        		try{
-	        			taxonConceptDao.setIsAustralian(guid, ((Boolean)isAustralian).booleanValue());
+	        		    //reindex the taxon concept too.
+	        			taxonConceptDao.setIsAustralian(guid, ((Boolean)isAustralian).booleanValue(), true);	        			        			
 	        		}
 	        		catch(Exception ex){
 	        			logger.error(ex);
