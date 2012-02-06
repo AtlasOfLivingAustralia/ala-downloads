@@ -18,10 +18,10 @@
         <netbeans.hint.deploy.server>Tomcat60</netbeans.hint.deploy.server>
     </properties>
     <dependencies>
-        <!-- BIE HBase -->
+        <!-- BIE Profile (used to be bie-hbase)-->
         <dependency>
             <groupId>au.org.ala</groupId>
-            <artifactId>bie-hbase</artifactId>
+            <artifactId>bie-profile</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- BIE Repository -->
@@ -58,6 +58,12 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.15</version>
+            <exclusions>
+<exclusion>
+<groupId>com.sun.jmx</groupId>
+<artifactId>jmxri</artifactId>
+</exclusion>
+</exclusions> 
         </dependency>
         <!-- COMMONS -->
         <dependency>
