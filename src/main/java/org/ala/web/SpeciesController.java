@@ -633,7 +633,13 @@ public class SpeciesController {
     	}
     	return recordCounts;
     }
-    
+    /**
+     * This method does not take into account the possibility of a subgenus
+     * @param parameter
+     * @deprecated 
+     * @return
+     */
+    @Deprecated
     private String extractScientificName(String parameter){
         String name = null;
 
@@ -650,7 +656,13 @@ public class SpeciesController {
 
         return name;
     }
-
+    /**
+     * This method has been deprecated because it does not cater for subgenus
+     * @param parameter
+     * @deprectaed
+     * @return
+     */
+    @Deprecated
     private String extractKingdom(String parameter){
         String kingdom = null;
 
@@ -662,14 +674,58 @@ public class SpeciesController {
         }
         return kingdom;
     }
+    /**
+     * Checks to see if the supplied name is a kingdom
+     * @param name
+     * @return
+     */
+    private boolean isKingdom(String name){
+        String lsid = taxonConceptDao.findLsidByName(name, "kingdom");
+        return lsid != null;
+    }
+    /**
+     * Splits up a url into scientific name and kingdom
+     * http://bie.ala.org.au/species/Scatochresis episema (Animalia)
+     * 
+     * But will cater for URLs that contain a subgenus
+     * http://bie.ala.org.au/species/Pulex (Pulex)
+     * 
+     * http://bie.ala.org.au/species/Pulex (Pulex) (Animalia)
+     * 
+     * @param in
+     * @return
+     */
+    private String[] extractComponents(String in){
+        String[] retArray = new String[2];
+        int lastOpen =in.lastIndexOf("(");
+        int lastClose = in.lastIndexOf(")"); 
+        if(lastOpen < lastClose){
+            //check to see if the last brackets are a kingdom
+            String potentialKingdom = in.substring(lastOpen+1, lastClose);
+            if(isKingdom(potentialKingdom)){
+                retArray[0] = in.substring(0, lastOpen);
+                retArray[1] = potentialKingdom;
+            }
+            else{
+                retArray[0] = in;
+            }
+        }
+        else{
+            retArray[0] = in;
+            //kingdom is null
+        }
+        return retArray;
+        
+    }
 
     private String getLsidByNameAndKingdom(String parameter){
         String lsid = null;
         String name = null;
         String kingdom = null;
-
-        name = extractScientificName(parameter);
-        kingdom = extractKingdom(parameter);
+        
+        String[] parts = extractComponents(parameter);
+        name = parts[0];
+        kingdom = parts[1];
         if(kingdom != null){
             LinnaeanRankClassification cl = new LinnaeanRankClassification(kingdom, null);
             cl.setScientificName(name);
