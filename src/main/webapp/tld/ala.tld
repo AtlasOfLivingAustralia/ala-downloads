@@ -26,8 +26,8 @@
      <name>property</name>
      <required>true</required>
      <rtexprvalue>true</rtexprvalue>
-    </attribute>			  
-  </tag>	
+    </attribute>
+  </tag>
 
   <tag>
     <description>Banner Menu Tag</description>
@@ -59,6 +59,31 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
+
+    <tag>
+        <description>Banner Menu Tag</description>
+        <name>header</name>
+        <tag-class>au.org.ala.commonui.headertails.BannerMenuTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>The return url path for the login/logout anchor</description>
+            <name>returnUrlPath</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>The search path to use</description>
+            <name>searchPath</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <description>Footer Menu Tag</description>
+        <name>footer</name>
+        <tag-class>au.org.ala.commonui.headertails.FooterMenuTag</tag-class>
+        <body-content>JSP</body-content>
+    </tag>
 
   <tag>
     <description>Logged In User Id</description>
