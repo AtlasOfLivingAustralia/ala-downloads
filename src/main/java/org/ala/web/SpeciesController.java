@@ -14,10 +14,7 @@
  ***************************************************************************/
 package org.ala.web;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -350,8 +347,7 @@ public class SpeciesController {
      * @throws Exception
      */ 
     @RequestMapping(value = "/ws/guid/{scientificName}", method = RequestMethod.GET)
-    public @ResponseBody List<GuidLookupDTO> getGuidForName(@PathVariable("scientificName") String scientificName,HttpServletRequest request,
-            Model model) throws Exception {
+    public @ResponseBody List<GuidLookupDTO> getGuidForName(@PathVariable("scientificName") String scientificName) throws Exception {
         return findGuids(scientificName);
     }
 
@@ -408,7 +404,6 @@ public class SpeciesController {
      * Get the repo location of a image according to {guid} .
      * E.g. /species/image/urn:lsid:biodiversity.org.au:afd.taxon:a402d4c8-db51-4ad9-a72a-0e912ae7bc9a
      * 
-     * @param model
      * @return view name
      * @throws Exception
      */ 
@@ -416,13 +411,19 @@ public class SpeciesController {
     public String showImages(
             @PathVariable("guid") String guidParam,
             @PathVariable("imageType") String imageType,
-            @RequestParam(value="conceptName", defaultValue ="", required=false) String conceptName,
-            HttpServletRequest request,
-            Model model) throws Exception {
+            @RequestParam(value="showNoImage", defaultValue = "true", required=false) boolean showNoImage,
+            HttpServletResponse response
+    ) throws Exception {
         String guid = guidParam;
-        logger.info("Displaying image for: " + guid +" .....");
+        logger.debug("Displaying image for: " + guid +" .....");
 
         SearchResultsDTO<SearchDTO> stcs = searchDao.findByName(IndexedTypes.TAXON, guid, null, 0, 1, "score", "asc");
+        //search by name
+        if(stcs.getTotalRecords() == 0){
+            logger.debug("Searching with by name instead....");
+            stcs = (SearchResultsDTO<SearchDTO>) searchDao.findByScientificName(guid,1);
+        }
+
         if(stcs.getTotalRecords()>0){
             SearchTaxonConceptDTO st = (SearchTaxonConceptDTO) stcs.getResults().get(0);
             repoUrlUtils.fixRepoUrls(st);
@@ -431,10 +432,45 @@ public class SpeciesController {
                 return "redirect:" + st.getThumbnail();
             } else if ("small".equals(imageType) && st.getImage() != null && !"".equals(st.getImage())) {
                 return "redirect:" + st.getImage().replaceAll("raw", "smallRaw");
+            }  else if ("large".equals(imageType) && st.getImage() != null && !"".equals(st.getImage())) {
+                return "redirect:" + st.getImage().replaceAll("raw", "largeRaw");
+            }  else if(st.getImage() !=null) {
+                return "redirect:" + st.getImage();
             }
         }
 
-        return "redirect:/images/noImage85.jpg"; // no image 
+        if(showNoImage){
+            return "redirect:/images/noImage85.jpg"; // no image
+        } else {
+            response.sendError(404);
+            return null;
+        }
+    }
+
+    /**
+     * TODO Replace this with a more efficient query mechanism.
+     * 
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = {"/species/bulklookup.json","/ws/species/bulklookup.json"}, method = RequestMethod.POST)
+    public SearchDTO[] bulkImageLookup(HttpServletRequest request) throws Exception {
+        ObjectMapper om = new ObjectMapper();
+        String[] guids = om.readValue(request.getInputStream(), (new String[0]).getClass());
+        List<SearchDTO> resultSet = new ArrayList<SearchDTO>();
+        for(int i=0; i< guids.length; i++){
+
+            SearchResultsDTO<SearchDTO> results = searchDao.findByName(IndexedTypes.TAXON, guids[i], null, 0, 1, "score", "asc");
+            if(results.getResults().isEmpty()){
+                results = searchDao.doExactTextSearch(guids[i], null, 0, 1, "score", "asc");
+            }
+            if(results.getTotalRecords() > 0){
+                repoUrlUtils.fixRepoUrls(results);
+                resultSet.addAll(results.getResults());
+            }
+        }
+        return resultSet.toArray(new SearchDTO[0]);
     }
 
     /**
@@ -1059,7 +1095,8 @@ public class SpeciesController {
         SearchResultsDTO searchResults = null;
 
         if (statusType!=null) {
-            searchResults = searchDao.findAllByStatus(statusType, filterQuery, startIndex, pageSize, sortField, sortDirection);// findByScientificName(query, startIndex, pageSize, sortField, sortDirection);
+            searchResults = searchDao.findAllByStatus(statusType, filterQuery, startIndex, pageSize, sortField, sortDirection);
+            // findByScientificName(query, startIndex, pageSize, sortField, sortDirection);
         }
 
         return searchResults;
@@ -1071,7 +1108,7 @@ public class SpeciesController {
      * @param guids
      * @return names
      */
-    @RequestMapping(value = "/species/namesFromGuids.json", method = RequestMethod.GET)
+    @RequestMapping(value = "/species/namesFromGuids.json")
     public @ResponseBody List<String> getNamesForGuids(@RequestParam(value="guid", required=true) String[] guids) {
         List<String> names = new ArrayList<String>();
         

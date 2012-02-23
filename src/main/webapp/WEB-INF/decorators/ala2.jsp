@@ -84,16 +84,24 @@ include file="/common/taglibs.jsp" %>
             });
         });
     </script>
+    <style type="text/css">
+        div.solrResults {
+            width: 762px;
+            float: left;
+        }
+    </style>
 </head>
 <body class="page species">
     <div id="wrapper">
         <c:set var="returnUrlPath" value="${initParam.serverName}${pageContext.request.requestURI}${not empty pageContext.request.queryString ? '?' : ''}${pageContext.request.queryString}"/>
-        <ala:header returnUrlPath="${returnUrlPath}" />
+        <ala:banner returnUrlPath="${returnUrlPath}" populateSearchBox="true"/>
+        <ala:menu />
         <div id="content">
             <ala:loggedInUserId />
             <decorator:body />
         </div>
         <ala:footer />
+        <ala:analytics />
     </div>
 </body>
 </html>

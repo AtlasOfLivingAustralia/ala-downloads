@@ -14,15 +14,27 @@
         <!-- This project uses UTF8 for Regular Expressions -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <openrdf.sesame.version>2.2</openrdf.sesame.version>
-        <spring.version>3.0.5.RELEASE</spring.version>
+        <spring.version>3.1.0.RELEASE</spring.version>
         <netbeans.hint.deploy.server>Tomcat60</netbeans.hint.deploy.server>
     </properties>
     <dependencies>
+    <!--  Remove the guava version conflict issue -->
+    	<dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>11.0.1</version>
+        </dependency>
         <!-- BIE Profile (used to be bie-hbase)-->
         <dependency>
             <groupId>au.org.ala</groupId>
             <artifactId>bie-profile</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- BIE Repository -->
         <dependency>
@@ -34,6 +46,10 @@
                     <groupId>xerces</groupId>
                     <artifactId>xercesImpl</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>au.org.ala</groupId>
+                    <artifactId>ala-name-matching</artifactId>
+                </exclusion>                
             </exclusions>
         </dependency>
         <!-- ALA common UI -->

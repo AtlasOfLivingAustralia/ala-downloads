@@ -169,7 +169,7 @@
     <div id="header">
         <div id="breadcrumb">
             <a href="${initParam.centralServer}">Home</a>
-            <a href="${initParam.centralServer}/explore/">Explore</a>
+            <%--<a href="${initParam.centralServer}/explore/">Explore</a>--%>
             <span class="current">Search the Atlas</span>
         </div>
     </div><!--close header-->
@@ -187,7 +187,7 @@
     <div id="header">
         <div id="breadcrumb">
             <a href="${initParam.centralServer}">Home</a>
-            <a href="${initParam.centralServer}/explore/">Explore</a>
+            <%--<a href="${initParam.centralServer}/explore/">Explore</a>--%>
             <span class="current">Search the Atlas</span>
         </div>
         <div class="astrisk" style="display:none">
@@ -311,7 +311,10 @@
                     Sort by
                     <select id="sort" name="sort">
                         <option value="score" <c:if test="${param.sort eq 'score'}">selected</c:if>>best match</option>
+                        <!--
+                        //REMOVED FOR NOW - cant sort on a multivalue field in SOLR
                         <option value="scientificNameRaw" <c:if test="${param.sort eq 'scientificNameRaw'}">selected</c:if>>scientific name</option>
+                        -->
                         <!--                            <option value="rank">rank</option>-->
                         <!-- <option value="commonNameSort" <c:if test="${param.sort eq 'commonNameSort'}">selected</c:if>>common name</option>  -->
                         <option value="commonNameSingle" <c:if test="${param.sort eq 'commonNameSingle'}">selected</c:if>>common name</option>
@@ -365,7 +368,11 @@
 	                            <!-- <span class="recordSighting" style="display:inline;"><a href="http://biocache.ala.org.au/share/sighting/${result.guid}">Record a sighting</a></span> -->	                            
 	                            	<span class="recordSighting" style="display:inline;"><a href="http://cs.ala.org.au/bdrs-ala/bdrs/user/atlas.htm?surveyId=1&guid=${result.guid}">Record a sighting</a></span>
 	                            	<span class="sharePhoto" style="display:inline;"><a href="${initParam.centralServer}/share-images/?guid=${result.guid}&scientificName=${not empty result.acceptedConceptName ? result.acceptedConceptName : result.name}&commonName=${result.commonNameSingle}">Share a photo</a></span>
-	                            	&nbsp;<span class="recordSighting" style="display:inline;"><a href="#" onClick='javascript:window.open("http://biocache.ala.org.au/occurrences/taxa/${result.guid}")'>Occurrences: ${result.occCount}</a></span>
+	                            	&nbsp;
+                                    <c:if test="${result.occCount > 0}">
+                                    <span class="recordSighting" style="display:inline;"><a href="http://biocache.ala.org.au/occurrences/taxa/${result.guid}">Occurrences:
+                                    <fmt:formatNumber value="${result.occCount}" pattern="#,###,###"/></a></span>
+                                    </c:if>
 	                            </c:if>
                                 <!-- ${sectionText} -->
                             </p>
