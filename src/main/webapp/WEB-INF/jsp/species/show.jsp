@@ -5,7 +5,7 @@ include file="/common/taglibs.jsp" %><%@ taglib uri="/tld/taglibs-string.tld" pr
 <c:set var="spatialPortalWMSUrl">http://spatial.ala.org.au/alaspatial/</c:set>
 <c:set var="wordPressUrl">${initParam.centralServer}</c:set>
 <c:set var="biocacheUrl">${initParam.biocacheUrl}</c:set>
-<c:set var="biocacheWSUrl">http://biocache.ala.org.au/ws/</c:set>
+<c:set var="biocacheWSUrl">${initParam.biocacheWSUrl}</c:set>
 <c:set var="citizenSciUrl">http://cs.ala.org.au/bdrs-ala/bdrs/user/atlas.htm?surveyId=1&guid=</c:set>
 <c:set var="collectoryUrl">http://collections.ala.org.au</c:set>
 <c:set var="threatenedSpeciesCodes">${collectoryUrl}/public/showDataResource</c:set>
@@ -534,10 +534,10 @@ include file="/common/taglibs.jsp" %><%@ taglib uri="/tld/taglibs-string.tld" pr
                             | <a href="${spatialPortalUrl}?q=lsid:${extendedTaxonConcept.taxonConcept.guid}" title="View interactive map">View interactive map</a>
                         </p>
                         <div class="left">
-                            <img id="mapImage" src='http://biocache.ala.org.au/ws/density/map?q=lsid:"${extendedTaxonConcept.taxonConcept.guid}"' class="distroImg" width="360" alt="occurrence map" onerror="this.style.display='none'"/>
+                            <img id="mapImage" src='${biocacheWSUrl}/density/map?q=lsid:"${extendedTaxonConcept.taxonConcept.guid}"' class="distroImg" width="360" alt="occurrence map" onerror="this.style.display='none'"/>
                         </div>
                         <div id="legendDiv" class="left" style="margin-top: 80px; margin-left: 20px;">
-                            <img id="mapLegend" src='http://biocache.ala.org.au/ws/density/legend?q=lsid:"${extendedTaxonConcept.taxonConcept.guid}"' class="distroLegend" alt="map legend" onerror="this.style.display='none'"/>
+                            <img id="mapLegend" src='${biocacheWSUrl}/density/legend?q=lsid:"${extendedTaxonConcept.taxonConcept.guid}"' class="distroLegend" alt="map legend" onerror="this.style.display='none'"/>
                         </div>
                         <p style="clear: both; margin-left: 50px;"><span class="asterisk-container"><a href="${wordPressUrl}/about/progress/map-ranges/">Learn more about Atlas maps</a>&nbsp;</span></p>
                     </div>
