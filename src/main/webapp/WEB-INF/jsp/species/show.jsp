@@ -469,7 +469,7 @@ include file="/common/taglibs.jsp" %><%@ taglib uri="/tld/taglibs-string.tld" pr
                             <h2><c:if test="${not empty extendedTaxonConcept.commonNames}">${extendedTaxonConcept.commonNames[0].nameString}</c:if></h2> 
                         </div> 
                         <div class="meta"> 
-                            <h3>Rank</h3><p style="text-transform: capitalize;">${extendedTaxonConcept.taxonConcept.rankString}</p>
+                            <h3>Rank</h3><p style="text-transform: capitalize;">${extendedTaxonConcept.taxonConcept.rawRankString}</p>
                             <c:if test="${not empty extendedTaxonConcept.taxonConcept.infoSourceName && not empty extendedTaxonConcept.taxonConcept.infoSourceURL}">
                             <h3>Name source</h3><p><a href="${extendedTaxonConcept.taxonConcept.infoSourceURL}" onclick="window.open(this.href); return false;" class="external">${extendedTaxonConcept.taxonConcept.infoSourceName}</a></p>
                             </c:if>
@@ -1216,7 +1216,7 @@ Read Only Mode
                     	<c:forEach items="${taxonHierarchy}" var="taxon">
                             <c:choose><%-- Note: check for rankId is here due to some taxonHierarchy including taxa at higher rank than requested taxon (bug) --%>
                                 <c:when test="${taxon.rankId <= extendedTaxonConcept.taxonConcept.rankID && taxon.guid != extendedTaxonConcept.taxonConcept.guid}">
-                                    <ul><li>${taxon.rank}: <a href="<c:url value='/species/${taxon.guid}#classification'/>" title="${taxon.rank}">
+                                    <ul><li>${taxon.rawRank}: <a href="<c:url value='/species/${taxon.guid}#classification'/>" title="${taxon.rank}">
                                         <alatag:formatSciName name="${not empty taxon.nameComplete ? taxon.nameComplete : taxon.name}" rankId="${taxon.rankId}"/>
                                         <c:if test="${not empty taxon.commonNameSingle && taxon.guid == extendedTaxonConcept.taxonConcept.guid}">
                                             : ${taxon.commonNameSingle}
@@ -1224,7 +1224,7 @@ Read Only Mode
                                     </a></li>
                                 </c:when>
                                 <c:when test="${taxon.guid == extendedTaxonConcept.taxonConcept.guid}">
-                                    <ul><li id="currentTaxonConcept">${taxon.rank}: <span><alatag:formatSciName name="${not empty taxon.nameComplete ? taxon.nameComplete : taxon.name}" rankId="${taxon.rankId}"/>
+                                    <ul><li id="currentTaxonConcept">${taxon.rawRank}: <span><alatag:formatSciName name="${not empty taxon.nameComplete ? taxon.nameComplete : taxon.name}" rankId="${taxon.rankId}"/>
                                     <c:if test="${not empty taxon.commonNameSingle && taxon.guid == extendedTaxonConcept.taxonConcept.guid}">
                                             : ${taxon.commonNameSingle}
                                         </c:if></span>
@@ -1238,7 +1238,7 @@ Read Only Mode
                     	</c:forEach>
                         <ul class="childClassification">
                             <c:forEach items="${childConcepts}" var="child">
-                                <li class="${child.isAustralian}">${child.rank}:
+                                <li class="${child.isAustralian}">${child.rawRank}:
                                     <c:set var="taxonLabel">
                                         <alatag:formatSciName name="${not empty child.nameComplete ? child.nameComplete : child.name}" rankId="${child.rankId}"/>
                                         <c:if test="${not empty child.commonNameSingle}">: ${child.commonNameSingle}</c:if>
