@@ -460,8 +460,8 @@ public class SpeciesController {
         String[] guids = om.readValue(request.getInputStream(), (new String[0]).getClass());
         List<SearchDTO> resultSet = new ArrayList<SearchDTO>();
         for(int i=0; i< guids.length; i++){
-
-            SearchResultsDTO<SearchDTO> results = searchDao.findByName(IndexedTypes.TAXON, guids[i], null, 0, 1, "score", "asc");
+            //Need to sort the scores descended to get the highest score first
+            SearchResultsDTO<SearchDTO> results = searchDao.findByName(IndexedTypes.TAXON, guids[i], null, 0, 1, "score", "desc");
             if(results.getResults().isEmpty()){
                 results = searchDao.doExactTextSearch(guids[i], null, 0, 1, "score", "asc");
             }
@@ -818,8 +818,8 @@ public class SpeciesController {
             @PathVariable("guid") String guid,
             @RequestParam(value="conceptName", defaultValue ="", required=false) String conceptName,
             Model model) throws Exception {
-
-        SearchResultsDTO<SearchDTO> stcs = searchDao.findByName(IndexedTypes.TAXON, guid, null, 0, 1, "score", "asc");
+        //sort by score needs to be desc.
+        SearchResultsDTO<SearchDTO> stcs = searchDao.findByName(IndexedTypes.TAXON, guid, null, 0, 1, "score", "desc");
         if(stcs.getTotalRecords()>0){
             SearchTaxonConceptDTO st = (SearchTaxonConceptDTO) stcs.getResults().get(0);
             model.addAttribute("taxonConcept", repoUrlUtils.fixRepoUrls(st));
