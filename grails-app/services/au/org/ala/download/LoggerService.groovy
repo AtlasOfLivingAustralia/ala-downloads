@@ -19,7 +19,7 @@ class LoggerService {
                 comment: params.comment?:"",
                 userIP: params.userIP,
                 reasonTypeId: params.reasonTypeId,
-                sourceUrl: "http://macropus.ala.org.au/archives/" + download.filePath.replaceAll("/data/archives/","")
+                sourceUrl: "http://macropus.ala.org.au/archives/" + download.fileUri.replaceAll("/data/archives/","")
         )
         if (!logEvent.save(flush: true)) {
             log.error logEvent.errors.allErrors.join("|")

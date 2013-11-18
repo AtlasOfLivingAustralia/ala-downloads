@@ -3,7 +3,7 @@ package au.org.ala.downloads
 class Download {
     String name
     String description
-    String filePath
+    String fileUri
     String mimeType
     Long fileSize
     Date dateCreated
@@ -12,7 +12,7 @@ class Download {
     static constraints = {
         name blank: false
         description blank: true, widget: 'textarea'
-        filePath blank: false
+        fileUri blank: false, unique: true
         mimeType blank: true
         fileSize min: 1L
         dateCreated display: false

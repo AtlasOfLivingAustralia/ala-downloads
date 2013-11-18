@@ -14,7 +14,7 @@ class ProxyController {
         }
 
         try {
-            def fileObj = new File(downloadInstance.filePath);
+            def fileObj = new File(downloadInstance.fileUri);
             def inputStream = fileObj.newInputStream()
 
             // log to ala-logger

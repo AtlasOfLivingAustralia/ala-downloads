@@ -52,7 +52,7 @@
 
                         <g:sortableColumn property="description" title="${message(code: 'download.description.label', default: 'Description')}" />
 
-                        %{--<g:sortableColumn property="filePath" title="${message(code: 'download.filePath.label', default: 'File Path')}" />--}%
+                        %{--<g:sortableColumn property="fileUri" title="${message(code: 'download.fileUri.label', default: 'File Path')}" />--}%
 
                         <g:sortableColumn property="mimeType" title="${message(code: 'download.mimeType.label', default: 'File Type')}" />
 
@@ -70,7 +70,7 @@
                                 <a href="#" class="downloadLink" data-id="${downloadInstance.id}">${fieldValue(bean: downloadInstance, field: "name")}</a>
                             </td>
                             <td>${fieldValue(bean: downloadInstance, field: "description")}</td>
-                            %{--<td>${fieldValue(bean: downloadInstance, field: "filePath")}</td>--}%
+                            %{--<td>${fieldValue(bean: downloadInstance, field: "fileUri")}</td>--}%
                             <td>${fieldValue(bean: downloadInstance, field: "mimeType")}</td>
                             <td>${fieldValue(bean: downloadInstance, field: "fileSize")}</td>
                             %{--<td><g:formatDate date="${downloadInstance.dateCreated}" /></td>--}%
@@ -135,7 +135,7 @@
                     %{--<p><img src="${resource(dir:'images',file:'spinner.gif')}" alt="spinner icon"/></p>--}%
                 </div>
                 <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                     %{--<button class="btn btn-primary" id="saveEditors">Save changes</button>--}%
                 </div>
             </div>

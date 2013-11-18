@@ -41,11 +41,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${downloadInstance?.filePath}">
+				<g:if test="${downloadInstance?.fileUri}">
 				<li class="fieldcontain">
 					<span id="filePath-label" class="property-label"><g:message code="download.filePath.label" default="File Path" /></span>
 					
-						<span class="property-value" aria-labelledby="filePath-label"><g:fieldValue bean="${downloadInstance}" field="filePath"/></span>
+						<span class="property-value" aria-labelledby="filePath-label"><g:fieldValue bean="${downloadInstance}" field="fileUri"/></span>
 					
 				</li>
 				</g:if>

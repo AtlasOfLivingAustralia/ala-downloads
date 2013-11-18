@@ -34,7 +34,7 @@ class DownloadController {
     def save() {
         def downloadInstance = new Download(params)
         if (!downloadInstance.save(flush: true)) {
-            render(view: "create", model: [downloadInstance: downloadInstance])
+            render(view: "create", model: [downloadInstance: downloadInstance, fileListing: fileListingService.getListing()])
             return
         }
 

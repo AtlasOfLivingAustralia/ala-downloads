@@ -74,18 +74,22 @@ app.downloads.dir = "/data/archives/"
 environments {
     development {
         grails.logging.jul.usebridge = true
-        grails.serverURL = 'http://dev.ala.org.au:8080/' + appName
         serverName='http://dev.ala.org.au:8080'
+        grails.serverURL = "${serverName}/${appName}"
+        contextPath = "/${appName}"
         security.cas.appServerName = serverName
-        security.cas.contextPath = "/${appName}"
-        contextPath = "/specieslist-webapp"
+        security.cas.contextPath = contextPath
     }
     test {
 
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
+        serverName = 'http://downloads.ala.org.au'
+        grails.serverURL = serverName
+        contextPath = ""
+        security.cas.appServerName = serverName
+        security.cas.contextPath = contextPath
     }
 }
 

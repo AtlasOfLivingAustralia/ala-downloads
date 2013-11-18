@@ -15,8 +15,8 @@
                 var name = el.split("/").pop(); // get last el
                 var name2 = name.split(".").shift(); // get first el
                 console.log("name",name,name2,fileObj);
-                $('#name').val(name2);
-                $('#filePath').val(el);
+                $('#name').val(name2.replace(/_/g," "));
+                $('#fileUri').val(el);
                 $('#mimetype').val(fileObj.mimetype);
                 $('#fileSize').val(fileObj.size);
                 $('#fileLastModified').val(fileObj.date);
@@ -53,12 +53,12 @@
 	<g:textArea name="description" id="description" cols="40" rows="5" value="${downloadInstance?.description}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'filePath', 'error')} required">
-	<label for="filePath">
-		<g:message code="download.filePath.label" default="File Path" />
+<div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'fileUri', 'error')} required">
+	<label for="fileUri">
+		<g:message code="download.fileUri.label" default="File Path" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="filePath" id="filePath" required="" value="${downloadInstance?.filePath}"/>
+	<g:textField name="fileUri" id="fileUri" required="" value="${downloadInstance?.fileUri}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'mimeType', 'error')} ">
