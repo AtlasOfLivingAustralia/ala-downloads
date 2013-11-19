@@ -28,7 +28,7 @@
 					
 						<g:sortableColumn property="description" title="${message(code: 'download.description.label', default: 'Description')}" />
 					
-						<g:sortableColumn property="filePath" title="${message(code: 'download.fileUri.label', default: 'File Path')}" />
+						<g:sortableColumn property="fileUri" title="${message(code: 'download.fileUri.label', default: 'File Uri')}" />
 					
 						<g:sortableColumn property="mimeType" title="${message(code: 'download.mimeType.label', default: 'Mime Type')}" />
 					

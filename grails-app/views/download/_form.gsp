@@ -55,7 +55,7 @@
 
 <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'fileUri', 'error')} required">
 	<label for="fileUri">
-		<g:message code="download.fileUri.label" default="File Path" />
+		<g:message code="download.fileUri.label" default="File Uri" />
 		<span class="required-indicator">*</span>
 	</label>
 	<g:textField name="fileUri" id="fileUri" required="" value="${downloadInstance?.fileUri}"/>
@@ -76,5 +76,3 @@
 	</label>
 	<g:field name="fileSize" id="fileSize" type="number" min="1" value="${downloadInstance.fileSize}"/>
 </div>
-
-

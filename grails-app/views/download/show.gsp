@@ -43,9 +43,9 @@
 			
 				<g:if test="${downloadInstance?.fileUri}">
 				<li class="fieldcontain">
-					<span id="filePath-label" class="property-label"><g:message code="download.filePath.label" default="File Path" /></span>
+					<span id="fileUri-label" class="property-label"><g:message code="download.fileUri.label" default="File Uri" /></span>
 					
-						<span class="property-value" aria-labelledby="filePath-label"><g:fieldValue bean="${downloadInstance}" field="fileUri"/></span>
+						<span class="property-value" aria-labelledby="fileUri-label"><g:fieldValue bean="${downloadInstance}" field="fileUri"/></span>
 					
 				</li>
 				</g:if>
@@ -82,6 +82,15 @@
 					<span id="lastUpdated-label" class="property-label"><g:message code="download.lastUpdated.label" default="Last Updated" /></span>
 					
 						<span class="property-value" aria-labelledby="lastUpdated-label"><g:formatDate date="${downloadInstance?.lastUpdated}" /></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${downloadInstance?.recordCounts}">
+				<li class="fieldcontain">
+					<span id="recordCounts-label" class="property-label"><g:message code="download.recordCounts.label" default="Record Counts" /></span>
+					
+						<span class="property-value" aria-labelledby="recordCounts-label"><g:fieldValue bean="${downloadInstance}" field="recordCounts"/></span>
 					
 				</li>
 				</g:if>
