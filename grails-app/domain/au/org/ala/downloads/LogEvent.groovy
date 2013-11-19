@@ -14,7 +14,7 @@ class LogEvent {
     Integer eventTypeId = 1002
     Integer reasonTypeId
     Integer sourceTypeId = 0
-    Map<String, Integer> recordCounts = new Hashtable<String, Integer>()
+    Map recordCounts
 
     Date dateCreated
     Date lastUpdated
@@ -22,5 +22,6 @@ class LogEvent {
     static constraints = {
         comment nullable: true
         month nullable: true
+        recordCounts nullable: true
     }
 }

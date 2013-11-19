@@ -1,4 +1,3 @@
-
 <%@ page import="au.org.ala.downloads.Download" %>
 <!DOCTYPE html>
 <html>
@@ -86,11 +85,13 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${downloadInstance?.recordCounts}">
+				<g:if test="${downloadInstance?.recordCount}">
 				<li class="fieldcontain">
-					<span id="recordCounts-label" class="property-label"><g:message code="download.recordCounts.label" default="Record Counts" /></span>
+					<span id="recordCount-label" class="property-label"><g:message code="download.recordCount.label" default="Record Count" /></span>
 					
-						<span class="property-value" aria-labelledby="recordCounts-label"><g:fieldValue bean="${downloadInstance}" field="recordCounts"/></span>
+						<g:each in="${downloadInstance.recordCount}" var="r">
+						<span class="property-value" aria-labelledby="recordCount-label"><g:link controller="recordCount" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></span>
+						</g:each>
 					
 				</li>
 				</g:if>

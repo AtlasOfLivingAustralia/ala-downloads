@@ -6,8 +6,11 @@ class Download {
     String fileUri
     String mimeType
     Long fileSize
+
     Date dateCreated
     Date lastUpdated
+
+    static hasMany = [recordCount: RecordCount]
 
     static constraints = {
         name blank: false

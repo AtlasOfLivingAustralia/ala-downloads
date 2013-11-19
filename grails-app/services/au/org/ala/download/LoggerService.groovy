@@ -6,7 +6,9 @@ import grails.converters.JSON
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 
 class LoggerService {
-    def httpWebService
+
+    def httpWebService, grailsApplication
+
     /**
      * Save logEvent to DB
      *
@@ -14,12 +16,19 @@ class LoggerService {
      * @param params
      */
     def addDownloadEvent(Download download, GrailsParameterMap params) {
+        Map recordCountMap = [:]
+        //recordCountMap.put("dr111", 200)
+        download.recordCount.each {
+            recordCountMap.put(it.code, it.records.toString())
+        }
+        log.error "recordCountMap = $recordCountMap"
         def logEvent = new LogEvent(
                 userEmail: params.userEmail,
                 comment: params.comment?:"",
                 userIP: params.userIP,
                 reasonTypeId: params.reasonTypeId,
-                sourceUrl: "http://macropus.ala.org.au/archives/" + download.fileUri.replaceAll("/data/archives/","")
+                recordCounts: recordCountMap,
+                sourceUrl: "http://macropus.ala.org.au/archives/" + download.fileUri.replaceAll(grailsApplication.config.app.downloads.dir,"")
         )
         if (!logEvent.save(flush: true)) {
             log.error logEvent.errors.allErrors.join("|")
@@ -37,8 +46,16 @@ class LoggerService {
         events.each { event ->
             log.info "${(System.currentTimeMillis() / 1000L)} event = ${event as JSON}"
             def jsonBody = event as JSON
-            def resp = httpWebService.doJsonPost("http://logger.ala.org.au/", "service/logger/", "80", jsonBody.toString())
-            log.debug "resp = $resp"
+            def resp
+            log.debug "json = ${jsonBody.toString()}"
+            if (grailsApplication.config.app.logger.enabled) {
+                resp = httpWebService.doJsonPost("http://logger.ala.org.au/", "service/logger/", "80", jsonBody.toString())
+                log.debug "resp = $resp"
+            } else {
+                resp = [:]
+                log.warn "ALA Logger NOT enabled"
+            }
+
             if (resp.error) {
                 // got an error
                 log.error "${resp.error}"

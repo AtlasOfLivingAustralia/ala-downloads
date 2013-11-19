@@ -15,12 +15,20 @@
                 var name = el.split("/").pop(); // get last el
                 var name2 = name.split(".").shift(); // get first el
                 console.log("name",name,name2,fileObj);
-                $('#name').val(name2.replace(/_/g," "));
+                $('#name').val(name2.replace(/[_\-]/g," "));
                 $('#fileUri').val(el);
                 $('#mimetype').val(fileObj.mimetype);
                 $('#fileSize').val(fileObj.size);
                 $('#fileLastModified').val(fileObj.date);
             }
+        });
+
+        $('#addRecordCount').click(function(e) {
+            e.preventDefault();
+            var lastItemIndex = $('.recordCountInput').length;
+            var input = "Code: <input type='text' name='recordCount[" + lastItemIndex + "].code' class='input-small'/>";
+            input += " Count: <input type='text' name='recordCount[" + lastItemIndex + "].records'  class='input-small'/>";
+            $('.recordCountFields').append(input);
         });
     });
 </r:script>
@@ -76,3 +84,18 @@
 	</label>
 	<g:field name="fileSize" id="fileSize" type="number" min="1" value="${downloadInstance.fileSize}"/>
 </div>
+
+<div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'recordCount', 'error')} ">
+	<label for="recordCount">
+		<g:message code="download.recordCount.label" default="Record Count" />
+		
+	</label>
+    %{--<div class="recordCountFields">--}%
+        %{--<g:each in="${downloadInstance.recordCount}" var="rc" status="i">--}%
+            %{--<g:field name="recordCount[${i}]" id="recordCount[${i}]" class="recordCountInput" type="text" value="${rc}"/><br/>--}%
+        %{--</g:each>--}%
+    %{--</div>--}%
+    %{--<button class="btn btn-small" id="addRecordCount"><!--i class="icon-plus"></i--> Add row</button>--}%
+	<g:select name="recordCount" from="${au.org.ala.downloads.RecordCount.list()}" multiple="multiple" optionKey="id" size="5" value="${downloadInstance?.recordCount*.id}" class="many-to-many"/>
+</div>
+<div>&nbsp;</div>
