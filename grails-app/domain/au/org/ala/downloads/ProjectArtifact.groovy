@@ -10,11 +10,16 @@ class ProjectArtifact {
     Long fileSize
     Long downloadCount
     Boolean deprecated
+    String guid
+    List<String> tags
+    String md5hash
+    String uploadedBy
 
     Date dateCreated
     Date lastUpdated
 
     static belongsTo = [project: Project]
+    static hasMany = [tags: String]
 
     static constraints = {
         name blank: false
@@ -26,5 +31,13 @@ class ProjectArtifact {
         lastUpdated display: false
         downloadCount nullable: true
         deprecated nullable: true
+        md5hash nullable: true
+        uploadedBy nullable: true
+    }
+
+    def beforeInsert() {
+        if (!guid) {
+            guid = UUID.randomUUID().toString()
+        }
     }
 }
