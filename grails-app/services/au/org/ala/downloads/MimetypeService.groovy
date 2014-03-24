@@ -1,4 +1,4 @@
-package au.org.ala.download
+package au.org.ala.downloads
 
 import javax.annotation.PostConstruct
 import grails.converters.*

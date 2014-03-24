@@ -1,15 +1,13 @@
-package au.org.ala.download
+package au.org.ala.downloads
 
-
-
+import au.org.ala.download.FileListingService
 import grails.test.mixin.*
-import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(MimetypeService)
-class MimetypeServiceTests {
+@TestFor(FileListingService)
+class FileListingServiceTests {
 
     void testSomething() {
         fail "Implement me"

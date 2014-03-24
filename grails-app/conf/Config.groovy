@@ -75,7 +75,7 @@ app.logger.enabled = true
 environments {
     development {
         grails.logging.jul.usebridge = true
-        serverName='http://dev.ala.org.au:8080'
+        serverName='http://devt.ala.org.au:8080'
         grails.serverURL = "${serverName}/${appName}"
         contextPath = "/${appName}"
         security.cas.appServerName = serverName

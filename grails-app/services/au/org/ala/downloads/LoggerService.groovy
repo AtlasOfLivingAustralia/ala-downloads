@@ -1,4 +1,4 @@
-package au.org.ala.download
+package au.org.ala.downloads
 
 import au.org.ala.downloads.Download
 import au.org.ala.downloads.LogEvent

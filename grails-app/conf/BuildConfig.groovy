@@ -40,7 +40,7 @@ grails.project.dependency.resolution = {
 
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
-        runtime 'mysql:mysql-connector-java:5.1.22'
+        runtime 'postgresql:postgresql:9.1-901.jdbc4'
         compile "au.org.ala:ala-logger:1.0-SNAPSHOT"
     }
 
@@ -59,8 +59,9 @@ grails.project.dependency.resolution = {
         compile ':cache:1.0.1'
         compile ':quartz:1.0.1'
         //compile ":log4j-xml:0.2"
-
+        compile ":feeds:1.6"
         runtime ":ala-web-theme:0.2.0"
+
         // runtime ":lesscss-resources:1.3.3"
     }
 }
