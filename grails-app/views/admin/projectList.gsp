@@ -22,7 +22,7 @@
                     }
                 });
 
-                $(".btnDownloads").click(function(e) {
+                $(".btnArtifacts").click(function(e) {
                     e.preventDefault();
                     var projectId = $(this).closest("[projectId]").attr("projectId");
                     if (projectId) {
@@ -53,13 +53,13 @@
                 <tbody>
                     <g:each in="${projects}" var="project">
                         <tr projectId="${project.id}">
-                            <td>${project.name}</td>
+                            <td><g:link action="projectArtifacts" params="${[projectId: project.id]}">${project.name}</g:link></td>
                             <td><small>${project.description}</small></td>
                             <td>${project.artifacts.size()}</td>
                             <td>
-                                <button class="btnDelete btn btn-danger btn-small"><i class="icon-remove icon-white"></i></button>
-                                <button class="btnEdit btn btn-small"><i class="icon-edit"></i></button>
-                                <button class="btnDownloads btn btn-small" title="Project downloads"><i class="icon-download"></i></button>
+                                <button class="btnDelete btn btn-danger btn-mini"><i class="icon-remove icon-white"></i></button>
+                                <button class="btnEdit btn btn-mini"><i class="icon-edit"></i></button>
+                                <button class="btnArtifacts btn btn-mini" title="Project artifacts"><i class="icon-list"></i></button>
                             </td>
                         </tr>
                     </g:each>

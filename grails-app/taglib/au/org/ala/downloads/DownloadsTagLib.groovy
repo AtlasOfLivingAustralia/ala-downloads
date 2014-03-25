@@ -2,6 +2,8 @@ package au.org.ala.downloads
 
 import groovy.xml.MarkupBuilder
 
+import java.text.DecimalFormat
+
 class DownloadsTagLib {
 
     static namespace = 'dl'
@@ -28,6 +30,17 @@ class DownloadsTagLib {
                 i(class:'icon-chevron-right') { mkp.yieldUnescaped('&nbsp;')}
                 mkp.yield(attrs.title)
             }
+        }
+    }
+
+    def sizeInBytes = { attrs, body ->
+        def size = attrs.size as Long
+        if (size) {
+            def labels = [' bytes', 'KB', 'MB', 'GB']
+            def label = labels.find { (size < 1024) ? true : { size /= 1024; false }() } ?: 'TB'
+            out << "${new DecimalFormat('0.#').format(size)} $label"
+        } else {
+            out << '??'
         }
     }
 

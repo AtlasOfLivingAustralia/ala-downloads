@@ -69,7 +69,8 @@ security.cas.casServerUrlPrefix = 'https://auth.ala.org.au/cas'
 security.cas.bypass = false
 security.cas.adminRole = "ROLE_ADMIN"
 
-app.downloads.dir = "/data/archives/"
+app.downloads.dir = "/data/downloads/archives"
+app.artifacts.dir = "/data/downloads/projects"
 app.logger.enabled = true
 
 environments {
