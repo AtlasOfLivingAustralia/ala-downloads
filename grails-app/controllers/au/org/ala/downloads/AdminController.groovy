@@ -60,7 +60,7 @@ class AdminController {
             redirect(action:'projectList')
             return
         }
-        params.sort = params.sort ?: "dateUploaded"
+        params.sort = params.sort ?: "dateCreated"
         params.order = params.order ?: "asc"
 
         def artifacts = ProjectArtifact.findAllByProject(project, params)

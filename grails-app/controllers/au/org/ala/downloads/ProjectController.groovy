@@ -74,7 +74,7 @@ class ProjectController {
 
             }
         } else {
-            artifacts = ProjectArtifact.findAllByProjectAndDateCreatedIsNullOr(project, params)
+            artifacts = ProjectArtifact.findAllByProject(project, params)
         }
 
         [projectInstance: project, artifacts: artifacts]

@@ -60,7 +60,7 @@ grails.project.dependency.resolution = {
         compile ':quartz:1.0.1'
         //compile ":log4j-xml:0.2"
         compile ":feeds:1.6"
-        runtime ":ala-web-theme:0.2.0"
+        runtime ":ala-web-theme:0.3-SNAPSHOT"
         compile ":qrcode:0.3"
 
         // runtime ":lesscss-resources:1.3.3"
