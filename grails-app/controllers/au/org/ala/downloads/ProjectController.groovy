@@ -53,6 +53,7 @@ class ProjectController {
     def artifactList() {
 
         def project = Project.get(params.int("id"))
+
         if (!project) {
             flash.errorMessage = "Missing or invalid project id!"
             redirect(action:'list')
@@ -78,6 +79,19 @@ class ProjectController {
         }
 
         [projectInstance: project, artifacts: artifacts]
+    }
+
+    def findByName() {
+        println params.name
+
+        def project = Project.findByNameIlike(params.name)
+        if (project) {
+            params.id = project.id
+            render(view: 'artifactList', model:artifactList())
+        } else {
+            flash.errorMessage = "No such project '${params.name}"
+            redirect(action:'list')
+        }
     }
 
 }
