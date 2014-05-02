@@ -1,59 +1,99 @@
 <!DOCTYPE html>
 <html>
+<g:set var="includeDeprecated" value="${params.boolean('includeDeprecated')}" />
+%{-- Calculate params for the show/hide deprecated and sort table links --}%
+<g:set var="hideDeprecatedParams" value="[projectName: projectInstance.name]" />
+<g:set var="showDeprecatedParams" value="[projectName: projectInstance.name, includeDeprecated: true]" />
+<g:if test="${params.sort}">
+    <g:set var="sortParams" value="[sort:params.sort, order: params.order]" />
+</g:if>
+<g:else>
+    <g:set var="sortParams" value="[:]" />
+</g:else>
+<g:if test="${includeDeprecated}">
+    <g:set var="showHideParams" value="${hideDeprecatedParams << sortParams}" />
+    <g:set var="linkparams" value="${showDeprecatedParams}" />
+</g:if>
+<g:else>
+    <g:set var="showHideParams" value="${showDeprecatedParams << sortParams}" />
+    <g:set var="linkparams" value="${hideDeprecatedParams}" />
+</g:else>
 <head>
     <meta name="layout" content="main"/>
+    <feed:meta kind="atom" version="1.0" mapping="feedByProjectName" params="${linkparams}" />
     <title>${projectInstance.name} downloads</title>
-    <r:script>
-            $(document).ready(function() {
-
-                $(".btnArtifactDetails").click(function(e) {
-                    e.preventDefault();
-                    var artifactId = $(this).closest("[artifactId").attr("artifactId");
-                    if (artifactId) {
-                        window.location ="${createLink(controller:'project', action:'artifactDetails')}/" + artifactId;
-                    }
-                });
-
-                $(".btnDownloadArtifact").click(function(e) {
-                    e.preventDefault();
-                    var artifactId = $(this).closest("[artifactId").attr("artifactId");
-                    if (artifactId) {
-                        window.location ="${createLink(controller:'project', action:'downloadArtifact')}/" + artifactId;
-                    }
-                });
-
-            });
-    </r:script>
-</head>
+    <style>
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        border: 0
+    }
+    </style>
+    </head>
 <body class="content">
-<div>
-    <h1>${projectInstance.name} downloads</h1>
+<div class="container-fluid">
+    <legend>
+        <table style="width: 100%">
+            <tbody>
+                <tr>
+                    <td><link:projects>Projects</link:projects>&nbsp;»&nbsp;${projectInstance.name} <small>downloads</small></td>
+                    <td style="text-align: right">
+                        <span>
+                            <auth:ifAnyGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}">
+                                <g:link controller="admin" action="projectArtifacts" params="[projectId:projectInstance.id]" class="btn btn-small">Project Admin</g:link>
+                                <g:link controller="admin" action="uploadProjectArtifact" params="[projectId: projectInstance.id]" class="btn btn-small btn-primary"><i class="icon-plus icon-white"></i> Upload a new artifact</g:link>
+                            </auth:ifAnyGranted>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </legend>
     <div class="well well-small">
-        ${projectInstance.description}
+        <markdown:renderHtml text="${projectInstance.description}" />
     </div>
+
+    <auth:ifLoggedIn>
+        <div>
+            <g:link mapping="projectByName" params="${showHideParams}"><g:if test="${includeDeprecated}">Hide</g:if><g:else>Show</g:else> deprecated downloads</g:link>
+        </div>
+    </auth:ifLoggedIn>
+
+    <auth:ifAnyGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}">
+        <g:set var="buttonColWidth" value="116px" />
+    </auth:ifAnyGranted>
+    <auth:ifNotGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}">
+        <g:set var="buttonColWidth" value="76px" />
+    </auth:ifNotGranted>
 
     <table class="table table-bordered table-striped">
         <thead>
-        <tr>
-            <g:sortableColumn id="${projectInstance.id}" property="name" title="Filename" />
-            <g:sortableColumn id="${projectInstance.id}" property="fileSize" title="Size" />
-            <g:sortableColumn id="${projectInstance.id}" property="description" title="Description" />
-            <g:sortableColumn id="${projectInstance.id}" property="dateCreated" title="Date uploaded" />
-            <g:sortableColumn id="${projectInstance.id}" property="downloadCount" title="Downloads" />
-            <th></th>
-        </tr>
+            <tr>
+                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="name" title="Filename"  />
+                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="fileSize" title="Size" class="span2" />
+                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="summary" title="Summary"  />
+                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="dateCreated" title="Date uploaded" class="span3" />
+                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="downloadCount" title="Downloads" class="span1" />
+                <th style="width:${buttonColWidth}"></th>
+            </tr>
         </thead>
         <tbody>
         <g:each in="${artifacts}" var="artifact">
-            <tr artifactId="${artifact.id}">
-                <td>${artifact.name}</td>
+            <tr data-artifactId="${artifact.id}">
+                <td><link:artifactDetailsByName projectName="${projectInstance.name}" file="${artifact.name}">${artifact.name}</link:artifactDetailsByName></td>
                 <td><dl:sizeInBytes size="${artifact.fileSize}" /></td>
-                <td><small>${artifact.description}</small></td>
+                <td><small>${artifact.summary}</small></td>
                 <td><g:formatDate date="${artifact.dateCreated}" format="dd MMM, yyyy HH:mm:ss" /></td>
                 <td>${artifact.downloadCount ?: 0}</td>
                 <td>
-                    <button class="btnArtifactDetails btn btn-small"><i class="icon-info-sign"></i></button>
-                    <button class="btnDownloadArtifact btn btn-small"><i class="icon-download-alt"></i></button>
+                    <link:artifactDetailsByName projectName="${projectInstance.name}" file="${artifact.name}" attrs="[class:'btn btn-small']"><i class="icon-info-sign"><span class="sr-only">File details</span></i></link:artifactDetailsByName>
+                    <link:downloadByFile projectName="${projectInstance.name}" file="${artifact.name}" attrs="[class:'btn btn-small', rel:'nofollow']"><i class="icon-download-alt"><span class="sr-only">Download file</span></i></link:downloadByFile>
+                    <auth:ifAnyGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}"><g:link controller="admin" action="editProjectArtifact" params="[projectId: projectInstance.id, artifactId: artifact.id]" class="btn btn-small"><i class="icon-edit"><span class="sr-only">Edit artifact</span></i></g:link></auth:ifAnyGranted>
                 </td>
             </tr>
         </g:each>

@@ -3,37 +3,27 @@
     <head>
         <meta name="layout" content="main"/>
         <title>ALA Downloads - Projects</title>
-        <r:script>
-            $(document).ready(function() {
-            });
-        </r:script>
-
-        <style>
-        </style>
-
+        <feed:meta kind="atom" version="1.0" controller="feed" action="projects"/>
     </head>
     <body class="content">
-        <div>
-            <h1>Projects</h1>
-            <table class="table table-bordered table-condensed">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Files</th>
-                </tr>
-                </thead>
-                <tbody>
-                <g:each in="${projects}" var="project">
-                    <tr projectId="${project.id}">
-                        <td><g:link controller="project" action="artifactList" id="${project.id}">${project.name}</g:link></td>
-                        <td><small>${project.description}</small></td>
-                        <td>${project.artifacts.size()}</td>
+        <div class="container-fluid">
+            <legend>
+                <table style="width: 100%">
+                    <tbody>
+                    <tr>
+                        <td>Projects</td>
+                        <td style="text-align: right">
+                            <span>
+                                <auth:ifAllGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}">
+                                    <g:link controller="admin" action="projectList" class="btn btn-small">Projects Admin</g:link>
+                                </auth:ifAllGranted>
+                            </span>
+                        </td>
                     </tr>
-                </g:each>
-                </tbody>
-
-            </table>
+                    </tbody>
+                </table>
+            </legend>
+            <g:render template="table" />
         </div>
     </body>
 </html>

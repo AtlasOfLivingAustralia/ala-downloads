@@ -13,12 +13,20 @@ class ProjectController {
         [projects: projects]
     }
 
+    def artifactDetailsByName(String projectName, String file) {
+        render(view: 'artifactDetails', model: internalArtifactDetails(artifactByName(projectName, file)))
+    }
+
     def artifactDetails() {
         def artifact = ProjectArtifact.get(params.int("id"))
         if (!artifact) {
             artifact = ProjectArtifact.get(params.int("artifactId"))
         }
 
+        internalArtifactDetails(artifact)
+    }
+
+    private def internalArtifactDetails(ProjectArtifact artifact) {
         if (!artifact) {
             response.sendError(404, "The artifact id is missing or invalid")
             return
@@ -27,14 +35,22 @@ class ProjectController {
         [artifact: artifact]
     }
 
+    def downloadArtifactByName(String projectName, String file) {
+        internalDownloadArtifact(artifactByName(projectName, file))
+    }
+
     def downloadArtifact() {
         def artifact = ProjectArtifact.get(params.int("id"))
         if (!artifact) {
             artifact = ProjectArtifact.get(params.int("artifactId"))
         }
+        internalDownloadArtifact(artifact)
+    }
+
+    private def internalDownloadArtifact(ProjectArtifact artifact) {
 
         if (!artifact) {
-            response.sendError(404, "The artifact id is missing or invalid")
+            response.sendError(404, "The artifact is missing or invalid")
             return
         }
 
@@ -51,9 +67,14 @@ class ProjectController {
     }
 
     def artifactList() {
+        internalArtifactList(Project.get(params.int("id")))
+    }
 
-        def project = Project.get(params.int("id"))
+    def artifactListByName() {
+        render(view: 'artifactList', model: internalArtifactList(Project.caseInsensitiveName(params.projectName).get()))
+    }
 
+    private def internalArtifactList(Project project) {
         if (!project) {
             flash.errorMessage = "Missing or invalid project id!"
             redirect(action:'list')
@@ -61,37 +82,13 @@ class ProjectController {
         }
         boolean includeDeprecated = params.boolean("includeDeprecated") ?: false
 
-        def artifacts
-        if (!includeDeprecated) {
-            def c = ProjectArtifact.createCriteria()
-            artifacts = c.list(params) {
-                and {
-                    eq("project", project)
-                    or {
-                        isNull("deprecated")
-                        eq("deprecated", false)
-                    }
-                }
-
-            }
-        } else {
-            artifacts = ProjectArtifact.findAllByProject(project, params)
-        }
+        def artifacts = ProjectArtifact.byDeprecated(project, includeDeprecated).list(params)
 
         [projectInstance: project, artifacts: artifacts]
     }
 
-    def findByName() {
-        println params.name
-
-        def project = Project.findByNameIlike(params.name)
-        if (project) {
-            params.id = project.id
-            render(view: 'artifactList', model:artifactList())
-        } else {
-            flash.errorMessage = "No such project '${params.name}"
-            redirect(action:'list')
-        }
+    private ProjectArtifact artifactByName(String projectName, String file) {
+        ProjectArtifact.byName(projectName, file).get()
     }
 
 }

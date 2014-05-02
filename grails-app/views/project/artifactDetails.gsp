@@ -17,10 +17,25 @@
 
     </head>
     <body class="content">
-        <content tag="pageTitle">${artifact?.project?.name} - ${artifact?.name} details</content>
-        <g:set var="downloadUrl" value="${createLink(controller:'project', action:'downloadArtifact', id: artifact.id, absolute: true)}" />
-        <div>
-            <h1>${artifact?.name}</h1>
+        <g:set var="downloadUrl" value="${createLink(mapping: 'downloadByFile', params: [projectName: artifact?.project?.name, file: artifact.name], absolute: true)}" />
+        <div class="container-fluid">
+            <legend>
+                <table style="width: 100%">
+                    <tbody>
+                    <tr>
+                        <td><link:projects>Projects</link:projects>&nbsp;»&nbsp;<link:projectByName projectName="${artifact?.project?.name}">${artifact?.project?.name}</link:projectByName>&nbsp;»&nbsp;${artifact?.name} <small>details</small></td>
+                        <td style="text-align: right">
+                            <span>
+                                <auth:ifAllGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}">
+                                    <g:link controller="admin" action="editProjectArtifact" params="[artifactId:artifact.id]" class="btn"><i class="icon-edit"></i> Update</g:link>
+                                </auth:ifAllGranted>
+                                <a href="${downloadUrl}" rel="nofollow" class="btn btn-primary"><i class="icon-download-alt icon-white"></i>&nbsp;Download</a>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </legend>
 
             <div class="row-fluid">
                 <div class="span3" style="text-align: center">
@@ -30,9 +45,7 @@
                     </div>
                 </div>
                 <div class="span9">
-                    ${artifact.description}
-                    <hr />
-                    <button class="btn btn-primary pull-right"><i class="icon-download-alt icon-white"></i>&nbsp;Download</button>
+                    <markdown:renderHtml text="${artifact.description}" />
                 </div>
             </div>
         </div>
@@ -45,12 +58,16 @@
                 <td class="dl-property-value">${artifact.name}</td>
             </tr>
             <tr>
+                <td>Summary</td>
+                <td class="dl-property-value">${artifact.summary}</td>
+            </tr>
+            <tr>
                 <td>Size</td>
                 <td class="dl-property-value"><dl:sizeInBytes size="${artifact.fileSize}" /></td>
             </tr>
             <tr>
                 <td>Project</td>
-                <td class="dl-property-value"><g:link action="artifactList" id="${artifact.project.id}">${artifact.project.name}</g:link></td>
+                <td class="dl-property-value"><link:projectByName projectName="${artifact?.project?.name}">${artifact.project.name}</link:projectByName></td>
             </tr>
 
             <tr>
@@ -79,7 +96,7 @@
             </tr>
             <tr>
                 <td>Download URL</td>
-                <td class="dl-property-value"><a href="${downloadUrl}">${downloadUrl}</a></td>
+                <td class="dl-property-value"><a href="${downloadUrl}" rel="nofollow">${downloadUrl}</a></td>
             </tr>
             <g:if test="${artifact.tags}">
                 <tr>

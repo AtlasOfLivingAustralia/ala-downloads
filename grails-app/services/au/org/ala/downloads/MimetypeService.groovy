@@ -1,5 +1,8 @@
 package au.org.ala.downloads
 
+import com.google.common.base.Charsets
+import com.google.common.io.Resources
+
 import javax.annotation.PostConstruct
 import grails.converters.*
 
@@ -16,8 +19,7 @@ class MimetypeService {
      */
     @PostConstruct
     def init() {
-        def filename = "${System.properties['base.dir']}/grails-app/conf/mimetypes.json"
-        def mimetypeList = JSON.parse(new File(filename).text)
+        def mimetypeList = JSON.parse(Resources.toString(Resources.getResource("mimetypes.json"), Charsets.UTF_8))
         mimetypeList.each { it ->
             mimetypeMap.putAll(it)
         }

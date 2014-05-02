@@ -1,6 +1,6 @@
 package au.org.ala.downloads
 
-import au.org.ala.download.MimetypeService
+import au.org.ala.downloads.MimetypeService
 import grails.test.mixin.*
 
 /**

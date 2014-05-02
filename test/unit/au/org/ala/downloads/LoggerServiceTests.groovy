@@ -1,6 +1,6 @@
 package au.org.ala.downloads
 
-import au.org.ala.download.LoggerService
+import au.org.ala.downloads.LoggerService
 import grails.test.mixin.*
 
 /**

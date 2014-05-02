@@ -1,13 +1,10 @@
 package au.org.ala.downloads
 
-import au.org.ala.web.CASRoles
 import groovy.xml.MarkupBuilder
 
 import java.text.DecimalFormat
 
 class DownloadsTagLib {
-
-    def authService
 
     static namespace = 'dl'
 
@@ -48,10 +45,6 @@ class DownloadsTagLib {
         } else {
             out << '??'
         }
-    }
-
-    def ifAdmin  = { attrs, body ->
-         // authService.userInRole(CASRoles.ROLE_ADMIN)
     }
 
 }

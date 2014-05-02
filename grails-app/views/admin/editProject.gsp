@@ -19,6 +19,13 @@
             </div>
 
             <div class="control-group">
+                <label class="control-label" for="summary">Summary</label>
+                <div class="controls">
+                    <g:textField class="input-xxlarge" name="summary" value="${projectInstance?.summary}" />
+                </div>
+            </div>
+
+            <div class="control-group">
                 <label class="control-label" for="description">Description</label>
                 <div class="controls">
                     <g:textArea class="input-xxlarge" name="description" value="${projectInstance?.description}" />

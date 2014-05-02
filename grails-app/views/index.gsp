@@ -22,7 +22,7 @@
                     var params = {
                         userEmail: $('#email').val(),
                         reasonTypeId: $('#reasonTypeId').val()
-                    }
+                    };
                     var link = "${g.createLink(controller:"proxy", action:"readFile")}/" + $('#downloadForm').data("id") + "?" + $.param(params);
                     window.location.href = link;
                 });
@@ -36,7 +36,10 @@
 	<body class="nav-datasets">
 		<div id="page-body" role="main">
 			<h1>ALA Downloads</h1>
-			<p>Downloads description goes here, not much to say really.</p>
+            <h2>Projects</h2>
+            <g:render template="../project/table" />
+
+            <h2>Record downloads</h2>
 
             <div id="list-download" class="row-fluid scaffold-list" role="main">
                 %{--<g:if test="${flash.message}">--}%

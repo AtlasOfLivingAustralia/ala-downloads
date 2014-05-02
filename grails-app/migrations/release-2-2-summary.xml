@@ -1,0 +1,17 @@
+<!-- In XML because the update column value doesn't work in the Groovy DSL -->
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet author="bea18c" id="1397109340541-2">
+        <addColumn tableName="project">
+            <column name="summary" type="varchar(255)">
+                <constraints unique="true" />
+            </column>
+        </addColumn>
+        <update tableName="project">
+            <column name="summary" type="varchar(255)" valueComputed="description"/>
+        </update>
+        <addNotNullConstraint tableName="project" columnName="summary" />
+    </changeSet>
+</databaseChangeLog>

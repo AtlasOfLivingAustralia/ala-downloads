@@ -1,11 +1,19 @@
 package au.org.ala.downloads
 
-import org.codehaus.groovy.grails.plugins.codecs.MD5Codec
-import org.codehaus.groovy.grails.plugins.codecs.SHA1Codec
+import au.org.ala.web.AlaSecured
+import au.org.ala.web.CASRoles
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
 
+@AlaSecured(value = [CASRoles.ROLE_ADMIN], redirectController = "home")
 class AdminController {
+
+    static allowedMethods = [uploadArtifact: ['POST'],
+                             updateProjectArtifact: ['PUT', 'POST'],
+                             deleteProjectArtifact: ['DELETE', 'POST'],
+                             saveProject: ['POST'],
+                             deleteProject: ['DELETE', 'POST']]
+
 
     def projectService
     def authService
@@ -40,7 +48,7 @@ class AdminController {
             project.save(failOnError: true, flush: true)
         }
 
-        redirect(action:'projectList')
+        redirect(action:'projectArtifacts', params: [projectId: project.id] )
     }
 
     def deleteProject() {
@@ -63,7 +71,9 @@ class AdminController {
         params.sort = params.sort ?: "dateCreated"
         params.order = params.order ?: "asc"
 
-        def artifacts = ProjectArtifact.findAllByProject(project, params)
+        def includeDeprecated = params.boolean("includeDeprecated", false)
+
+        def artifacts = ProjectArtifact.byDeprecated(project, includeDeprecated).list(params)
         [projectInstance: project, artifacts: artifacts]
     }
 
@@ -105,16 +115,31 @@ class AdminController {
                 return
             }
 
-            artifact = new ProjectArtifact(name: file.originalFilename, description: params.description)
+            artifact = new ProjectArtifact(name: file.originalFilename, summary: params.summary, description: params.description)
             artifact.project = project
-            def bytes = file.bytes
-            artifact.md5hash = MD5Codec.encode(bytes)
-            artifact.sha1hash = SHA1Codec.encode(bytes)
             artifact.originalFilename = file.originalFilename
             artifact.uploadedBy = authService.userId
             artifact.mimeType = file.contentType
             artifact.fileSize = file.size
-            artifact.artifactGuid = artifactStorageService.storeArtifactFile(artifact, bytes)
+
+            final start = System.currentTimeMillis()
+            final result
+            try {
+                result = artifactStorageService.storeArtifactFile(artifact, file.inputStream)
+            } catch (IOException e) {
+                log.error("Couldn't write ${artifact} from ${file}", e)
+                render(status: 500)
+                return
+            }
+            if (artifact.fileSize != result.length) {
+                log.warn("Reported size of ${file.originalFilename} in project ${project.name} differs from copied size")
+            }
+            artifact.md5hash = result.md5
+            artifact.sha1hash = result.sha
+            artifact.artifactGuid = result.guid
+
+            final end = System.currentTimeMillis()
+            log.debug("Copy and hash took ${end - start}ms")
 
             artifact.save()
         } else {
@@ -124,6 +149,45 @@ class AdminController {
         }
 
         redirect(action:'projectArtifacts', params:[projectId: project.id])
+    }
+
+    def editProjectArtifact(int artifactId) {
+        def artifact = ProjectArtifact.get(artifactId)
+        if (!artifact) {
+            flash.errorMessage = "Missing or invalid artifact id!"
+            redirect(action: 'projectList')
+            return
+        }
+        [artifactInstance: artifact]
+    }
+
+    def updateProjectArtifact(Long artifactId, Long version) {
+        def artifact = ProjectArtifact.get(artifactId)
+        if (!artifact) {
+            flash.errorMessage = "Missing or invalid artifact id!"
+            redirect(action: 'projectList')
+            return
+        }
+
+        if (version != null) {
+            if (artifact.version > version) {
+                artifact.errors.rejectValue("version", "default.optimistic.locking.failure",
+                        [message(code: 'projectArtifact.label', default: 'Project Artifact')] as Object[],
+                        "Another user has updated this Project Artifact while you were editing")
+                render(view: "editProjectArtifact", model: [artifactInstance: artifact])
+                return
+            }
+        }
+
+        artifact.properties['description','summary','deprecated'] = params
+
+        if (!artifact.save(flush: true)) {
+            render(view: "editProjectArtifact", model: [artifactInstance: artifact])
+            return
+        }
+
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'projectArtifact.label', default: 'Project Artifact'), artifact.id])
+        redirect(action: "projectArtifacts", params:[projectId: artifact.project.id])
     }
 
     def deleteProjectArtifact() {

@@ -1,6 +1,6 @@
 package au.org.ala.downloads
 
-import au.org.ala.download.FileListingService
+import au.org.ala.downloads.FileListingService
 import grails.test.mixin.*
 
 /**
