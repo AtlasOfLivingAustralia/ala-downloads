@@ -69,6 +69,7 @@ grails.project.dependency.resolution = {
         compile ":feeds:1.6"
         compile ":qrcode:0.3"
         compile ":markdown:1.1.1"
+        compile ":pretty-time:2.1.3.Final-1.0.1"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.9" // or ":hibernate4:4.3.4"
@@ -76,7 +77,7 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.11.0.2"
         runtime ":resources:1.2.7"
         // additions
-        runtime ":ala-web-theme:[0.3,]"
+        runtime ":ala-web-theme:[0.4,]"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0.1"

@@ -15,7 +15,7 @@
                 $('#confirmModelText').text("Are you sure you want to delete " + name + "?");
                 $('#confirmationModal').on('hide', function () {
                     $('#confirmationModalSave').off('click');
-                })
+                });
 
                 $('#confirmationModal').modal('show');
             });
@@ -37,6 +37,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Artifacts</th>
+                    <th>Downloads</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -46,6 +47,7 @@
                             <td><g:link action="projectArtifacts" params="${[projectId: project.id]}">${project.name}</g:link></td>
                             <td><small>${project.summary}</small></td>
                             <td>${project.artifacts.size()}</td>
+                            <td>${project.artifacts*.downloadCount.sum() ?: 0}</td>
                             <td>
                                 <g:form controller="admin" action="deleteProject" method="delete" name="delete-${project.id}" style="display:inline-block;" class="form-inline"><g:hiddenField name="projectId" value="${project.id}"/><button type="submit" id="submit-delete-${project.id}" class="btnDelete btn btn-danger btn-mini"><i class="icon-remove icon-white"></i></button></g:form>
                                 <g:link controller="admin" action="editProject" params="[projectId: project.id]" role="button" class="btnEdit btn btn-mini"><i class="icon-edit"></i></g:link>

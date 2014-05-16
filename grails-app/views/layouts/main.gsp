@@ -95,7 +95,7 @@
     pageTracker._trackPageview();
 
     // show warning if using IE6
-    if ($.browser.msie && $.browser.version.slice(0,1) == '6') {
+    if ($.browser && $.browser.msie && $.browser.version.slice(0,1) == '6') {
         $('#header').prepend($('<div style="text-align:center;color:red;">WARNING: This page is not compatible with IE6.' +
                 ' Many functions will still work but layout and image transparency will be disrupted.</div>'));
     }

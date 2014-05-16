@@ -108,7 +108,7 @@ grails.hibernate.osiv.readonly = false
 security.cas.casServerName = 'https://auth.ala.org.au'
 security.cas.uriFilterPattern = "/download/.*,/recordCount/.*,/admin/.*" // pattern for pages that require authentication
 security.cas.uriExclusionFilterPattern = '/images.*,/css.*,/js.*,/less.*'
-security.cas.authenticateOnlyIfLoggedInPattern = "/p,/project,/p/.*,/project/.*" // pattern for pages that can optionally display info about the logged-in user
+security.cas.authenticateOnlyIfLoggedInPattern = "/p,/project,/p/.*,/project/.*,/" // pattern for pages that can optionally display info about the logged-in user
 security.cas.loginUrl = 'https://auth.ala.org.au/cas/login'
 security.cas.logoutUrl = 'https://auth.ala.org.au/cas/logout'
 security.cas.casServerUrlPrefix = 'https://auth.ala.org.au/cas'
@@ -117,6 +117,7 @@ security.cas.bypass = false
 
 app.downloads.dir = "/data/downloads/archives"
 app.artifacts.dir = "/data/downloads/projects"
+
 app.logger.enabled = true
 
 environments {
@@ -127,7 +128,11 @@ environments {
         contextPath = "/ala-downloads"
         security.cas.appServerName = serverName
         security.cas.contextPath = contextPath
-        app.logger.enabled = false
+
+//        app.logger.enabled = true
+//        app.logger.server = "http://localhost/"
+//        app.logger.port = "9090"
+//        app.logger.path = "ala-logger-service/service/logger/"
     }
     test {
 
@@ -183,6 +188,8 @@ log4j = {
     environments {
         development {
             debug   'grails.app.controllers.au.org.ala',
+                    'grails.app.services.au.org.ala',
+                    'grails.app.jobs.au.org.ala',
                     'ala',
                     'au.org.ala.download',
                     'au.org.ala.web',

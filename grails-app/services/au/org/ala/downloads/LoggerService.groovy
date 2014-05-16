@@ -1,13 +1,28 @@
 package au.org.ala.downloads
 
-import au.org.ala.downloads.Download
-import au.org.ala.downloads.LogEvent
 import grails.converters.JSON
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 
 class LoggerService {
 
-    def httpWebService, grailsApplication
+    def httpWebService, downloadService, grailsApplication
+
+    def addProxiedDownloadEvent(String dataUri, String metadataUri, String userIP, String userEmail, String comment, Integer reasonTypeId) {
+        final results = downloadService.getRecordCountsFromUrl(metadataUri)
+
+        log.error "recordCountMap = $results"
+        final event = new LogEvent()
+        event.userEmail = userEmail
+        event.comment = comment?:""
+        event.userIP = userIP
+        event.reasonTypeId = reasonTypeId
+        event.recordCounts = results
+        event.sourceUrl = dataUri
+
+        if (!event.save(flush: true)) {
+            log.error event.errors.allErrors.join("|")
+        }
+    }
 
     /**
      * Save logEvent to DB
@@ -49,7 +64,11 @@ class LoggerService {
             def resp
             log.debug "json = ${jsonBody.toString()}"
             if (grailsApplication.config.app.logger.enabled) {
-                resp = httpWebService.doJsonPost("http://logger.ala.org.au/", "service/logger/", "80", jsonBody.toString())
+                final server = grailsApplication.config.app.logger.server ?: 'http://logger.ala.org.au'
+                final port = grailsApplication.config.app.logger.port ?: '80'
+                final path = grailsApplication.config.app.logger.path ?: 'service/logger/'
+
+                resp = httpWebService.doJsonPost(server, path, port, jsonBody.toString())
                 log.debug "resp = $resp"
             } else {
                 resp = [:]

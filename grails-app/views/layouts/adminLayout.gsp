@@ -45,6 +45,7 @@
             <div class="span3">
                 <ul class="nav nav-list nav-stacked nav-tabs">
                     <dl:breadcrumbItem href="${createLink(controller: 'admin', action: 'projectList')}" title="Projects" />
+                    <dl:breadcrumbItem href="${createLink(controller: 'download', action: 'list')}" title="Record Downloads" />
                 </ul>
             </div>
 

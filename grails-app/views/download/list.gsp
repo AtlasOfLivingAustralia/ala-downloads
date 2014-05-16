@@ -3,22 +3,27 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+        <meta name="layout" content="adminLayout"/>
 		<g:set var="entityName" value="${message(code: 'download.label', default: 'Download')}" />
-		<title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title>ALA Downloads - Administration - <g:message code="default.list.label" args="[entityName]" /></title>
 	</head>
-	<body>
-		<a href="#list-download" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="list-download" class="content scaffold-list" role="main">
+	<body class="content">
+        <content tag="pageTitle">Record Downloads</content>
+        <content tag="adminButtonBar">
+            <a href="${createLink(uri: '/')}" class="btn btn-small"><g:message code="default.home.label"/></a>
+            <g:link action="create" class="btn btn-small btn-primary"><i class="icon-plus icon-white"></i>&nbsp;<g:message code="default.new.label" args="[entityName]" /></g:link>
+        </content>
+		%{--<a href="#list-download" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>--}%
+		%{--<div class="nav" role="navigation">--}%
+			%{--<ul>--}%
+				%{--<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>--}%
+				%{--<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>--}%
+			%{--</ul>--}%
+		%{--</div>--}%
+		<div id="list-download" class="scaffold-list" role="main">
 			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
 			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
+			    <div class="message" role="status">${flash.message}</div>
 			</g:if>
 			<table>
 				<thead>

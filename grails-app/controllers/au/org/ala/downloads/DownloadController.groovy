@@ -1,22 +1,14 @@
 package au.org.ala.downloads
 
+import au.org.ala.web.AlaSecured
+import grails.converters.JSON
 import org.springframework.dao.DataIntegrityViolationException
 
+@AlaSecured(value=["ROLE_ADMIN"], redirectController = "home", message = "You are not authorised to access this page")
 class DownloadController {
-    def fileListingService, authService
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST", checkHead: "GET", download: ["HEAD", "GET"]]
 
-    def beforeInterceptor = [action:this.&auth]
-
-    private auth() {
-        if (!authService.userInRole("ROLE_ADMIN")) {
-            flash.message = "You are not authorised to access this page."
-            redirect(controller:"home", action: "index")
-            false
-        } else {
-            true
-        }
-    }
+    def proxyService, downloadService
 
     def index() {
         redirect(action: "list", params: params)
@@ -28,13 +20,16 @@ class DownloadController {
     }
 
     def create() {
-        [downloadInstance: new Download(params), fileListing: fileListingService.getListing()]
+        [downloadInstance: new Download(params), metadataRecords: []]
     }
 
     def save() {
         def downloadInstance = new Download(params)
+
+        setPropertiesFromDataUri(downloadInstance)
+
         if (!downloadInstance.save(flush: true)) {
-            render(view: "create", model: [downloadInstance: downloadInstance, fileListing: fileListingService.getListing()])
+            render(view: "create", model: [downloadInstance: downloadInstance, metadataRecords: downloadService.getRecordCountsFromUrlAsArray(downloadInstance.metadataUri)])
             return
         }
 
@@ -61,7 +56,7 @@ class DownloadController {
             return
         }
 
-        [downloadInstance: downloadInstance, fileListing: fileListingService.getListing()]
+        [downloadInstance: downloadInstance, metadataRecords: downloadService.getRecordCountsFromUrlAsArray(downloadInstance.metadataUri)]
     }
 
     def update(Long id, Long version) {
@@ -83,6 +78,8 @@ class DownloadController {
         }
 
         downloadInstance.properties = params
+
+        setPropertiesFromDataUri(downloadInstance)
 
         if (!downloadInstance.save(flush: true)) {
             render(view: "edit", model: [downloadInstance: downloadInstance])
@@ -110,5 +107,37 @@ class DownloadController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'download.label', default: 'Download'), id])
             redirect(action: "show", id: id)
         }
+    }
+
+    def checkHead(String uri) {
+        log.debug("checkHead ${uri}")
+        try {
+            render proxyService.headRequest(new URL(uri)) as JSON
+        } catch (MalformedURLException e) {
+            response.sendError(400, "The URL is invalid")
+        } catch (IOException e) {
+            response.sendError(500)
+        }
+        return null
+    }
+
+    def checkMetadataUri(String uri) {
+        log.debug("checkMetadataUri ${uri}")
+        try {
+            render downloadService.getRecordCountsFromUrlAsArray(uri) as JSON
+        } catch (MalformedURLException e) {
+            response.sendError(400, "The URL is invalid")
+        } catch (IOException e) {
+            response.sendError(500)
+        }
+        return null
+    }
+
+    private def setPropertiesFromDataUri(Download downloadInstance) {
+        final data = proxyService.headRequest(downloadInstance.fileUri.toURL())
+        downloadInstance.dataEtag = data.etag
+        downloadInstance.dataLastModified = data.lastModified
+        downloadInstance.fileSize = data.contentLength
+        downloadInstance.mimeType = data.contentType
     }
 }

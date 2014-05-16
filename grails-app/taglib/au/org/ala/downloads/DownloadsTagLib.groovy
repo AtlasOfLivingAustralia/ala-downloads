@@ -1,5 +1,6 @@
 package au.org.ala.downloads
 
+import grails.converters.JSON
 import groovy.xml.MarkupBuilder
 
 import java.text.DecimalFormat
@@ -47,4 +48,11 @@ class DownloadsTagLib {
         }
     }
 
+    /**
+     * @attr value the object to convert to JSON
+     */
+    def json = { attrs, body ->
+        final val = attrs.value as JSON
+        out << val
+    }
 }

@@ -23,7 +23,7 @@
                         userEmail: $('#email').val(),
                         reasonTypeId: $('#reasonTypeId').val()
                     };
-                    var link = "${g.createLink(controller:"proxy", action:"readFile")}/" + $('#downloadForm').data("id") + "?" + $.param(params);
+                    var link = "${g.createLink(controller:"proxy", action:"download")}/" + $('#downloadForm').data("id") + "?" + $.param(params);
                     window.location.href = link;
                 });
 
@@ -34,6 +34,14 @@
         </r:script>
 	</head>
 	<body class="nav-datasets">
+        <auth:ifAllGranted roles="ROLE_ADMIN">
+            <div class="nav" role="navigation">
+                <ul>
+                    <li><g:link class="list" controller="admin" action="projectList"><g:message code="default.list.label" args="[project]" /></g:link></li>
+                    <li><g:link class="list" controller="download" action="list"><g:message code="default.list.label" args="[download]" /></g:link></li>
+                </ul>
+            </div>
+        </auth:ifAllGranted>
 		<div id="page-body" role="main">
 			<h1>ALA Downloads</h1>
             <h2>Projects</h2>
@@ -42,12 +50,16 @@
             <h2>Record downloads</h2>
 
             <div id="list-download" class="row-fluid scaffold-list" role="main">
-                %{--<g:if test="${flash.message}">--}%
-                    <div id="flashMessage" class="hide message alert alert-info span6">
+                <div id="flashMessage" class="hide message alert alert-info span6">
+                    <button type="button" class="close" onclick="$(this).parent().hide()">×</button>
+                    <span>${flash.message}</span>
+                </div>
+                <g:hasErrors bean="${flash.errors}">
+                    <div id="flashMessage" class="message alert alert-error span6">
                         <button type="button" class="close" onclick="$(this).parent().hide()">×</button>
-                        <span>${flash.message}</span>
+                        <g:renderErrors bean="${flash.errors}" as="list" />
                     </div>
-                %{--</g:if>--}%
+                </g:hasErrors>
                 <table>
                     <thead>
                     <tr>
@@ -59,7 +71,9 @@
 
                         <g:sortableColumn property="mimeType" title="${message(code: 'download.mimeType.label', default: 'File Type')}" />
 
-                        <g:sortableColumn property="fileSize" title="${message(code: 'download.fileSize.label', default: 'File Size (bytes)')}" />
+                        <g:sortableColumn property="fileSize" title="${message(code: 'download.fileSize.label', default: 'File Size')}" />
+
+                        <g:sortableColumn property="dataLastModified" title="${message(code: 'download.dataLastModified.label', default: 'Last Updated')}" />
 
                         %{--<g:sortableColumn property="dateCreated" title="${message(code: 'download.dateCreated.label', default: 'Date Created')}" />--}%
 
@@ -75,7 +89,8 @@
                             <td>${fieldValue(bean: downloadInstance, field: "description")}</td>
                             %{--<td>${fieldValue(bean: downloadInstance, field: "fileUri")}</td>--}%
                             <td>${fieldValue(bean: downloadInstance, field: "mimeType")}</td>
-                            <td>${fieldValue(bean: downloadInstance, field: "fileSize")}</td>
+                            <td><dl:sizeInBytes size="${downloadInstance.fileSize}" /></td>
+                            <td><prettytime:display date="${downloadInstance.dataLastModified}" /></td>
                             %{--<td><g:formatDate date="${downloadInstance.dateCreated}" /></td>--}%
 
                         </tr>

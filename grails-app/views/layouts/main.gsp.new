@@ -68,7 +68,7 @@
 </head>
 <body class="${pageProperty(name:'body.class')?:'nav-datasets'}" id="${pageProperty(name:'body.id')}" onload="${pageProperty(name:'body.onload')}">
 <g:set var="fluidLayout" value="${grailsApplication.config.skin?.fluidLayout}"/>
-<hf:banner logoutUrl="${grailsApplication.config.grails.serverURL}/logout/logout" fluidLayout="${fluidLayout}"/>
+<hf:banner logoutUrl="${g.createLink(controller:"logout", action:"logout", absolute: true)}" fluidLayout="${fluidLayout}"/>
 
 <hf:menu fluidLayout="${fluidLayout}"/>
 
@@ -93,7 +93,7 @@
     pageTracker._trackPageview();
 
     // show warning if using IE6
-    if ($.browser.msie && $.browser.version.slice(0,1) == '6') {
+    if ($.browser && $.browser.msie && $.browser.version.slice(0,1) == '6') {
         $('#header').prepend($('<div style="text-align:center;color:red;">WARNING: This page is not compatible with IE6.' +
                 ' Many functions will still work but layout and image transparency will be disrupted.</div>'));
     }
