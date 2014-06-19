@@ -2,6 +2,10 @@ class UrlMappings {
 
 	static mappings = {
 
+        name projects: "/admin" {
+            controller = 'admin'
+            action = 'index'
+        }
         name projects: "/p" {
             controller = 'project'
             action = 'list'

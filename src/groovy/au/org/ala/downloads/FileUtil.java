@@ -2,7 +2,10 @@ package au.org.ala.downloads;
 
 import org.apache.commons.codec.binary.Hex;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -18,15 +21,23 @@ public class FileUtil {
      * @return a Map with keys 'md5' and 'sha' with the hex encoded versions of the given hash, and a length key
      * with the number of bytes in the input stream as a long
      */
-    public static LinkedHashMap<String, Serializable> copyInputStreamToFileWithSha1AndMd5Digest(File file, InputStream inputStream) throws IOException {
+     public static LinkedHashMap<String, Serializable> copyInputStreamToFileWithSha1AndMd5Digest(File file, InputStream inputStream) throws IOException {
         MessageDigest md5 = getDigest("MD5");
         MessageDigest sha = getDigest("SHA");
         long count;
-
-        try (DigestInputStream md5Stream = new DigestInputStream(inputStream, md5);
-             DigestInputStream shaStream = new DigestInputStream(md5Stream, sha)){
-
+        DigestInputStream md5Stream = null;
+        DigestInputStream shaStream = null;
+        try {
+            md5Stream = new DigestInputStream(inputStream, md5);
+            shaStream = new DigestInputStream(md5Stream, sha);
             count = Files.copy(shaStream, file.toPath());
+        } finally {
+            if(md5Stream !=null){
+                md5Stream.close();
+            }
+            if(shaStream !=null){
+                shaStream.close();
+            }
         }
 
         LinkedHashMap<String, Serializable> map = new LinkedHashMap<String, Serializable>(3);
@@ -55,5 +66,4 @@ public class FileUtil {
         }
 
     }
-
 }

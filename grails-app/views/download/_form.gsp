@@ -127,12 +127,12 @@
                 <g:message code="download.name.label" default="Name" />
                 <span class="required-indicator">*</span>
             </label>
-            <g:textField name="name" id="name" required="" value="${downloadInstance?.name}"/>
+            <g:textField name="name" id="name" required="" class="input-xxlarge" value="${downloadInstance?.name}"/>
         </div>
 
         <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'description', 'error')} ">
             <label for="description">
-                <g:message code="download.description.label" default="Description" />
+                <g:message code="download.description.label" default="Description (use markdown if formatting is required)" />
 
             </label>
             <g:textArea name="description" id="description" cols="40" rows="5" value="${downloadInstance?.description}" class="input-xxlarge"/>
@@ -151,27 +151,27 @@
                 <g:message code="download.fileSize.label" default="File Size" />
                 <span class="required-indicator">*</span>
             </label>
-            <g:field name="fileSize" id="fileSize" type="number" min="1" readonly="true" value="${downloadInstance.fileSize}"/>
+            <g:field name="fileSize" id="fileSize" type="number" min="1" class="input-xlarge" readonly="true" value="${downloadInstance.fileSize}"/>
         </div>
 
         <div class="fieldcontain">
             <label for="dataLastModified">
                 <g:message code="download.dataLastModified.label" default="Last Modified" />
             </label>
-            <g:textField name="dataLastModified" id="dataLastModified" readonly="true" value="${downloadInstance.dataLastModified}"/>
+            <g:textField name="dataLastModified" id="dataLastModified" class="input-xlarge" readonly="true" value="${downloadInstance.dataLastModified}"/>
         </div>
 
         <div class="fieldcontain">
             <label for="dataEtag">
                 <g:message code="download.dataEtag.label" default="ETag" />
             </label>
-            <g:textField name="dataEtag" id="dataEtag" readonly="true" value="${downloadInstance.dataEtag}"/>
+            <g:textField name="dataEtag" id="dataEtag" class="input-xlarge" readonly="true" value="${downloadInstance.dataEtag}"/>
         </div>
 
     </div>
     <div id="right-sidebar" class="span4" style="overflow-y: scroll;">
         <div id="metadataResults">
-            <h4>Current Record Count from Metadata URI</h4>
+            <h4>Current record count from metadata URI</h4>
             <table class="table table-striped table-condensed">
                 <thead>
                 <tr>

@@ -21,7 +21,6 @@
 			%{--</ul>--}%
 		%{--</div>--}%
 		<div id="list-download" class="scaffold-list" role="main">
-			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
 			<g:if test="${flash.message}">
 			    <div class="message" role="status">${flash.message}</div>
 			</g:if>
@@ -31,8 +30,6 @@
 					
 						<g:sortableColumn property="name" title="${message(code: 'download.name.label', default: 'Name')}" />
 					
-						<g:sortableColumn property="description" title="${message(code: 'download.description.label', default: 'Description')}" />
-					
 						<g:sortableColumn property="fileUri" title="${message(code: 'download.fileUri.label', default: 'File Uri')}" />
 					
 						<g:sortableColumn property="mimeType" title="${message(code: 'download.mimeType.label', default: 'Mime Type')}" />
@@ -40,7 +37,8 @@
 						<g:sortableColumn property="fileSize" title="${message(code: 'download.fileSize.label', default: 'File Size')}" />
 					
 						<g:sortableColumn property="dateCreated" title="${message(code: 'download.dateCreated.label', default: 'Date Created')}" />
-					
+
+                        <th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -49,8 +47,6 @@
 					
 						<td><g:link action="show" id="${downloadInstance.id}">${fieldValue(bean: downloadInstance, field: "name")}</g:link></td>
 					
-						<td>${fieldValue(bean: downloadInstance, field: "description")}</td>
-					
 						<td>${fieldValue(bean: downloadInstance, field: "fileUri")}</td>
 					
 						<td>${fieldValue(bean: downloadInstance, field: "mimeType")}</td>
@@ -58,7 +54,9 @@
 						<td>${fieldValue(bean: downloadInstance, field: "fileSize")}</td>
 					
 						<td><g:formatDate date="${downloadInstance.dateCreated}" /></td>
-					
+
+                        <td><g:link class="btn btn-mini" controller="download" action="edit" id="${downloadInstance.id}">Edit</g:link></td>
+
 					</tr>
 				</g:each>
 				</tbody>

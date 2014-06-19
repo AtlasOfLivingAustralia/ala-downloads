@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="main"/>
-		<title>ALA Downloads</title>
+		<title>Downloads | Atlas of Living Australia</title>
         <r:script>
             $(window).load(function() {
                 // download link in table
@@ -43,11 +43,17 @@
             </div>
         </auth:ifAllGranted>
 		<div id="page-body" role="main">
-			<h1>ALA Downloads</h1>
-            <h2>Projects</h2>
+			<h1>Downloads</h1>
+            <p class="lead">
+                This page provides access to desktop software and large data exports.
+                For developers interested in installing server components,
+                please using the scripts in this <a href="https://github.com/gbif/ala-install">project</a>.
+            </p>
+
+            <h2>Software packages for desktop computers</h2>
             <g:render template="../project/table" />
 
-            <h2>Record downloads</h2>
+            <h2>File downloads</h2>
 
             <div id="list-download" class="row-fluid scaffold-list" role="main">
                 <div id="flashMessage" class="hide message alert alert-info span6">
@@ -69,8 +75,6 @@
 
                         %{--<g:sortableColumn property="fileUri" title="${message(code: 'download.fileUri.label', default: 'File Path')}" />--}%
 
-                        <g:sortableColumn property="mimeType" title="${message(code: 'download.mimeType.label', default: 'File Type')}" />
-
                         <g:sortableColumn property="fileSize" title="${message(code: 'download.fileSize.label', default: 'File Size')}" />
 
                         <g:sortableColumn property="dataLastModified" title="${message(code: 'download.dataLastModified.label', default: 'Last Updated')}" />
@@ -86,9 +90,10 @@
                                 %{--<g:link class="downloadLink" controller="proxy" action="readFile" id="${downloadInstance.id}">${fieldValue(bean: downloadInstance, field: "name")}</g:link>--}%
                                 <a href="#" class="downloadLink" data-id="${downloadInstance.id}">${fieldValue(bean: downloadInstance, field: "name")}</a>
                             </td>
-                            <td>${fieldValue(bean: downloadInstance, field: "description")}</td>
+                            <td>
+                                <markdown:renderHtml text=" ${fieldValue(bean: downloadInstance, field: "description")}"/>
+                            </td>
                             %{--<td>${fieldValue(bean: downloadInstance, field: "fileUri")}</td>--}%
-                            <td>${fieldValue(bean: downloadInstance, field: "mimeType")}</td>
                             <td><dl:sizeInBytes size="${downloadInstance.fileSize}" /></td>
                             <td><prettytime:display date="${downloadInstance.dataLastModified}" /></td>
                             %{--<td><g:formatDate date="${downloadInstance.dateCreated}" /></td>--}%

@@ -29,7 +29,6 @@ class Download {
     }
 
     static mapping = {
-        dataLastModified defaultValue: new Date(0)
         dataEtag defaultValue: ''
     }
 }

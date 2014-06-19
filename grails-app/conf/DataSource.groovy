@@ -18,8 +18,8 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = 'validate' // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:postgresql://localhost/downloads-dev"
+            dbCreate = 'update' // one of 'create', 'create-drop', 'update', 'validate', ''
+            url = "jdbc:postgresql://localhost/downloads"
             logSql = false
         }
     }
@@ -29,7 +29,7 @@ environments {
             dbCreate = 'validate'
             url = "jdbc:postgresql://localhost/downloads"
             username="postgres"
-            password="password"
+            password=""
             logSql = false
             pooled = true
             properties {
