@@ -147,13 +147,15 @@ environments {
     }
 }
 
+logging.dir = (System.getProperty('catalina.base') ? System.getProperty('catalina.base') + '/logs'  : '/var/log/tomcat6/')
+
 // log4j configuration
 log4j = {
     appenders {
         environments {
             production {
                 rollingFile name: 'file',
-                        file: 'logs/downloads.log',
+                        file: logging.dir + '/downloads.log',
                         maxBackupIndex: 4
             }
         }
