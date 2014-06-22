@@ -26,6 +26,7 @@ class Download {
         fileSize min: 1L
         dateCreated display: false
         lastUpdated display: false
+        metadataUri nullable: true
     }
 
     static mapping = {

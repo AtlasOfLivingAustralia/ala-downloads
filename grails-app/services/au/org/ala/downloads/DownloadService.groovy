@@ -48,7 +48,11 @@ class DownloadService {
     }
 
     def getRecordCountsFromUrlAsArray(String url) {
-        getRecordCountsFromUrl(url).collect {k,v -> [id:k, count:v]}
+        if(url){
+            getRecordCountsFromUrl(url).collect {k,v -> [id:k, count:v]}
+        } else {
+           []
+        }
     }
 
     private def getFacetMap(json) {

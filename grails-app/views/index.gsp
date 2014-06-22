@@ -70,34 +70,32 @@
                     <thead>
                     <tr>
                         <g:sortableColumn property="name" title="${message(code: 'download.name.label', default: 'Name')}" />
-
                         <g:sortableColumn property="description" title="${message(code: 'download.description.label', default: 'Description')}" />
-
-                        %{--<g:sortableColumn property="fileUri" title="${message(code: 'download.fileUri.label', default: 'File Path')}" />--}%
-
-                        <g:sortableColumn property="fileSize" title="${message(code: 'download.fileSize.label', default: 'File Size')}" />
-
                         <g:sortableColumn property="dataLastModified" title="${message(code: 'download.dataLastModified.label', default: 'Last Updated')}" />
-
-                        %{--<g:sortableColumn property="dateCreated" title="${message(code: 'download.dateCreated.label', default: 'Date Created')}" />--}%
-
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     <g:each in="${downloadInstanceList}" status="i" var="downloadInstance">
                         <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                             <td>
-                                %{--<g:link class="downloadLink" controller="proxy" action="readFile" id="${downloadInstance.id}">${fieldValue(bean: downloadInstance, field: "name")}</g:link>--}%
-                                <a href="#" class="downloadLink" data-id="${downloadInstance.id}">${fieldValue(bean: downloadInstance, field: "name")}</a>
+                                ${fieldValue(bean: downloadInstance, field: "name")}<br/>
+                                File size: <dl:sizeInBytes size="${downloadInstance.fileSize}" />
                             </td>
-                            <td>
-                                <markdown:renderHtml text=" ${fieldValue(bean: downloadInstance, field: "description")}"/>
+                            <td class="description">
+                                <a href="javascript:void(0);" class="showHideDescription pull-right">More details</a>
+                                <g:set var="descLines" value="${(fieldValue(bean: downloadInstance, field: "description")).readLines()}"/>
+                                <div class="intro">
+                                    <markdown:renderHtml text="${descLines.take(1).join("\n")}"/>
+                                </div>
+                                <div class="therest" style="display:none;">
+                                    <markdown:renderHtml text="${descLines.drop(1).join("\n")}"/>
+                                </div>
                             </td>
-                            %{--<td>${fieldValue(bean: downloadInstance, field: "fileUri")}</td>--}%
-                            <td><dl:sizeInBytes size="${downloadInstance.fileSize}" /></td>
                             <td><prettytime:display date="${downloadInstance.dataLastModified}" /></td>
-                            %{--<td><g:formatDate date="${downloadInstance.dateCreated}" /></td>--}%
-
+                            <td>
+                                <a href="#" class="btn downloadLink" data-id="${downloadInstance.id}"><i class="icon-download-alt"></i> Download</a>
+                            </td>
                         </tr>
                     </g:each>
                     </tbody>
@@ -164,4 +162,12 @@
             </div>
 		</div>
 	</body>
+
+<r:script>
+    $( ".showHideDescription" ).click(function() {
+        $(this).parent().children('.therest').toggle( "slow", function() {
+            // Animation complete.
+        });
+    });
+</r:script>
 </html>

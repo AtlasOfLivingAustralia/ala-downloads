@@ -1,4 +1,4 @@
-grails.servlet.version = "3.0" // Change depending on target container compliance (2.5 or 3.0)
+grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
@@ -64,7 +64,7 @@ grails.project.dependency.resolution = {
         // plugins for the compile step
         compile ":scaffolding:2.0.2"
         compile ':cache:1.1.1'
-        compile ":release:3.0.1"
+        build ":release:3.0.1"
         // additions
         compile ':quartz:1.0.1'
         compile ":feeds:1.6"
@@ -76,7 +76,7 @@ grails.project.dependency.resolution = {
         runtime ":hibernate:3.6.10.9" // or ":hibernate4:4.3.4"
         runtime ":database-migration:1.3.8"
         runtime ":jquery:1.11.0.2"
-        runtime ":resources:1.2.7"
+        runtime ":resources:1.2.8"
         // additions
         runtime ":ala-web-theme:[0.4,]"
 

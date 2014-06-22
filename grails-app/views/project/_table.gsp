@@ -1,3 +1,7 @@
+<g:if test="${!projects}">
+    <p>No projects are currently available.</p>
+</g:if>
+<g:else>
 <table class="table table-bordered table-condensed">
     <thead>
     <tr>
@@ -15,5 +19,5 @@
         </tr>
     </g:each>
     </tbody>
-
 </table>
+</g:else>

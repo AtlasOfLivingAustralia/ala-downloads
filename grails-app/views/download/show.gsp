@@ -35,7 +35,9 @@
 				<li class="fieldcontain">
 					<span id="description-label" class="property-label"><g:message code="download.description.label" default="Description" /></span>
 					
-						<span class="property-value" aria-labelledby="description-label"><g:fieldValue bean="${downloadInstance}" field="description"/></span>
+						<span class="property-value" aria-labelledby="description-label">
+                            <markdown:renderHtml text="${downloadInstance.description}"/>
+                        </span>
 					
 				</li>
 				</g:if>

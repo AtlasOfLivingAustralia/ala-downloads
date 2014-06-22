@@ -119,7 +119,7 @@
                 <g:message code="download.metadataUri.label" default="Metadata Uri" />
                 <span class="required-indicator">*</span>
             </label>
-            <g:field name="metadataUri" id="metadataUri" required="" type="url" value="${downloadInstance?.metadataUri}" class="input-xxlarge"/>
+            <g:field name="metadataUri" id="metadataUri" type="url" value="${downloadInstance?.metadataUri}" class="input-xxlarge"/>
         </div>
 
         <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'name', 'error')} required">
@@ -158,7 +158,10 @@
             <label for="dataLastModified">
                 <g:message code="download.dataLastModified.label" default="Last Modified" />
             </label>
-            <g:textField name="dataLastModified" id="dataLastModified" class="input-xlarge" readonly="true" value="${downloadInstance.dataLastModified}"/>
+
+            <g:textField name="dataLastModified" id="dataLastModified" class="input-xlarge" readonly="true">
+                <g:formatDate format="yyyy-MM-dd'T'HH:mm:ss'Z'" date="${downloadInstance.dataLastModified}"/>
+            </g:textField>
         </div>
 
         <div class="fieldcontain">
@@ -180,7 +183,6 @@
                 </tr>
                 </thead>
                 <tbody id="metadataTable">
-
                 </tbody>
             </table>
         </div>
