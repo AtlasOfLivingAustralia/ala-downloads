@@ -1,9 +1,10 @@
 package au.org.ala.downloads
 
 import au.org.ala.web.AlaSecured
-import grails.converters.JSON
 import groovy.time.TimeCategory
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+
+import static javax.servlet.http.HttpServletResponse.*
 
 class ProxyController {
 
@@ -30,9 +31,13 @@ class ProxyController {
     public static final String EXPIRES = 'Expires'
     public static final String USER_AGENT = "User-Agent"
     public static final String CONTENT_DISPOSITION = 'Content-Disposition'
+    public static final String VARY = "Vary"
 
-    def loggerService, proxyService
+    static allowedMethods = [proxy: ["HEAD", "GET"]]
 
+    def loggerService, proxyService, authService
+
+    @AlaSecured(statusCode=SC_FORBIDDEN)
     def download (DownloadCommand command) {
 
         if (command.hasErrors()) {
@@ -51,7 +56,7 @@ class ProxyController {
         final dataUri = downloadInstance.fileUri
         final metaUri = downloadInstance.metadataUri
         final userIP = request.getRemoteAddr()
-        final userEmail = command.userEmail
+        final userEmail = authService.email
         final comment = command.comment?:""
         final reasonTypeId = command.reasonTypeId
 
@@ -77,7 +82,6 @@ class ProxyController {
         def webRequest = request.getAttribute(GrailsApplicationAttributes.WEB_REQUEST)
         webRequest.setRenderView(false)
 
-
         final a = request.getHeader(ACCEPT)
         final ac = request.getHeader(ACCEPT_CHARSET)
         final ae = request.getHeader(ACCEPT_ENCODING)
@@ -94,7 +98,7 @@ class ProxyController {
 
         // synchronously proxy download
         final url = dataUri.toURL()
-        final stream
+        final InputStream stream
         final urlConnection
         try {
             final rc
@@ -128,7 +132,7 @@ class ProxyController {
                     rc = responseCode
                     cd = getHeaderField(CONTENT_DISPOSITION)
 
-                    if ((200..299).contains(responseCode)) {
+                    if ((200..299).contains(rc)) {
                         stream = inputStream
                     } else {
                         stream = errorStream
@@ -136,7 +140,7 @@ class ProxyController {
 
                 }
             } else {
-                rc = 200
+                rc = SC_OK
                 cd = null
                 stream = urlConnection.inputStream
             }
@@ -153,33 +157,46 @@ class ProxyController {
             final pragma = urlConnection.getHeaderField(PRAGMA)
             final cc = urlConnection.getHeaderField(CACHE_CONTROL)
             final expires = urlConnection.getHeaderField(EXPIRES)
+            final vary = urlConnection.getHeaderField(VARY)
 
             final path = url.getPath()
             final filename = proxyService.getFilenameForProxiedDownload(path, cd)
 
-            response.status = rc
-            response.contentLength = cl
-            response.contentType = ct
-            if (ce) response.setHeader(CONTENT_ENCODING, ce)
-            if (ar) response.setHeader(ACCEPT_RANGES, ar)
-            if (lm) response.setDateHeader(LAST_MODIFIED, lm)
-            if (etag) response.setHeader(ETAG, etag)
-            if (clang) response.setHeader(CONTENT_LANGUAGE, clang)
-            if (cmd5) response.setHeader(CONTENT_MD5, cmd5)
-            if (cr) response.setHeader(CONTENT_RANGE, cr)
-            if (cc) response.setHeader(CACHE_CONTROL, cc)
-            if (expires) response.setHeader(EXPIRES, expires)
-            if (pragma) response.setHeader(PRAGMA, pragma)
+            // Only proxy the actual body if the connection succeeds, error messages might leak
+            // internal information
+            if ((200..299).contains(rc)) {
+                response.status = rc
+                response.contentLength = cl
+                // XXX HACK to dissuade Grails from messing with the servlet output stream
+                // From workaround on https://jira.grails.org/browse/GRAILS-1223
+                response.contentType = ct.contains('text/html') ? ct.replace('text/html', 'TEXT/HTML') : ct
+                if (ce) response.setHeader(CONTENT_ENCODING, ce)
+                if (ar) response.setHeader(ACCEPT_RANGES, ar)
+                if (lm) response.setDateHeader(LAST_MODIFIED, lm)
+                if (etag) response.setHeader(ETAG, etag)
+                if (clang) response.setHeader(CONTENT_LANGUAGE, clang)
+                if (cmd5) response.setHeader(CONTENT_MD5, cmd5)
+                if (cr) response.setHeader(CONTENT_RANGE, cr)
+                if (cc) response.setHeader(CACHE_CONTROL, cc)
+                if (expires) response.setHeader(EXPIRES, expires)
+                if (pragma) response.setHeader(PRAGMA, pragma)
+                if (vary) response.setHeader(VARY, pragma)
 
+                // only send content disposition on success
+                response.setHeader CONTENT_DISPOSITION, "attachment; filename=${filename}"
+                response.outputStream << stream
 
-            response.setHeader CONTENT_DISPOSITION, "attachment; filename=${filename}"
-            response.outputStream << stream
-
-            onSuccess(rc, cr)
-
-        } catch(Exception e) {
+                onSuccess(rc, cr)
+            } else {
+                log.warn("Got non success response ${rc} while proxying to ${dataUri}")
+                response.sendError(SC_BAD_GATEWAY)
+            }
+        } catch (SocketTimeoutException e) {
+            log.error("Socket Timeout while attempting to proxy ${dataUri}", e)
+            response.sendError(SC_GATEWAY_TIMEOUT)
+        } catch (Exception e) {
             log.error("Exception while attempting to proxy ${dataUri}", e)
-            response.sendError(500)
+            response.sendError(SC_INTERNAL_SERVER_ERROR)
         } finally {
             try {
                 stream?.close()
@@ -190,38 +207,6 @@ class ProxyController {
                 urlConnection.disconnect()
             }
         }
-    }
-
-    def readFile (Long id) {
-        def downloadInstance = Download.get(id)
-        if (!downloadInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'download.label', default: 'Download'), id])
-            redirect(controller: "download")
-            return
-        }
-
-        try {
-            def fileObj = new File(downloadInstance.fileUri);
-            def inputStream = fileObj.newInputStream()
-
-            // log to ala-logger
-            //LogEventVO vo_reason = new LogEventVO(1002, params.reasonTypeId?:0, 0, params.email?:"", params.comment?:"", request.getRemoteAddr(), null);
-            //log (RestLevel.REMOTE, vo_reason);
-            params.userIP = request.getRemoteAddr()
-            loggerService.addDownloadEvent(downloadInstance, params)  // queue
-
-            response.setHeader "Content-disposition", "attachment; filename=${fileObj.name}"
-            response.contentType = "${downloadInstance.mimeType}"
-            response.contentLength = fileObj.length() //downloadInstance.fileSize.toInteger()
-            response.outputStream << inputStream
-            response.outputStream.flush()
-        } catch (FileNotFoundException fe) {
-            log.error fe.localizedMessage, fe
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'download.label', default: 'Download file'), id])
-            redirect(controller: "download")
-            return
-        }
-
     }
 
 }

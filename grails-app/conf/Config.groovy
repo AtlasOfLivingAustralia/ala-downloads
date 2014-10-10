@@ -22,7 +22,7 @@ if(System.getenv(ENV_NAME) && new File(System.getenv(ENV_NAME)).exists()) {
 
 println "[${appName}] (*) grails.config.locations = ${grails.config.locations}"
 
-grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
+grails.project.groupId = 'au.org.ala'
 
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = true
@@ -108,7 +108,7 @@ grails.hibernate.osiv.readonly = false
 security.cas.casServerName = 'https://auth.ala.org.au'
 security.cas.uriFilterPattern = "/download/.*,/recordCount/.*,/admin/.*" // pattern for pages that require authentication
 security.cas.uriExclusionFilterPattern = '/images.*,/css.*,/js.*,/less.*'
-security.cas.authenticateOnlyIfLoggedInPattern = "/p,/project,/p/.*,/project/.*,/" // pattern for pages that can optionally display info about the logged-in user
+security.cas.authenticateOnlyIfLoggedInFilterPattern = "/p,/project,/p/.*,/project/.*,/,/proxy/download/.*" // pattern for pages that can optionally display info about the logged-in user
 security.cas.loginUrl = 'https://auth.ala.org.au/cas/login'
 security.cas.logoutUrl = 'https://auth.ala.org.au/cas/logout'
 security.cas.casServerUrlPrefix = 'https://auth.ala.org.au/cas'
@@ -196,6 +196,7 @@ log4j = {
                     'au.org.ala.download',
                     'au.org.ala.web',
                     'au'
+            trace   'grails.app.services.au.org.ala.downloads.DownloadService'
         }
         production {
             info    'au.org.ala',

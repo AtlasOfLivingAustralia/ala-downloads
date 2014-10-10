@@ -8,6 +8,7 @@ class LoggerService {
     def httpWebService, downloadService, grailsApplication
 
     def addProxiedDownloadEvent(String dataUri, String metadataUri, String userIP, String userEmail, String comment, Integer reasonTypeId) {
+        if (!metadataUri) return
         final results = downloadService.getRecordCountsFromUrl(metadataUri)
 
         log.error "recordCountMap = $results"

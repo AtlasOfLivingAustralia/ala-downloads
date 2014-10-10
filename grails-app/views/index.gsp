@@ -20,7 +20,6 @@
                     $('#flashMessage').fadeIn();
                     $('#downloadModal').modal('hide');
                     var params = {
-                        userEmail: $('#email').val(),
                         reasonTypeId: $('#reasonTypeId').val()
                     };
                     var link = "${g.createLink(controller:"proxy", action:"download")}/" + $('#downloadForm').data("id") + "?" + $.param(params);
@@ -37,8 +36,8 @@
         <auth:ifAllGranted roles="ROLE_ADMIN">
             <div class="nav" role="navigation">
                 <ul>
-                    <li><g:link class="list" controller="admin" action="projectList"><g:message code="default.list.label" args="[project]" /></g:link></li>
-                    <li><g:link class="list" controller="download" action="list"><g:message code="default.list.label" args="[download]" /></g:link></li>
+                    <li><g:link class="list" controller="admin" action="projectList"><g:message code="default.list.label" args="['Project']" /></g:link></li>
+                    <li><g:link class="list" controller="download" action="list"><g:message code="default.list.label" args="['Download']" /></g:link></li>
                 </ul>
             </div>
         </auth:ifAllGranted>
@@ -55,7 +54,7 @@
 
             <h2>File downloads</h2>
 
-            <div id="list-download" class="row-fluid scaffold-list" role="main">
+            <div id="list-download" class="row-fluid content scaffold-list" role="main">
                 <div id="flashMessage" class="hide message alert alert-info span6">
                     <button type="button" class="close" onclick="$(this).parent().hide()">×</button>
                     <span>${flash.message}</span>
@@ -66,6 +65,11 @@
                         <g:renderErrors bean="${flash.errors}" as="list" />
                     </div>
                 </g:hasErrors>
+                <auth:ifNotLoggedIn>
+                    <div id="not-logged-in" class="message alert alert-error">
+                        These downloads require you be logged in to access them.
+                    </div>
+                </auth:ifNotLoggedIn>
                 <table>
                     <thead>
                     <tr>
@@ -110,49 +114,50 @@
                     <h3 id="myModalLabel">Download Confirmation</h3>
                 </div>
                 <div class="modal-body">
-                    <p id="termsOfUseDownload">
-                        By downloading this content you are agreeing to use it in accordance with the Atlas of Living Australia
-                        <a href="http://www.ala.org.au/about/terms-of-use/#TOUusingcontent">Terms of Use</a> and any Data Provider
+                    <auth:ifLoggedIn>
+                        <p id="termsOfUseDownload">
+                            By downloading this content you are agreeing to use it in accordance with the Atlas of Living Australia
+                            <a href="http://www.ala.org.au/about/terms-of-use/#TOUusingcontent">Terms of Use</a> and any Data Provider
                         Terms associated with the data download.
-                        <br><br>
-                        Please provide the following details before downloading (* required):
-                    </p>
-                    <form id="downloadForm" class="form-horizontal" data-id="">
-                        <div class="control-group">
-                            <label class="control-label" for="email">Email *</label>
-                            <div class="controls">
-                                <input type="text" id="email" placeholder="Email">
+                            <br><br>
+                            Please provide the following details before downloading (* required):
+                        </p>
+                        <form id="downloadForm" class="form-horizontal" data-id="">
+                            <div class="control-group">
+                                <label class="control-label" for="reasonTypeId">Download reason *</label>
+                                <div class="controls">
+                                    <select name="reasonTypeId" id="reasonTypeId">
+                                        <option value="">-- select a reason --</option>
+                                        <option value="0">conservation management/planning</option>
+                                        <option value="1">biosecurity management, planning</option>
+                                        <option value="2">environmental impact, site assessment</option>
+                                        <option value="3">education</option>
+                                        <option value="4">scientific research</option>
+                                        <option value="5">collection management</option>
+                                        <option value="6">other</option>
+                                        <option value="7">ecological research</option>
+                                        <option value="8">systematic research</option>
+                                        <option value="9">other scientific research</option>
+                                        <option value="10">testing</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="reasonTypeId">Download reason *</label>
-                            <div class="controls">
-                                <select name="reasonTypeId" id="reasonTypeId">
-                                    <option value="">-- select a reason --</option>
-                                    <option value="0">conservation management/planning</option>
-                                    <option value="1">biosecurity management, planning</option>
-                                    <option value="2">environmental impact, site assessment</option>
-                                    <option value="3">education</option>
-                                    <option value="4">scientific research</option>
-                                    <option value="5">collection management</option>
-                                    <option value="6">other</option>
-                                    <option value="7">ecological research</option>
-                                    <option value="8">systematic research</option>
-                                    <option value="9">other scientific research</option>
-                                    <option value="10">testing</option>
-                                </select>
-                            </div>
-                        </div>
 
-                        <div class="control-group">
-                            <label class="control-label" for="email"></label>
-                            <div class="controls">
-                                <input type="submit" value="Start Download" id="downloadStart" class="btn tooltips">
+                            <div class="control-group">
+                                %{--<label class="control-label" for="email"></label>--}%
+                                <div class="controls">
+                                    <input type="submit" value="Start Download" id="downloadStart" class="btn tooltips">
+                                </div>
                             </div>
-                        </div>
 
-                        <div id="statusMsg" style="text-align: center; font-weight: bold; "></div>
-                    </form>
+                            <div id="statusMsg" style="text-align: center; font-weight: bold; "></div>
+                        </form>
+                    </auth:ifLoggedIn>
+                    <auth:ifNotLoggedIn>
+                        <div id="not-logged-in" class="message alert alert-error">
+                            Please <a href="${hf.createLoginUrl()}">log in</a> to access this download.
+                        </div>
+                    </auth:ifNotLoggedIn>
                     %{--<p><img src="${resource(dir:'images',file:'spinner.gif')}" alt="spinner icon"/></p>--}%
                 </div>
                 <div class="modal-footer">

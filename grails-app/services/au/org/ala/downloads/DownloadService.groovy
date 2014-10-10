@@ -22,23 +22,29 @@ class DownloadService {
                 // Don't update the download if there was a non successful HTTP response
                 log.warn("HTTP Request (${newVals}) while refreshing metadata for ${download} was non successful!")
             } else if (download.mimeType != newVals.contentType ||
-                !DateUtils.truncatedEquals(download.dataLastModified, newVals.lastModified, Calendar.SECOND) ||
+                (newVals.lastModified && download.dataLastModified && !DateUtils.truncatedEquals(download.dataLastModified, newVals.lastModified, Calendar.SECOND)) ||
                 download.fileSize != newVals.contentLength ||
-                download.dataEtag != newVals.etag) {
+                download.dataEtag != newVals.etag ||
+                (newVals.contentMd5 && download.dataMd5 && newVals.contentMd5 != download.dataMd5)) {
 
                 // Only update the download if some of the data has changed
                 download.mimeType = newVals.contentType
                 download.fileSize = newVals.contentLength
 
-                download.dataLastModified = newVals.lastModified
+                download.dataLastModified = newVals.lastModified ?: new Date()
                 download.dataEtag = newVals.etag
+
+                download.dataMd5 = newVals.contentMd5
 
                 log.info("Updating ${download}")
                 if (!download.save(validate: true)) {
                     log.error("Tried to save ${download} but it was invalid!")
                 }
+            } else {
+                // The server doesn't support HTTP 304, but nothing changed.
+                log.debug("${download} data resource is unchanged since last update")
             }
-        } catch (MalformedURLException | IOException e) {
+        } catch (IOException e) {
             log.error("Error updating metadata for ${download}", e)
         }
     }

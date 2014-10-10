@@ -22,19 +22,13 @@
         fileUri.on('input propertychange', function(e) {
             fileUriChangeEventHandler(e,
             function (data, textStatus, jqXHR) {
-                if (data.statusCode === 200) {
-                    updateDataUriFields(data);
-                }
+                onResponse(data, null);
             });
         });
         fileUri.change(function(e) {
             fileUriChangeEventHandler(e,
             function (data, textStatus, jqXHR) {
-                if (data.statusCode === 200) {
-                    updateDataUriFields(data);
-                } else {
-                    alert("The Data URI returned status code: " + data.statusCode);
-                }
+                onResponse(data, function() { alert("The Data URI returned status code: " + data.statusCode); } );
             },
             function (jqXHR, textStatus, errorThrown) {
                 alert("The Data URI request failed!  Status: " + textStatus + ", Error: " + errorThrown);
@@ -71,7 +65,7 @@
             var urlregex = new RegExp(
                 "^(http|https|)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
           return urlregex.test(textval);
-        };
+        }
         function fileUriChangeEventHandler(e, done, fail) {
             var val = e.target.value;
             if (validateURL(val)) {
@@ -87,17 +81,25 @@
                     data: {uri : uri},
                     dataType: 'json'
                 })
-        };
+        }
         function updateDataUriFields(data) {
             if (!$('#name').val()) $('#name').val(data.filename.replace(/[_\-]/g," "));
             $('#mimetype').val(data.contentType);
             $('#fileSize').val(data.contentLength);
             $('#dataLastModified').val(data.lastModified);
             $('#dataEtag').val(data.etag);
-        };
+            $('#dataMd5').val(data.contentMd5);
+        }
         function updateMetadataUriFields(data) {
             $("#metadataTable").loadTemplate("#recordCountTmpl", data);
-        };
+        }
+        function onResponse(data, nonSuccessCodeFn) {
+                if (data.statusCode >= 200 && data.statusCode < 300) {
+                    updateDataUriFields(data);
+                } else if (nonSuccessCodeFn) {
+                    nonSuccessCodeFn();
+                }
+            }
         if (initialRecords) updateMetadataUriFields(initialRecords);
     });
 
@@ -169,6 +171,13 @@
                 <g:message code="download.dataEtag.label" default="ETag" />
             </label>
             <g:textField name="dataEtag" id="dataEtag" class="input-xlarge" readonly="true" value="${downloadInstance.dataEtag}"/>
+        </div>
+
+        <div class="fieldcontain">
+            <label for="dataMd5">
+                <g:message code="download.dataMd5.label" default="MD5" />
+            </label>
+            <g:textField name="dataMd5" id="dataMd5" class="input-xlarge" readonly="true" value="${downloadInstance.dataMd5}"/>
         </div>
 
     </div>
