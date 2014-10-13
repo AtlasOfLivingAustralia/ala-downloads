@@ -1,6 +1,12 @@
 package au.org.ala.downloads
 
+import com.google.common.hash.Hashing
+import com.google.common.hash.HashingOutputStream
+import com.google.common.io.BaseEncoding
+import com.google.common.io.ByteStreams
+import com.google.common.io.Closer
 import org.apache.commons.fileupload.FileUpload
+import org.apache.commons.io.output.NullOutputStream
 
 class ProxyService {
 
@@ -10,15 +16,58 @@ class ProxyService {
 
     def headRequest(URL uri, String etag = '', Date lastModified = new Date(0)) throws IOException {
 
-        def c = uri.openConnection().asType(HttpURLConnection)
+        def retVal = doRequest(uri, "HEAD", etag, lastModified)
+        // app servers might not support head requests so try a get request instead.
+        if (retVal.statusCode == 405) retVal = doRequest(uri, "GET", etag, lastModified)
+        return retVal
+
+    }
+
+    private def doRequest(URL url, String method, String etag, Date lastModified) throws IOException {
+        def c = url.openConnection().asType(HttpURLConnection)
         try {
-            c.requestMethod = "HEAD"
+            c.requestMethod = method
             c.setRequestProperty("User-Agent", USER_AGENT)
             if (etag) c.setRequestProperty("If-None-Match", etag)
             else if (lastModified && lastModified.time != 0) c.setIfModifiedSince(lastModified.time)
             c.connect()
-            final filename = getFilenameForProxiedDownload(uri.getPath(), c.getHeaderField(FileUpload.CONTENT_DISPOSITION))
-            [statusCode: c.responseCode, contentLength: c.contentLengthLong, contentType: c.contentType, lastModified: new Date(c.lastModified), filename: filename, etag: c.getHeaderField("ETag")]
+            def rc = c.responseCode
+            final stream
+            final closer = Closer.create()
+
+            def contentLength = c.contentLengthLong
+            def contentMd5 = c.getHeaderField("Content-MD5")
+            def contentEtag = c.getHeaderField("ETag")
+            def contentLastMod = c.lastModified != 0 ? new Date(c.lastModified) : null
+
+            try {
+                if ((200..299).contains(rc)) {
+                    stream = closer.register(c.inputStream)
+                } else {
+                    stream = closer.register(c.errorStream)
+                }
+
+                // Calculate content-length and md5 ourself if one of them was not sent by server and we have a response body
+                if (!"HEAD".equalsIgnoreCase(method) &&
+                    rc != 304 &&
+                    (
+                        (!contentMd5 && !contentLastMod && !contentEtag) || // We only care about md5 if there is no last modified and no etag
+                         contentLength == -1)
+                    ) {
+                    def out = new HashingOutputStream(Hashing.md5(), NullOutputStream.NULL_OUTPUT_STREAM)
+                    def written = ByteStreams.copy(stream, out)
+                    contentLength = written
+                    out.flush()
+                    contentMd5 = BaseEncoding.base64().encode(out.hash().asBytes())
+                }
+            } catch (IOException e) {
+                throw closer.rethrow(e)
+            } finally {
+                closer.close()
+            }
+
+            final filename = getFilenameForProxiedDownload(url.getPath(), c.getHeaderField(FileUpload.CONTENT_DISPOSITION))
+            [statusCode: rc, contentLength: contentLength, contentType: c.contentType, lastModified: contentLastMod, filename: filename, etag: contentEtag, contentMd5: contentMd5]
         } finally {
             c.disconnect()
         }

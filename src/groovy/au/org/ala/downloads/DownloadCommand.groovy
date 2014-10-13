@@ -5,15 +5,17 @@ import grails.validation.Validateable
 @Validateable
 class DownloadCommand {
 
+    def loggerService
+
     Long id
     Integer reasonTypeId
-    String userEmail
     String comment
 
     static constraints = {
         id blank: false
-        reasonTypeId blank: false, range: 0..10
-        userEmail blank: false, email: true
+        reasonTypeId nullable: false, blank: false, validator: { reason, cmd ->
+            reason in cmd.loggerService.reasons*.id
+        }
         comment nullable: true, blank: true
     }
 

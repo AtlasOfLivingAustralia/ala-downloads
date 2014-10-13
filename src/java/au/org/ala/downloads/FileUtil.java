@@ -1,5 +1,6 @@
 package au.org.ala.downloads;
 
+import com.google.common.io.Closer;
 import org.apache.commons.codec.binary.Hex;
 
 import java.io.File;
@@ -25,19 +26,15 @@ public class FileUtil {
         MessageDigest md5 = getDigest("MD5");
         MessageDigest sha = getDigest("SHA");
         long count;
-        DigestInputStream md5Stream = null;
-        DigestInputStream shaStream = null;
+        Closer closer = Closer.create();
         try {
-            md5Stream = new DigestInputStream(inputStream, md5);
-            shaStream = new DigestInputStream(md5Stream, sha);
+            DigestInputStream md5Stream = closer.register(new DigestInputStream(inputStream, md5));
+            DigestInputStream shaStream = closer.register(new DigestInputStream(md5Stream, sha));
             count = Files.copy(shaStream, file.toPath());
+        } catch (Throwable e) {
+            throw closer.rethrow(e);
         } finally {
-            if(md5Stream !=null){
-                md5Stream.close();
-            }
-            if(shaStream !=null){
-                shaStream.close();
-            }
+            closer.close();
         }
 
         LinkedHashMap<String, Serializable> map = new LinkedHashMap<String, Serializable>(3);

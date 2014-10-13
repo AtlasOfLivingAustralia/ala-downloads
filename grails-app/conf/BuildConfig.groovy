@@ -79,7 +79,7 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.11.0.2"
         runtime ":resources:1.2.8"
         // additions
-        runtime ":ala-web-theme:0.8.1"
+        runtime ":ala-web-theme:0.8.2"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0.1"

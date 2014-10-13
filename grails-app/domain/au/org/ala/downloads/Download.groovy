@@ -12,6 +12,7 @@ class Download {
     Long fileSize
     Date dataLastModified
     String dataEtag
+    String dataMd5
 
     Date dateCreated
     Date lastUpdated
@@ -23,10 +24,13 @@ class Download {
         description blank: true, widget: 'textarea'
         fileUri blank: false, unique: true
         mimeType blank: true
-        fileSize min: 1L
+        fileSize nullable: true, min: 1L
         dateCreated display: false
         lastUpdated display: false
         metadataUri nullable: true
+        dataEtag nullable: true
+        dataLastModified nullable: true
+        dataMd5 nullable: true
     }
 
     static mapping = {

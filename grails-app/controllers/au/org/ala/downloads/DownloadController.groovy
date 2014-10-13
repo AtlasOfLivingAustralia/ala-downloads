@@ -28,6 +28,9 @@ class DownloadController {
 
         setPropertiesFromDataUri(downloadInstance)
 
+        if (downloadInstance.fileSize == -1) downloadInstance.fileSize = null
+        if (!downloadInstance.dataLastModified) downloadInstance.dataLastModified = new Date()
+
         if (!downloadInstance.save(flush: true)) {
             render(view: "create", model: [downloadInstance: downloadInstance, metadataRecords: downloadService.getRecordCountsFromUrlAsArray(downloadInstance.metadataUri)])
             return
@@ -114,8 +117,10 @@ class DownloadController {
         try {
             render proxyService.headRequest(new URL(uri)) as JSON
         } catch (MalformedURLException e) {
+            log.debug("MalformedURLException contacting ${uri}", e)
             response.sendError(400, "The URL is invalid")
         } catch (IOException e) {
+            log.debug("IOException contacting ${uri}", e)
             response.sendError(500)
         }
         return null
@@ -126,9 +131,11 @@ class DownloadController {
         try {
             render downloadService.getRecordCountsFromUrlAsArray(uri) as JSON
         } catch (MalformedURLException e) {
+            log.debug("MalformedURLException contacting ${uri}", e)
             response.sendError(400, "The URL is invalid")
         } catch (IOException e) {
-            response.sendError(500)
+            log.debug("IOException contacting ${uri}", e)
+            response.sendError(500, "Network error contacting service")
         }
         return null
     }
@@ -139,5 +146,6 @@ class DownloadController {
         downloadInstance.dataLastModified = data.lastModified
         downloadInstance.fileSize = data.contentLength
         downloadInstance.mimeType = data.contentType
+        downloadInstance.dataMd5 = data.contentMd5
     }
 }
