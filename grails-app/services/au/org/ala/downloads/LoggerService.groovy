@@ -1,6 +1,7 @@
 package au.org.ala.downloads
 
 import grails.converters.JSON
+import grails.plugin.cache.Cacheable
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 
 class LoggerService {
@@ -88,5 +89,14 @@ class LoggerService {
                 }
             }
         }
+    }
+
+    @Cacheable("reasons")
+    def getReasons() {
+        final server = grailsApplication.config.app.logger.server ?: 'http://logger.ala.org.au'
+        final port = grailsApplication.config.app.logger.port ?: '80'
+        final path = grailsApplication.config.app.logger.path ?: 'service/logger/'
+        final reasons = grailsApplication.config.app.logger.reasons ?: 'reasons'
+        httpWebService.getJson("${server}:${port}/${path}${reasons}")
     }
 }

@@ -128,17 +128,9 @@
                                 <div class="controls">
                                     <select name="reasonTypeId" id="reasonTypeId">
                                         <option value="">-- select a reason --</option>
-                                        <option value="0">conservation management/planning</option>
-                                        <option value="1">biosecurity management, planning</option>
-                                        <option value="2">environmental impact, site assessment</option>
-                                        <option value="3">education</option>
-                                        <option value="4">scientific research</option>
-                                        <option value="5">collection management</option>
-                                        <option value="6">other</option>
-                                        <option value="7">ecological research</option>
-                                        <option value="8">systematic research</option>
-                                        <option value="9">other scientific research</option>
-                                        <option value="10">testing</option>
+                                        <g:each in="${reasons}">
+                                            <option value="${it.id}">${it.name}</option>
+                                        </g:each>
                                     </select>
                                 </div>
                             </div>
