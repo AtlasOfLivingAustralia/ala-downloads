@@ -185,22 +185,8 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 
-    info    'grails.app'
+    info    'grails.app',
+            'au.org.ala',
+            'ala'
 
-    environments {
-        development {
-            debug   'grails.app.controllers.au.org.ala',
-                    'grails.app.services.au.org.ala',
-                    'grails.app.jobs.au.org.ala',
-                    'ala',
-                    'au.org.ala.download',
-                    'au.org.ala.web',
-                    'au'
-            trace   'grails.app.services.au.org.ala.downloads.DownloadService'
-        }
-        production {
-            info    'au.org.ala',
-                    'ala'
-        }
-    }
 }
