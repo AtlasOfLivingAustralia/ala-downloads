@@ -68,7 +68,7 @@ class LoggerService {
             if (grailsApplication.config.app.logger.enabled) {
                 final server = grailsApplication.config.app.logger.server ?: 'http://logger.ala.org.au'
                 final port = grailsApplication.config.app.logger.port ?: '80'
-                final path = grailsApplication.config.app.logger.path ?: 'service/logger/'
+                final path = grailsApplication.config.app.logger.path ?: '/service/logger/'
 
                 resp = httpWebService.doJsonPost(server, path, port, jsonBody.toString())
                 log.debug "resp = $resp"
@@ -95,8 +95,8 @@ class LoggerService {
     def getReasons() {
         final server = grailsApplication.config.app.logger.server ?: 'http://logger.ala.org.au'
         final port = grailsApplication.config.app.logger.port ?: '80'
-        final path = grailsApplication.config.app.logger.path ?: 'service/logger/'
+        final path = grailsApplication.config.app.logger.path ?: '/service/logger/'
         final reasons = grailsApplication.config.app.logger.reasons ?: 'reasons'
-        httpWebService.getJson("${server}:${port}/${path}${reasons}")
+        httpWebService.getJson("${server}:${port}${path}${reasons}")
     }
 }
