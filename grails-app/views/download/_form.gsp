@@ -161,9 +161,7 @@
                 <g:message code="download.dataLastModified.label" default="Last Modified" />
             </label>
 
-            <g:textField name="dataLastModified" id="dataLastModified" class="input-xlarge" readonly="true">
-                <g:formatDate format="yyyy-MM-dd'T'HH:mm:ss'Z'" date="${downloadInstance.dataLastModified}"/>
-            </g:textField>
+            <g:textField name="dataLastModified" id="dataLastModified" class="input-xlarge" readonly="true" value="${g.formatDate(format:"yyyy-MM-dd'T'HH:mm:ss'Z'", date:downloadInstance.dataLastModified)}" />
         </div>
 
         <div class="fieldcontain">
