@@ -55,7 +55,6 @@ grails.project.dependency.resolution = {
         // plugins for the compile step
         compile ":scaffolding:2.0.2"
         compile ':cache:1.1.1'
-        build ":release:3.0.1"
         // additions
         compile ':quartz:1.0.1'
         compile ":feeds:1.6"
@@ -69,21 +68,7 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.11.0.2"
         runtime ":resources:1.2.8"
         // additions
-        runtime ":ala-web-theme:0.8.2"
-
-        // Uncomment these (or add new ones) to enable additional resources capabilities
-        //runtime ":zipped-resources:1.0.1"
-        //runtime ":cached-resources:1.1"
-        //runtime ":cache-headers:1.1.6"
-        //runtime ":yui-minify-resources:0.1.5"
-
-        // An alternative to the default resources plugin is the asset-pipeline plugin
-        //compile ":asset-pipeline:1.6.1"
-
-        // Uncomment these to enable additional asset-pipeline capabilities
-        //compile ":sass-asset-pipeline:1.5.5"
-        //compile ":less-asset-pipeline:1.5.3"
-        //compile ":coffee-asset-pipeline:1.5.0"
-        //compile ":handlebars-asset-pipeline:1.3.0.1"
+        runtime ":ala-bootstrap2:2.1"
+        runtime ":ala-auth:1.2"
     }
 }
