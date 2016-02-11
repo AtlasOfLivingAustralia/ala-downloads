@@ -43,7 +43,7 @@ grails.project.dependency.resolution = {
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
         runtime 'postgresql:postgresql:9.1-901.jdbc4'
-        compile "au.org.ala:ala-logger:1.0-SNAPSHOT"
+        compile "au.org.ala:ala-logger:1.3"
         compile 'com.google.guava:guava:16.0.1'
     }
 
@@ -68,7 +68,7 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.11.0.2"
         runtime ":resources:1.2.8"
         // additions
-        runtime ":ala-bootstrap2:2.1"
-        runtime ":ala-auth:1.2"
+        runtime ":ala-bootstrap2:2.4.1"
+        runtime ":ala-auth:1.3"
     }
 }

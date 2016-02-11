@@ -23,7 +23,6 @@
             margin-right: -6px;
             opacity: .25;
         }
-
         </style>
     </head>
 
