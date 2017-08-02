@@ -105,14 +105,23 @@ grails.hibernate.pass.readonly = false
 // configure passing read-only to OSIV session by default, requires "singleSession = false" OSIV mode
 grails.hibernate.osiv.readonly = false
 
-security.cas.casServerName = 'https://auth.ala.org.au'
-security.cas.uriFilterPattern = "/download/.*,/recordCount/.*,/admin/.*" // pattern for pages that require authentication
-security.cas.uriExclusionFilterPattern = '/images.*,/css.*,/js.*,/less.*'
-security.cas.authenticateOnlyIfLoggedInFilterPattern = "/p,/project,/p/.*,/project/.*,/,/proxy/download/.*" // pattern for pages that can optionally display info about the logged-in user
-security.cas.loginUrl = 'https://auth.ala.org.au/cas/login'
-security.cas.logoutUrl = 'https://auth.ala.org.au/cas/logout'
-security.cas.casServerUrlPrefix = 'https://auth.ala.org.au/cas'
-security.cas.bypass = false
+security {
+    cas {
+        casServerName = 'https://auth.ala.org.au'
+        uriFilterPattern = '/download/.*,/recordCount/.*,/admin/.*,/admin'
+        uriExclusionFilterPattern = '/images.*,/css.*,/js.*,/less.*'
+        authenticateOnlyIfLoggedInFilterPattern = '/p,/project,/p/.*,/project/.*,/,/.*'
+        loginUrl = 'https://auth.ala.org.au/cas/login'
+        logoutUrl = 'https://auth.ala.org.au/cas/logout'
+        casServerUrlPrefix = 'https://auth.ala.org.au/cas'
+        bypass = false
+    }
+}
+//security.cas.uriFilterPattern = "/download/.*,/recordCount/.*,/admin/.*" // pattern for pages that require authentication
+//security.cas.uriExclusionFilterPattern = '/images.*,/css.*,/js.*,/less.*'
+//security.cas.authenticateOnlyIfLoggedInFilterPattern = "/p,/project,/p/.*,/project/.*,/,/proxy/download/.*" // pattern for pages that can optionally display info about the logged-in user
+
+//sec
 //security.cas.adminRole = "ROLE_ADMIN"
 
 app.downloads.dir = "/data/downloads/archives"
@@ -135,7 +144,7 @@ environments {
 //        app.logger.path = "ala-logger-service/service/logger/"
     }
     test {
-
+        security.cas.appServerName = 'http://devt.ala.org.au:8080/'
     }
     production {
         grails.logging.jul.usebridge = false
