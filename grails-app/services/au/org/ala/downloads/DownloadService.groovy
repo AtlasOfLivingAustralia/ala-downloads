@@ -51,7 +51,7 @@ class DownloadService {
 
     def getRecordCountsFromUrl(String url) {
         def response = webService.get("${url}")
-        if (response.statusCode < 300) {
+        if (response.statusCode >= 300) {
             log.error("Couldn't get record counts for $url")
         }
         return getFacetMap(response.resp)

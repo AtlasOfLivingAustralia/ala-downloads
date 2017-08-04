@@ -110,16 +110,13 @@ security {
         casServerName = 'https://auth.ala.org.au'
         uriFilterPattern = '/download/.*,/recordCount/.*,/admin/.*,/admin'
         uriExclusionFilterPattern = '/images.*,/css.*,/js.*,/less.*'
-        authenticateOnlyIfLoggedInFilterPattern = '/p,/project,/p/.*,/project/.*,/,/.*'
+        authenticateOnlyIfLoggedInPattern = '/p,/project,/p/.*,/project/.*,/,/.*'
         loginUrl = 'https://auth.ala.org.au/cas/login'
         logoutUrl = 'https://auth.ala.org.au/cas/logout'
         casServerUrlPrefix = 'https://auth.ala.org.au/cas'
         bypass = false
     }
 }
-//security.cas.uriFilterPattern = "/download/.*,/recordCount/.*,/admin/.*" // pattern for pages that require authentication
-//security.cas.uriExclusionFilterPattern = '/images.*,/css.*,/js.*,/less.*'
-//security.cas.authenticateOnlyIfLoggedInFilterPattern = "/p,/project,/p/.*,/project/.*,/,/proxy/download/.*" // pattern for pages that can optionally display info about the logged-in user
 
 //sec
 //security.cas.adminRole = "ROLE_ADMIN"

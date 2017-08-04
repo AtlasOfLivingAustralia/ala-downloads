@@ -62,19 +62,17 @@ class LoggerService {
         def events = LogEvent.listOrderByDateCreated()
         events.each { event ->
             log.info "${(System.currentTimeMillis() / 1000L)} event = ${event as JSON}"
-            def jsonBody = event as JSON
-//            def resp
+            def jsonBody = event.properties
+            def resp
+
             log.debug "json = ${jsonBody.toString()}"
             if (grailsApplication.config.app.logger.enabled) {
                 final server = grailsApplication.config.app.logger.server ?: 'http://logger.ala.org.au'
                 final port = grailsApplication.config.app.logger.port ?: '80'
                 final path = grailsApplication.config.app.logger.path ?: '/service/logger/'
 
-//                resp = httpWebService.doJsonPost(server, path, port, jsonBody.toString())
-                def response = webService.post("${server}:${port}${path}", jsonBody.toString())
-                def resp = response.resp
+                resp = webService.post("${server}:${port}${path}", jsonBody)
                 log.debug "resp = $resp"
-                return resp
             } else {
                 resp = [:]
                 log.warn "ALA Logger NOT enabled"
@@ -100,10 +98,11 @@ class LoggerService {
         final port = grailsApplication.config.app.logger.port ?: '80'
         final path = grailsApplication.config.app.logger.path ?: '/service/logger/'
         final reasons = grailsApplication.config.app.logger.reasons ?: 'reasons'
-        def response = webService.get("${server}:${port}${path}${reasons}")
-        if (response.statusCode < 300) {
+        def resp = webService.get("${server}:${port}${path}${reasons}")
+        if (resp.error) {
             log.error("Couldn't get reasons for $path $reasons")
+        } else {
+            return resp.resp
         }
-        return response.resp
     }
 }
