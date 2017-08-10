@@ -16,12 +16,17 @@
 <g:applyLayout name="main">
     <head>
         <style type="text/css">
+        .nav-pills > li.active > a {
+            color: #555;
+            background-color: white;
+        }
 
-        .icon-chevron-right {
-            float: right;
-            margin-top: 2px;
-            margin-right: -6px;
-            opacity: .25;
+        .nav-pills>li.active>a:hover {
+            color: #333;
+            background-color: #f2f2f2;
+        }
+        .nav-stacked > li > a {
+            border: 1px solid #ddd;
         }
         </style>
     </head>
@@ -40,15 +45,15 @@
             </table>
         </legend>
 
-        <div class="row-fluid">
-            <div class="span3">
-                <ul class="nav nav-list nav-stacked nav-tabs">
+        <div class="row">
+            <div class="col-md-3">
+                <ul class="nav nav-pills nav-stacked">
                     <dl:breadcrumbItem href="${createLink(controller: 'admin', action: 'projectList')}" title="Projects" />
                     <dl:breadcrumbItem href="${createLink(controller: 'download', action: 'list')}" title="Record Downloads" />
                 </ul>
             </div>
 
-            <div class="span9">
+            <div class="col-md-9">
                 <g:if test="${flash.errorMessage}">
                     <div class="container-fluid">
                         <div class="alert alert-error">

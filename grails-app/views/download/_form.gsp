@@ -105,81 +105,117 @@
 
 </r:script>
 
-<div id="parent" class="row-fluid">
-    <div class="span8 main-content">
+<div id="parent" class="row">
+    <div class="col-md-8 main-content">
 
-        <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'fileUri', 'error')} required">
-            <label for="fileUri">
-                <g:message code="download.fileUri.label" default="File Uri" />
-                <span class="required-indicator">*</span>
-            </label>
-            <g:field name="fileUri" id="fileUri" required="" type="url" value="${downloadInstance?.fileUri}" class="input-xxlarge"/>
+        <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'fileUri', 'has-error')} required">
+            <div class="form-group row">
+                <div class="col-md-8">
+                    <label for="fileUri">
+                        <g:message code="download.fileUri.label" default="File Uri" />
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <g:field name="fileUri" id="fileUri" required="" type="url" value="${downloadInstance?.fileUri}" class="form-control" />
+                </div>
+            </div>
         </div>
 
         <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'metadataUri', 'error')} required">
-            <label for="metadataUri">
-                <g:message code="download.metadataUri.label" default="Metadata Uri" />
-                <span class="required-indicator">*</span>
-            </label>
-            <g:field name="metadataUri" id="metadataUri" type="url" value="${downloadInstance?.metadataUri}" class="input-xxlarge"/>
+            <div class="form-group row">
+                <div class="col-md-8">
+                    <label for="metadataUri">
+                        <g:message code="download.metadataUri.label" default="Metadata Uri" />
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <g:field name="metadataUri" id="metadataUri" type="url" value="${downloadInstance?.metadataUri}" class="form-control" />
+                </div>
+            </div>
         </div>
 
         <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'name', 'error')} required">
-            <label for="name">
-                <g:message code="download.name.label" default="Name" />
-                <span class="required-indicator">*</span>
-            </label>
-            <g:textField name="name" id="name" required="" class="input-xxlarge" value="${downloadInstance?.name}"/>
+            <div class="form-group row">
+                <div class="col-md-8">
+                    <label for="name">
+                        <g:message code="download.name.label" default="Name" />
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <g:textField name="name" id="name" required="" class="form-control" value="${downloadInstance?.name}"/>
+                </div>
+            </div>
         </div>
 
         <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'description', 'error')} ">
-            <label for="description">
-                <g:message code="download.description.label" default="Description (use markdown if formatting is required)" />
+            <div class="form-group row">
+                <div class="col-md-8">
+                <label for="description">
+                    <g:message code="download.description.label" default="Description (use markdown if formatting is required)" />
 
-            </label>
-            <g:textArea name="description" id="description" cols="40" rows="5" value="${downloadInstance?.description}" class="input-xxlarge"/>
+                </label>
+                <g:textArea name="description" id="description" cols="40" rows="5" value="${downloadInstance?.description}" class="form-control"/>
+                </div>
+            </div>
         </div>
 
         <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'mimeType', 'error')} ">
-            <label for="mimeType">
-                <g:message code="download.mimeType.label" default="Mime Type" />
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label for="mimeType">
+                        <g:message code="download.mimeType.label" default="Mime Type" />
 
-            </label>
-            <g:textField name="mimeType" id="mimetype" readonly="true" value="${downloadInstance?.mimeType}"/>
+                    </label>
+                    <g:textField name="mimeType" id="mimetype" readonly="true" class="form-control" value="${downloadInstance?.mimeType}"/>
+                </div>
+            </div>
         </div>
 
         <div class="fieldcontain ${hasErrors(bean: downloadInstance, field: 'fileSize', 'error')} required">
-            <label for="fileSize">
-                <g:message code="download.fileSize.label" default="File Size" />
-                <span class="required-indicator">*</span>
-            </label>
-            <g:field name="fileSize" id="fileSize" type="number" min="1" class="input-xlarge" readonly="true" value="${downloadInstance.fileSize}"/>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label for="fileSize">
+                        <g:message code="download.fileSize.label" default="File Size" />
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <g:field name="fileSize" id="fileSize" type="number" min="1" class="form-control" readonly="true" value="${downloadInstance.fileSize}"/>
+                </div>
+            </div>
         </div>
 
         <div class="fieldcontain">
-            <label for="dataLastModified">
-                <g:message code="download.dataLastModified.label" default="Last Modified" />
-            </label>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label for="dataLastModified">
+                        <g:message code="download.dataLastModified.label" default="Last Modified" />
+                    </label>
+                    <g:textField name="dataLastModified" id="dataLastModified" class="form-control" readonly="true" value="${g.formatDate(format:"yyyy-MM-dd'T'HH:mm:ss'Z'", date:downloadInstance.dataLastModified)}" />
 
-            <g:textField name="dataLastModified" id="dataLastModified" class="input-xlarge" readonly="true" value="${g.formatDate(format:"yyyy-MM-dd'T'HH:mm:ss'Z'", date:downloadInstance.dataLastModified)}" />
+                </div>
+            </div>
         </div>
 
         <div class="fieldcontain">
-            <label for="dataEtag">
-                <g:message code="download.dataEtag.label" default="ETag" />
-            </label>
-            <g:textField name="dataEtag" id="dataEtag" class="input-xlarge" readonly="true" value="${downloadInstance.dataEtag}"/>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label for="dataEtag">
+                        <g:message code="download.dataEtag.label" default="ETag" />
+                    </label>
+                    <g:textField name="dataEtag" id="dataEtag" class="form-control" readonly="true" value="${downloadInstance.dataEtag}"/>
+                </div>
+            </div>
         </div>
 
         <div class="fieldcontain">
-            <label for="dataMd5">
-                <g:message code="download.dataMd5.label" default="MD5" />
-            </label>
-            <g:textField name="dataMd5" id="dataMd5" class="input-xlarge" readonly="true" value="${downloadInstance.dataMd5}"/>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label for="dataMd5">
+                        <g:message code="download.dataMd5.label" default="MD5" />
+                    </label>
+                    <g:textField name="dataMd5" id="dataMd5" class="form-control" readonly="true" value="${downloadInstance.dataMd5}"/>
+                </div>
+            </div>
         </div>
 
     </div>
-    <div id="right-sidebar" class="span4" style="overflow-y: scroll;">
+    <div id="right-sidebar" class="col-md-4" style="overflow-y: scroll;">
         <div id="metadataResults">
             <h4>Current record count from metadata URI</h4>
             <table class="table table-striped table-condensed">

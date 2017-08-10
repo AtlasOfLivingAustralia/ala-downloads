@@ -69,7 +69,7 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.11.1"
         runtime ":resources:1.2.14"
         // additions
-        runtime ":ala-bootstrap2:2.7.0"
+        runtime ":ala-bootstrap3:2.0.0"
         runtime ":ala-auth:2.1.3"
     }
 }
