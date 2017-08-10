@@ -31,15 +31,24 @@
                 }
             });
         </r:script>
+
+        <style type="text/css">
+            .glyphicon-list {
+                color: #333;
+            }
+        </style>
+
 	</head>
 	<body class="nav-datasets">
         <auth:ifAllGranted roles="ROLE_ADMIN">
             <div class="nav" role="navigation">
-                <ul>
-                    <li><g:link class="list" controller="admin" action="projectList"><g:message code="default.list.label" args="['Project']" /></g:link></li>
-                    <li><g:link class="list" controller="download" action="list"><g:message code="default.list.label" args="['Download']" /></g:link></li>
-                </ul>
+                <div class="row">
+                    <div class="col-md-2"><g:link controller="admin" action="projectList"><i class="glyphicon glyphicon-list"></i> <g:message code="default.list.label" args="['Project']" /></g:link></div>
+                    <div class="col-md-2"><g:link controller="download" action="list"><i class="glyphicon glyphicon-list"></i> <g:message code="default.list.label" args="['Download']" /></g:link></div>
+                </div>
             </div>
+
+            <div style="margin-top:12px"></div>
         </auth:ifAllGranted>
 		<div id="page-body" role="main">
 			<h1>Downloads</h1>
@@ -70,7 +79,7 @@
                         These downloads require you be logged in to access them.
                     </div>
                 </auth:ifNotLoggedIn>
-                <table>
+                <table class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <g:sortableColumn property="name" title="${message(code: 'download.name.label', default: 'Name')}" />
@@ -98,7 +107,7 @@
                             </td>
                             <td><prettytime:display date="${downloadInstance.dataLastModified}" /></td>
                             <td>
-                                <a href="#" class="btn downloadLink" data-id="${downloadInstance.id}"><i class="icon-download-alt"></i> Download</a>
+                                <a href="#" class="btn btn-default downloadLink" data-id="${downloadInstance.id}"><i class="glyphicon glyphicon-download-alt"></i> Download</a>
                             </td>
                         </tr>
                     </g:each>
@@ -108,56 +117,69 @@
                     <g:paginate total="${downloadInstanceTotal}" />
                 </div>
             </div>
-            <div class="modal hide fade" id="downloadModal">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel">Download Confirmation</h3>
-                </div>
-                <div class="modal-body">
-                    <auth:ifLoggedIn>
-                        <p id="termsOfUseDownload">
-                            By downloading this content you are agreeing to use it in accordance with the Atlas of Living Australia
-                            <a href="http://www.ala.org.au/about/terms-of-use/#TOUusingcontent">Terms of Use</a> and any Data Provider
-                        Terms associated with the data download.
-                            <br><br>
-                            Please provide the following details before downloading (* required):
-                        </p>
-                        <form id="downloadForm" class="form-horizontal" data-id="">
-                            <div class="control-group">
-                                <label class="control-label" for="reasonTypeId">Download reason *</label>
-                                <div class="controls">
-                                    <select name="reasonTypeId" id="reasonTypeId">
-                                        <option value="">-- select a reason --</option>
-                                        <g:each in="${reasons}">
-                                            <option value="${it.id}">${it.name}</option>
-                                        </g:each>
-                                    </select>
-                                </div>
-                            </div>
 
-                            <div class="control-group">
-                                %{--<label class="control-label" for="email"></label>--}%
-                                <div class="controls">
-                                    <input type="submit" value="Start Download" id="downloadStart" class="btn tooltips">
-                                </div>
-                            </div>
+            <div class="modal fade" id="downloadModal">
+                <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 
-                            <div id="statusMsg" style="text-align: center; font-weight: bold; "></div>
-                        </form>
-                    </auth:ifLoggedIn>
-                    <auth:ifNotLoggedIn>
-                        <div id="not-logged-in" class="message alert alert-error">
-                            Please <a href="${hf.createLoginUrl()}">log in</a> to access this download.
+                            <h3 id="myModalLabel">Download Confirmation</h3>
                         </div>
-                    </auth:ifNotLoggedIn>
-                    %{--<p><img src="${resource(dir:'images',file:'spinner.gif')}" alt="spinner icon"/></p>--}%
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    %{--<button class="btn btn-primary" id="saveEditors">Save changes</button>--}%
+
+                        <div class="modal-body">
+                            <auth:ifLoggedIn>
+                                <p id="termsOfUseDownload">
+                                    By downloading this content you are agreeing to use it in accordance with the Atlas of Living Australia
+                                    <a href="http://www.ala.org.au/about/terms-of-use/#TOUusingcontent">Terms of Use</a> and any Data Provider
+                                Terms associated with the data download.
+                                    <br><br>
+                                    Please provide the following details before downloading (* required):
+                                </p>
+
+                                <form id="downloadForm" class="form-horizontal" data-id="">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3" for="reasonTypeId">Download reason *</label>
+
+                                        <div class="col-md-9">
+                                            <select name="reasonTypeId" id="reasonTypeId">
+                                                <option value="">-- select a reason --</option>
+                                                <g:each in="${reasons}">
+                                                    <option value="${it.id}">${it.name}</option>
+                                                </g:each>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        %{--<label class="control-label" for="email"></label>--}%
+                                        <div class="col-md-offset-3 col-md-10">
+                                            <input type="submit" value="Start Download" id="downloadStart"
+                                                   class="btn btn-default tooltips">
+                                        </div>
+                                    </div>
+
+                                    <div id="statusMsg" style="text-align: center; font-weight: bold; "></div>
+                                </form>
+                            </auth:ifLoggedIn>
+                            <auth:ifNotLoggedIn>
+                                <div id="not-logged-in" class="message alert alert-error">
+                                    Please <a href="${hf.createLoginUrl()}">log in</a> to access this download.
+                                </div>
+                            </auth:ifNotLoggedIn>
+                        %{--<p><img src="${resource(dir:'images',file:'spinner.gif')}" alt="spinner icon"/></p>--}%
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                            %{--<button class="btn btn-primary" id="saveEditors">Save changes</button>--}%
+                        </div>
+                    </div>
                 </div>
             </div>
-		</div>
+            </div>
+        </div>
 	</body>
 
 <r:script>
