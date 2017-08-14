@@ -10,8 +10,6 @@
         <content tag="pageTitle">${projectInstance ? 'Edit Project' : 'New Project'}</content>
         <g:form action="saveProject" class="form-horizontal">
             <g:hiddenField name="projectId" value="${projectInstance?.id}" />
-
-            <form class="form-horizontal">
                 <div class="form-group">
                     <label class="control-label col-md-2" for="name">Name</label>
                     <div class="col-md-10">
@@ -39,7 +37,6 @@
                         <button class="btn btn-primary" type="submit">Save</button>
                     </div>
                 </div>
-            </form>
         </g:form>
     </body>
 </html>

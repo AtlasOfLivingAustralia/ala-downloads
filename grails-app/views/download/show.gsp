@@ -42,78 +42,77 @@
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
 
-			<div class="container-fluid">
-				<div class="row row-grid">
+			<div class="row row-grid">
 
-				<g:if test="${downloadInstance?.name}">
-					<div class="col-md-2 text-right">
-						<span id="name-label" class="property-label"><g:message code="download.name.label" default="Name" /></span></div>
-					<div class="col-md-10">
-						<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${downloadInstance}" field="name"/></span></div>
-				</g:if>
+			<g:if test="${downloadInstance?.name}">
+				<div class="col-md-2 text-right">
+					<span id="name-label" class="property-label"><g:message code="download.name.label" default="Name" /></span></div>
+				<div class="col-md-10">
+					<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${downloadInstance}" field="name"/></span></div>
+			</g:if>
 
-				<g:if test="${downloadInstance?.description}">
-					<div class="col-md-2 text-right">
-                        <span id="description-label" class="property-label"><g:message code="download.description.label" default="Description" /></div>
-					<div class="col-md-10">
-						<span class="property-value" aria-labelledby="description-label">
-                            <markdown:renderHtml text="${downloadInstance.description}"/>
-						</span></div>
-				</g:if>
+			<g:if test="${downloadInstance?.description}">
+				<div class="col-md-2 text-right">
+					<span id="description-label" class="property-label"><g:message code="download.description.label" default="Description" /></div>
+				<div class="col-md-10">
+					<span class="property-value" aria-labelledby="description-label">
+						<markdown:renderHtml text="${downloadInstance.description}"/>
+					</span></div>
+			</g:if>
 
-				<g:if test="${downloadInstance?.fileUri}">
-					<div class="col-md-2 text-right">
-						<span id="fileUri-label" class="property-label"><g:message code="download.fileUri.label" default="File Uri" /></span></div>
-					<div class="col-md-10">
-						<span class="property-value" aria-labelledby="fileUri-label"><g:fieldValue bean="${downloadInstance}" field="fileUri"/></span>
-					</div>
-				</g:if>
-
-				<g:if test="${downloadInstance?.mimeType}">
-					<div class="col-md-2 text-right">
-						<span id="mimeType-label" class="property-label"><g:message code="download.mimeType.label" default="Mime Type" /></span></div>
-					<div class="col-md-10">
-						<span class="property-value" aria-labelledby="mimeType-label"><g:fieldValue bean="${downloadInstance}" field="mimeType"/></span>
-					</div>
-				</g:if>
-
-				<g:if test="${downloadInstance?.fileSize}">
-					<div class="col-md-2 text-right">
-						<span id="fileSize-label" class="property-label"><g:message code="download.fileSize.label" default="File Size" /></span></div>
-					<div class="col-md-10">
-						<span class="property-value" aria-labelledby="fileSize-label"><g:fieldValue bean="${downloadInstance}" field="fileSize"/></span>
-					</div>
-				</g:if>
-
-				<g:if test="${downloadInstance?.dateCreated}">
-					<div class="col-md-2 text-right">
-						<span id="dateCreated-label" class="property-label"><g:message code="download.dateCreated.label" default="Date Created" /></span></div>
-					<div class="col-md-10">
-						<span class="property-value" aria-labelledby="dateCreated-label"><g:formatDate date="${downloadInstance?.dateCreated}" /></span>
-					</div>
-				</g:if>
-
-				<g:if test="${downloadInstance?.lastUpdated}">
-					<div class="col-md-2 text-right">
-						<span id="lastUpdated-label" class="property-label"><g:message code="download.lastUpdated.label" default="Last Updated" /></span></div>
-					<div class="col-md-10">
-						<span class="property-value" aria-labelledby="lastUpdated-label"><g:formatDate date="${downloadInstance?.lastUpdated}" /></span>
-					</div>
-				</g:if>
-
-				<g:if test="${downloadInstance?.recordCount}">
-					<div class="col-md-2 text-right">
-						<span id="recordCount-label" class="property-label"><g:message code="download.recordCount.label" default="Record Count" /></span></div>
-
-						<g:each in="${downloadInstance.recordCount}" var="r">
-                            <div class="col-md-10"><span class="property-value" aria-labelledby="recordCount-label"><g:link controller="recordCount" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></span> </div>
-						</g:each>
-
+			<g:if test="${downloadInstance?.fileUri}">
+				<div class="col-md-2 text-right">
+					<span id="fileUri-label" class="property-label"><g:message code="download.fileUri.label" default="File Uri" /></span></div>
+				<div class="col-md-10">
+					<span class="property-value" aria-labelledby="fileUri-label"><g:fieldValue bean="${downloadInstance}" field="fileUri"/></span>
 				</div>
-				</g:if>
+			</g:if>
 
+			<g:if test="${downloadInstance?.mimeType}">
+				<div class="col-md-2 text-right">
+					<span id="mimeType-label" class="property-label"><g:message code="download.mimeType.label" default="Mime Type" /></span></div>
+				<div class="col-md-10">
+					<span class="property-value" aria-labelledby="mimeType-label"><g:fieldValue bean="${downloadInstance}" field="mimeType"/></span>
 				</div>
+			</g:if>
+
+			<g:if test="${downloadInstance?.fileSize}">
+				<div class="col-md-2 text-right">
+					<span id="fileSize-label" class="property-label"><g:message code="download.fileSize.label" default="File Size" /></span></div>
+				<div class="col-md-10">
+					<span class="property-value" aria-labelledby="fileSize-label"><g:fieldValue bean="${downloadInstance}" field="fileSize"/></span>
+				</div>
+			</g:if>
+
+			<g:if test="${downloadInstance?.dateCreated}">
+				<div class="col-md-2 text-right">
+					<span id="dateCreated-label" class="property-label"><g:message code="download.dateCreated.label" default="Date Created" /></span></div>
+				<div class="col-md-10">
+					<span class="property-value" aria-labelledby="dateCreated-label"><g:formatDate date="${downloadInstance?.dateCreated}" /></span>
+				</div>
+			</g:if>
+
+			<g:if test="${downloadInstance?.lastUpdated}">
+				<div class="col-md-2 text-right">
+					<span id="lastUpdated-label" class="property-label"><g:message code="download.lastUpdated.label" default="Last Updated" /></span></div>
+				<div class="col-md-10">
+					<span class="property-value" aria-labelledby="lastUpdated-label"><g:formatDate date="${downloadInstance?.lastUpdated}" /></span>
+				</div>
+			</g:if>
+
+			<g:if test="${downloadInstance?.recordCount}">
+				<div class="col-md-2 text-right">
+					<span id="recordCount-label" class="property-label"><g:message code="download.recordCount.label" default="Record Count" /></span></div>
+
+					<g:each in="${downloadInstance.recordCount}" var="r">
+						<div class="col-md-10"><span class="property-value" aria-labelledby="recordCount-label"><g:link controller="recordCount" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></span> </div>
+					</g:each>
+
 			</div>
+			</g:if>
+
+			</div>
+
 			<g:form>
 				<div class="form-group">
 				    <div class="col-md-10">

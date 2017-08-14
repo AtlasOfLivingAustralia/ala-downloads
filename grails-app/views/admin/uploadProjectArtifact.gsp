@@ -15,8 +15,6 @@
         <g:uploadForm action="uploadArtifact" class="form-horizontal">
 
             <g:hiddenField name="projectId" value="${projectInstance?.id}" />
-            <form class="form-horizontal">
-
                 <div class="form-group">
                     <label class="control-label col-md-2" for="file">Name</label>
                     <div class="col-md-10">
@@ -51,7 +49,6 @@
                         <button class="btn btn-primary" type="submit">Upload</button>
                     </div>
                 </div>
-            </form>
         </g:uploadForm>
     </body>
 </html>

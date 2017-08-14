@@ -11,7 +11,7 @@
         <content tag="pageTitle">Record Downloads</content>
         <content tag="adminButtonBar">
             <a href="${createLink(uri: '/')}" class="btn btn-default btn-xs"><g:message code="default.home.label"/></a>
-            <g:link action="create" class="btn btn-default btn-xs btn-primary"><i class="glyphicon glyphicon-plus glyphicon glyphicon-white"></i>&nbsp;<g:message code="default.new.label" args="[entityName]" /></g:link>
+            <g:link action="create" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-plus glyphicon glyphicon-white"></i>&nbsp;<g:message code="default.new.label" args="[entityName]" /></g:link>
         </content>
 		%{--<a href="#list-download" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>--}%
 		%{--<div class="nav" role="navigation">--}%

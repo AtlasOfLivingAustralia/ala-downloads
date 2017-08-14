@@ -18,15 +18,12 @@
     <g:hiddenField name="artifactId" value="${artifactInstance?.id}" />
     <g:hiddenField name="version" value="${artifactInstance?.version}" />
 
-    <form class="form-horizontal">
-        <div class="form-group">
+    <div class="form-group">
         <label class="control-label col-md-2" for="name">Name</label>
         <div class="col-md-10"">
             <g:textField name="name" class="form-control" readonly="true" value="${artifactInstance?.name}" />
-    </div>
         </div>
-
-
+    </div>
 
     <div class="form-group ${hasErrors(bean: artifactInstance, field: 'summary', 'error')}">
         <label class="control-label col-md-2" for="summary">Summary</label>
@@ -55,7 +52,6 @@
             <button class="btn btn-primary" type="submit">Save</button>
         </div>
     </div>
-    </form>
 </g:form>
 </body>
 </html>
