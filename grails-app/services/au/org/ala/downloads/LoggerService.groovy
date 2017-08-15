@@ -6,7 +6,7 @@ import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 
 class LoggerService {
 
-    def httpWebService, downloadService, grailsApplication
+    def webService, downloadService, grailsApplication
 
     def addProxiedDownloadEvent(String dataUri, String metadataUri, String userIP, String userEmail, String comment, Integer reasonTypeId) {
         if (!metadataUri) return
@@ -62,15 +62,16 @@ class LoggerService {
         def events = LogEvent.listOrderByDateCreated()
         events.each { event ->
             log.info "${(System.currentTimeMillis() / 1000L)} event = ${event as JSON}"
-            def jsonBody = event as JSON
+            def jsonBody = event.properties
             def resp
+
             log.debug "json = ${jsonBody.toString()}"
             if (grailsApplication.config.app.logger.enabled) {
                 final server = grailsApplication.config.app.logger.server ?: 'http://logger.ala.org.au'
                 final port = grailsApplication.config.app.logger.port ?: '80'
                 final path = grailsApplication.config.app.logger.path ?: '/service/logger/'
 
-                resp = httpWebService.doJsonPost(server, path, port, jsonBody.toString())
+                resp = webService.post("${server}:${port}${path}", jsonBody)
                 log.debug "resp = $resp"
             } else {
                 resp = [:]
@@ -97,6 +98,11 @@ class LoggerService {
         final port = grailsApplication.config.app.logger.port ?: '80'
         final path = grailsApplication.config.app.logger.path ?: '/service/logger/'
         final reasons = grailsApplication.config.app.logger.reasons ?: 'reasons'
-        httpWebService.getJson("${server}:${port}${path}${reasons}")
+        def resp = webService.get("${server}:${port}${path}${reasons}")
+        if (resp.error) {
+            log.error("Couldn't get reasons for $path $reasons")
+        } else {
+            return resp.resp
+        }
     }
 }

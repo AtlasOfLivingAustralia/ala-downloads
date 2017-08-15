@@ -3,10 +3,10 @@
     <head>
         <meta name="layout" content="main"/>
         <title>${artifact?.project?.name} - ${artifact?.name} details</title>
-        <r:script>
+        <asset:script type="text/javascript">
                 $(document).ready(function() {
                 });
-        </r:script>
+        </asset:script>
 
         <style>
 
@@ -27,9 +27,9 @@
                         <td style="text-align: right">
                             <span>
                                 <auth:ifAllGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}">
-                                    <g:link controller="admin" action="editProjectArtifact" params="[artifactId:artifact.id]" class="btn"><i class="icon-edit"></i> Update</g:link>
+                                    <g:link controller="admin" action="editProjectArtifact" params="[artifactId:artifact.id]" class="btn btn-default"><i class="glyphicon glyphicon-edit"></i> Update</g:link>
                                 </auth:ifAllGranted>
-                                <a href="${downloadUrl}" rel="nofollow" class="btn btn-primary"><i class="icon-download-alt icon-white"></i>&nbsp;Download</a>
+                                <a href="${downloadUrl}" rel="nofollow" class="btn btn-primary"><i class="glyphicon glyphicon-download-alt glyphicon glyphicon-white"></i>&nbsp;Download</a>
                             </span>
                         </td>
                     </tr>
@@ -37,14 +37,14 @@
                 </table>
             </legend>
 
-            <div class="row-fluid">
-                <div class="span3" style="text-align: center">
+            <div class="row">
+                <div class="col-md-3" style="text-align: center">
                     QR Code
                     <div>
                         <img src="${createLink(controller:'qrcode', action:'url', params:[u:downloadUrl, size: 150])}" />
                     </div>
                 </div>
-                <div class="span9">
+                <div class="col-md-9">
                     <markdown:renderHtml text="${artifact.description}" />
                 </div>
             </div>

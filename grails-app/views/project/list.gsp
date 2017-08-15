@@ -15,7 +15,7 @@
                         <td style="text-align: right">
                             <span>
                                 <auth:ifAllGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}">
-                                    <g:link controller="admin" action="projectList" class="btn btn-small">Projects Admin</g:link>
+                                    <g:link controller="admin" action="projectList" class="btn btn-sm">Projects Admin</g:link>
                                 </auth:ifAllGranted>
                             </span>
                         </td>

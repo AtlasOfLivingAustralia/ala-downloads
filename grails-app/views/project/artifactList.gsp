@@ -45,8 +45,8 @@
                     <td style="text-align: right">
                         <span>
                             <auth:ifAnyGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}">
-                                <g:link controller="admin" action="projectArtifacts" params="[projectId:projectInstance.id]" class="btn btn-small">Project Admin</g:link>
-                                <g:link controller="admin" action="uploadProjectArtifact" params="[projectId: projectInstance.id]" class="btn btn-small btn-primary"><i class="icon-plus icon-white"></i> Upload a new artifact</g:link>
+                                <g:link controller="admin" action="projectArtifacts" params="[projectId:projectInstance.id]" class="btn btn-sm">Project Admin</g:link>
+                                <g:link controller="admin" action="uploadProjectArtifact" params="[projectId: projectInstance.id]" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus glyphicon glyphicon-white"></i> Upload a new artifact</g:link>
                             </auth:ifAnyGranted>
                         </span>
                     </td>
@@ -75,10 +75,10 @@
         <thead>
             <tr>
                 <g:sortableColumn mapping="projectByName" params="${linkparams}" property="name" title="Filename"  />
-                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="fileSize" title="Size" class="span2" />
+                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="fileSize" title="Size" />
                 <g:sortableColumn mapping="projectByName" params="${linkparams}" property="summary" title="Summary"  />
-                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="dateCreated" title="Date uploaded" class="span3" />
-                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="downloadCount" title="Downloads" class="span1" />
+                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="dateCreated" title="Date uploaded" />
+                <g:sortableColumn mapping="projectByName" params="${linkparams}" property="downloadCount" title="Downloads" />
                 <th style="width:${buttonColWidth}"></th>
             </tr>
         </thead>
@@ -91,9 +91,9 @@
                 <td><g:formatDate date="${artifact.dateCreated}" format="dd MMM, yyyy HH:mm:ss" /></td>
                 <td>${artifact.downloadCount ?: 0}</td>
                 <td>
-                    <link:artifactDetailsByName projectName="${projectInstance.name}" file="${artifact.name}" attrs="[class:'btn btn-small']"><i class="icon-info-sign"><span class="sr-only">File details</span></i></link:artifactDetailsByName>
-                    <link:downloadByFile projectName="${projectInstance.name}" file="${artifact.name}" attrs="[class:'btn btn-small', rel:'nofollow']"><i class="icon-download-alt"><span class="sr-only">Download file</span></i></link:downloadByFile>
-                    <auth:ifAnyGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}"><g:link controller="admin" action="editProjectArtifact" params="[projectId: projectInstance.id, artifactId: artifact.id]" class="btn btn-small"><i class="icon-edit"><span class="sr-only">Edit artifact</span></i></g:link></auth:ifAnyGranted>
+                    <link:artifactDetailsByName projectName="${projectInstance.name}" file="${artifact.name}" attrs="[class:'btn btn-default btn-sm']"><i class="glyphicon glyphicon-info-sign"><span class="sr-only">File details</span></i></link:artifactDetailsByName>
+                    <link:downloadByFile projectName="${projectInstance.name}" file="${artifact.name}" attrs="[class:'btn btn-default btn-sm', rel:'nofollow']"><i class="glyphicon glyphicon-download-alt"><span class="sr-only">Download file</span></i></link:downloadByFile>
+                    <auth:ifAnyGranted roles="${au.org.ala.web.CASRoles.ROLE_ADMIN}"><g:link controller="admin" action="editProjectArtifact" params="[projectId: projectInstance.id, artifactId: artifact.id]" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-edit"><span class="sr-only">Edit artifact</span></i></g:link></auth:ifAnyGranted>
                 </td>
             </tr>
         </g:each>

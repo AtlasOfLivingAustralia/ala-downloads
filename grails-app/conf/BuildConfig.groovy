@@ -1,4 +1,4 @@
-grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
+grails.servlet.version = "3.0" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
@@ -42,33 +42,35 @@ grails.project.dependency.resolution = {
 
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
-        runtime 'postgresql:postgresql:9.1-901.jdbc4'
+        runtime 'org.postgresql:postgresql:42.1.3.jre7'
         compile "au.org.ala:ala-logger:1.3"
-        compile 'com.google.guava:guava:16.0.1'
+        compile 'com.google.guava:guava:19.0'
     }
 
     plugins {
         build ":release:3.0.1"
         // plugins for the build system only
-        build ":tomcat:7.0.52.1"
+        build ":tomcat:7.0.70"
 
         // plugins for the compile step
-        compile ":scaffolding:2.0.2"
-        compile ':cache:1.1.1'
+        compile ":scaffolding:2.1.2"
+        compile ":cache:1.1.8"
         // additions
-        compile ':quartz:1.0.1'
+        compile ":quartz:1.0.1"
         compile ":feeds:1.6"
-        compile ":qrcode:0.3"
+        compile ":qrcode:0.7"
         compile ":markdown:1.1.1"
         compile ":pretty-time:2.1.3.Final-1.0.1"
+        compile ":ala-ws-plugin:1.7"
+        compile "org.grails.plugins:asset-pipeline:2.14.1"
 
         // plugins needed at runtime but not for compilation
-        runtime ":hibernate:3.6.10.9" // or ":hibernate4:4.3.4"
+        runtime ":hibernate4:4.3.10" // or ":hibernate:3.6.10.18"
         runtime ":database-migration:1.3.8"
-        runtime ":jquery:1.11.0.2"
-        runtime ":resources:1.2.8"
+        runtime ":jquery:1.11.1"
+
         // additions
-        runtime ":ala-bootstrap2:2.4.1"
-        runtime ":ala-auth:1.3"
+        runtime ":ala-bootstrap3:2.0.0"
+        runtime ":ala-auth:2.1.3"
     }
 }

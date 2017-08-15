@@ -10,8 +10,8 @@
 	<body class="content">
         <content tag="pageTitle">Record Downloads</content>
         <content tag="adminButtonBar">
-            <a href="${createLink(uri: '/')}" class="btn btn-small"><g:message code="default.home.label"/></a>
-            <g:link action="create" class="btn btn-small btn-primary"><i class="icon-plus icon-white"></i>&nbsp;<g:message code="default.new.label" args="[entityName]" /></g:link>
+            <a href="${createLink(uri: '/')}" class="btn btn-default btn-xs"><g:message code="default.home.label"/></a>
+            <g:link action="create" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-plus glyphicon glyphicon-white"></i>&nbsp;<g:message code="default.new.label" args="[entityName]" /></g:link>
         </content>
 		%{--<a href="#list-download" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>--}%
 		%{--<div class="nav" role="navigation">--}%
@@ -24,7 +24,7 @@
 			<g:if test="${flash.message}">
 			    <div class="message" role="status">${flash.message}</div>
 			</g:if>
-			<table>
+			<table class="table table-bordered table-striped">
 				<thead>
 					<tr>
 					
@@ -55,7 +55,7 @@
 					
 						<td><g:formatDate date="${downloadInstance.dateCreated}" /></td>
 
-                        <td><g:link class="btn btn-mini" controller="download" action="edit" id="${downloadInstance.id}">Edit</g:link></td>
+                        <td><g:link class="btn btn-default btn-xs" controller="download" action="edit" id="${downloadInstance.id}">Edit</g:link></td>
 
 					</tr>
 				</g:each>

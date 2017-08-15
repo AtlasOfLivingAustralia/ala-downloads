@@ -18,37 +18,37 @@
     <g:hiddenField name="artifactId" value="${artifactInstance?.id}" />
     <g:hiddenField name="version" value="${artifactInstance?.version}" />
 
-    <div class="control-group">
-        <label class="control-label" for="name">Name</label>
-        <div class="controls">
-            <g:textField name="name" readonly="true" value="${artifactInstance?.name}" />
+    <div class="form-group">
+        <label class="control-label col-md-2" for="name">Name</label>
+        <div class="col-md-10"">
+            <g:textField name="name" class="form-control" readonly="true" value="${artifactInstance?.name}" />
         </div>
     </div>
 
-    <div class="control-group ${hasErrors(bean: artifactInstance, field: 'summary', 'error')}">
-        <label class="control-label" for="summary">Summary</label>
-        <div class="controls">
-            <g:textField class="input-xxlarge" maxlength="100" name="summary" value="${artifactInstance?.summary}" />
+    <div class="form-group ${hasErrors(bean: artifactInstance, field: 'summary', 'error')}">
+        <label class="control-label col-md-2" for="summary">Summary</label>
+        <div class="col-md-10"">
+            <g:textField class="form-control" maxlength="100" name="summary" value="${artifactInstance?.summary}" />
         </div>
     </div>
 
-    <div class="control-group ${hasErrors(bean: artifactInstance, field: 'description', 'error')}">
-        <label class="control-label" for="description">Description</label>
-        <div class="controls">
-            <g:textArea class="input-xxlarge" maxlength="1000" name="description" value="${artifactInstance?.description}" />
+    <div class="form-group ${hasErrors(bean: artifactInstance, field: 'description', 'error')}">
+        <label class="control-label col-md-2" for="description">Description</label>
+        <div class="col-md-10"">
+            <g:textArea class="form-control" maxlength="1000" name="description" value="${artifactInstance?.description}" />
         </div>
     </div>
     
-    <div class="control-group">
-        <label class="control-label" for="deprecated">Deprecated</label>
-        <div class="controls">
+    <div class="form-group">
+        <label class="control-label col-md-2" for="deprecated">Deprecated</label>
+        <div class="col-md-10"">
             <g:checkBox class="checkbox" name="deprecated" value="${artifactInstance.deprecated}" />
         </div>
     </div>
 
-    <div class="control-group">
-        <div class="controls">
-            <a class="btn" href="${createLink(action:'projectList')}">Cancel</a>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a class="btn btn-default" href="${createLink(action:'projectList')}">Cancel</a>
             <button class="btn btn-primary" type="submit">Save</button>
         </div>
     </div>
