@@ -44,7 +44,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
         runtime 'org.postgresql:postgresql:42.1.3.jre7'
         compile "au.org.ala:ala-logger:1.3"
-        compile 'com.google.guava:guava:23.0'
+        compile 'com.google.guava:guava:19.0'
     }
 
     plugins {
