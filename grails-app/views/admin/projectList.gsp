@@ -3,7 +3,7 @@
     <head>
         <meta name="layout" content="adminLayout"/>
         <title>ALA Downloads - Administration - Projects</title>
-        <r:script disposition="head">
+        <asset:script type="text/javascript">
         jQuery(function($) {
             $('.btnDelete').click(function(e) {
                 e.preventDefault();
@@ -21,7 +21,7 @@
             });
         });
         var brs = $.browser
-        </r:script>
+        </asset:script>
     </head>
     <body class="content">
         <content tag="pageTitle">Projects</content>

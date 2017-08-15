@@ -3,10 +3,10 @@
     <head>
         <meta name="layout" content="main"/>
         <title>${artifact?.project?.name} - ${artifact?.name} details</title>
-        <r:script>
+        <asset:script type="text/javascript">
                 $(document).ready(function() {
                 });
-        </r:script>
+        </asset:script>
 
         <style>
 

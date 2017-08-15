@@ -62,12 +62,13 @@ grails.project.dependency.resolution = {
         compile ":markdown:1.1.1"
         compile ":pretty-time:2.1.3.Final-1.0.1"
         compile ":ala-ws-plugin:1.7"
+        compile "org.grails.plugins:asset-pipeline:2.14.1"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.10" // or ":hibernate:3.6.10.18"
         runtime ":database-migration:1.3.8"
         runtime ":jquery:1.11.1"
-        runtime ":resources:1.2.14"
+
         // additions
         runtime ":ala-bootstrap3:2.0.0"
         runtime ":ala-auth:2.1.3"

@@ -3,8 +3,7 @@
     <head>
         <meta name="layout" content="adminLayout"/>
         <title>Upload Artifact for ${projectInstance.name}</title>
-        <r:script>
-        </r:script>
+
     </head>
     <body class="content">
         <content tag="adminButtonBar">

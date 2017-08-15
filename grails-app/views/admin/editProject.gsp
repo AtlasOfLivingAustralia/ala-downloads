@@ -3,8 +3,6 @@
     <head>
         <meta name="layout" content="adminLayout"/>
         <title>ALA Downloads - Administration - ${projectInstance ? 'Edit Project' : 'New Project'}</title>
-        <r:script>
-        </r:script>
     </head>
     <body class="content">
         <content tag="pageTitle">${projectInstance ? 'Edit Project' : 'New Project'}</content>

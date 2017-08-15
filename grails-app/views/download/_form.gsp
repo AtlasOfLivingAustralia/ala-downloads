@@ -1,20 +1,24 @@
 <%@ page import="grails.converters.JSON; au.org.ala.downloads.Download" %>
-<r:require modules="bootstrapCombobox,jqueryTmpl"/>
-<r:style>
-#parent{
-  position: relative
-}
 
-#right-sidebar{
-  position: absolute;
-  right: 0;
-  height: 100%;
-}
+<asset:stylesheet src="bootstrapCombobox.css" />
+<asset:javascript src="bootstrapCombobox.js" />
+<asset:javascript src="jqueryTmpl.js" />
 
-.main-content{
-}
-</r:style>
-<r:script>
+<style type="text/css">
+    #parent{
+      position: relative
+    }
+
+    #right-sidebar{
+      position: absolute;
+      right: 0;
+      height: 100%;
+    }
+
+    .main-content{
+    }
+</style>
+<asset:script type="text/javascript">
 
     $(window).load(function() {
         var initialRecords = <dl:json value="${metadataRecords}" />;
@@ -103,7 +107,7 @@
         if (initialRecords) updateMetadataUriFields(initialRecords);
     });
 
-</r:script>
+</asset:script>
 
 <div id="parent" class="row">
     <div class="col-md-8 main-content">
