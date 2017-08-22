@@ -11,6 +11,7 @@ stacktrace.log
 /*DB.*
 /cobertura.ser
 .DS_Store
+/build/
 /target/
 /out/
 /web-app/plugins
@@ -23,7 +24,7 @@ stacktrace.log
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
-/*.iml
+*.iml
 
 ## Directory-based project format:
 .idea/
