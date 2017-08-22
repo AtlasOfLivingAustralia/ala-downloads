@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<meta name="layout" content="ala-main">
 		<g:set var="entityName" value="${message(code: 'download.label', default: 'Download')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 

@@ -2,7 +2,7 @@ package au.org.ala.downloads
 
 import au.org.ala.web.AlaSecured
 import groovy.time.TimeCategory
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import org.grails.web.util.GrailsApplicationAttributes
 
 import static javax.servlet.http.HttpServletResponse.*
 

@@ -2,7 +2,7 @@ package au.org.ala.downloads
 
 import grails.converters.JSON
 import grails.plugin.cache.Cacheable
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
+import grails.web.servlet.mvc.GrailsParameterMap
 
 class LoggerService {
 

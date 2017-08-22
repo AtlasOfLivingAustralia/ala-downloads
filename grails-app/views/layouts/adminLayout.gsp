@@ -13,7 +13,7 @@
   - rights and limitations under the License.
   --}%
 
-<g:applyLayout name="main">
+<g:applyLayout name="ala-main">
     <head>
         <style type="text/css">
         .nav-pills > li.active > a {

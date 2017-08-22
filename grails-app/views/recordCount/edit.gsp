@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<meta name="layout" content="ala-main">
 		<g:set var="entityName" value="${message(code: 'recordCount.label', default: 'RecordCount')}" />
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
 

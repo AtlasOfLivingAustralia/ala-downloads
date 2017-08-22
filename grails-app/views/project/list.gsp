@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main"/>
+        <meta name="layout" content="ala-main"/>
         <title>ALA Downloads - Projects</title>
         <feed:meta kind="atom" version="1.0" controller="feed" action="projects"/>
     </head>

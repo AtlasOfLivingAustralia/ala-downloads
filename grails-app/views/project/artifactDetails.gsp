@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main"/>
+        <meta name="layout" content="ala-main"/>
         <title>${artifact?.project?.name} - ${artifact?.name} details</title>
         <asset:script type="text/javascript">
                 $(document).ready(function() {

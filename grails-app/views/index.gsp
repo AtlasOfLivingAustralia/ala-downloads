@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main"/>
+    <meta name="layout" content="ala-main"/>
     <title>Downloads | Atlas of Living Australia</title>
     <asset:script type="text/javascript">
         $(window).load(function() {
@@ -59,7 +59,7 @@
     </p>
 
     <h2>Software packages for desktop computers</h2>
-    <g:render template="../project/table" />
+    <g:render template="/project/table" />
 
     <h2>File downloads</h2>
 

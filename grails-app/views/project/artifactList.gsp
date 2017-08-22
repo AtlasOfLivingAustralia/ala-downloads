@@ -19,7 +19,7 @@
     <g:set var="linkparams" value="${hideDeprecatedParams}" />
 </g:else>
 <head>
-    <meta name="layout" content="main"/>
+    <meta name="layout" content="ala-main"/>
     <feed:meta kind="atom" version="1.0" mapping="feedByProjectName" params="${linkparams}" />
     <title>${projectInstance.name} downloads</title>
     <style>
