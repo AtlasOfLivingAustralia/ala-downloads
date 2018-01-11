@@ -46,7 +46,7 @@
             <p class="lead">
                 This page provides access to desktop software and large data exports.
                 For developers interested in installing server components,
-                please using the scripts in this <a href="https://github.com/gbif/ala-install">project</a>.
+                please use the scripts in this <a href="https://github.com/AtlasOfLivingAustralia/ala-install">project</a>.
             </p>
 
             <h2>Software packages for desktop computers</h2>
